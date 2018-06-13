@@ -1,12 +1,20 @@
-FROM centos
-MAINTAINER wkodate <hbwandeow@gmail.com>
-# RUN: buildするときに実行される
-# RUN echo "now building..."
-# CMD: runするときに実行される
-# CMD: echo "now running..."
-# CMD ["echo", "now running..."]
-RUN yum update -y
-RUN yum install -y httpd
-ADD ./index.html /var/www/html/
+# Use an official Python runtime as a parent image
+FROM python:2.7-slim
+
+# Set the working directory to /app
+WORKDIR /app
+
+# Copy the current directory contents into the container at /app
+ADD . /app
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
+
+# Make port 80 available to the world outside this container
 EXPOSE 80
-CMD ["/usr/sbin/httpd". "-D", "FOREGROUND"]
+
+# Define environment variable
+ENV NAME World
+
+# Run app.py when the container launches
+CMD ["python", "app.py"]
