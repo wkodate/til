@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
- * Created by wkodate on 2018/10/25.
+ * roomIdとreservedDateフィールドによる複合クラス.
  */
 @Embeddable
 public class ReservableRoomId implements Serializable {

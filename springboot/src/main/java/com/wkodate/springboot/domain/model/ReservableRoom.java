@@ -24,5 +24,4 @@ public class ReservableRoom implements Serializable {
     public ReservableRoom() {
     }
 
-
 }
