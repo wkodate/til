@@ -22,4 +22,22 @@ public class ReservableRoomId implements Serializable {
     public ReservableRoomId() {
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ReservableRoomId that = (ReservableRoomId) o;
+
+        if (roomId != null ? !roomId.equals(that.roomId) : that.roomId != null) return false;
+        return !(reservedDate != null ? !reservedDate.equals(that.reservedDate) : that.reservedDate != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = roomId != null ? roomId.hashCode() : 0;
+        result = 31 * result + (reservedDate != null ? reservedDate.hashCode() : 0);
+        return result;
+    }
 }
