@@ -1,7 +1,7 @@
 package com.wkodate.springboot.domain.service;
 
 import com.wkodate.springboot.domain.model.ReservableRoom;
-import com.wkodate.springboot.domain.repository.ReservableRoomRepository;
+import com.wkodate.springboot.domain.repository.room.ReservableRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

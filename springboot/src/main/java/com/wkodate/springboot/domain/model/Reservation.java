@@ -1,5 +1,8 @@
 package com.wkodate.springboot.domain.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalTime;
@@ -7,6 +10,9 @@ import java.time.LocalTime;
 /**
  * Created by wkodate on 2018/10/25.
  */
+@Entity
+@Getter
+@Setter
 public class Reservation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
