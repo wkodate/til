@@ -1,4 +1,4 @@
-package com.wkodate.springboot.domain.service;
+package com.wkodate.springboot.domain.service.room;
 
 import com.wkodate.springboot.domain.model.ReservableRoom;
 import com.wkodate.springboot.domain.repository.room.ReservableRoomRepository;

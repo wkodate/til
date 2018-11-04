@@ -1,7 +1,7 @@
 package com.wkodate.springboot.app.room;
 
 import com.wkodate.springboot.domain.model.ReservableRoom;
-import com.wkodate.springboot.domain.service.RoomService;
+import com.wkodate.springboot.domain.service.room.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
