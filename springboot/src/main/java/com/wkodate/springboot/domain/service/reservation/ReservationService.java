@@ -1,8 +1,6 @@
 package com.wkodate.springboot.domain.service.reservation;
 
-import com.wkodate.springboot.domain.model.ReservableRoom;
-import com.wkodate.springboot.domain.model.ReservableRoomId;
-import com.wkodate.springboot.domain.model.Reservation;
+import com.wkodate.springboot.domain.model.*;
 import com.wkodate.springboot.domain.repository.reservation.ReservationRepository;
 import com.wkodate.springboot.domain.repository.room.ReservableRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by wkodate on 2018/11/04.
@@ -22,6 +21,12 @@ public class ReservationService {
     @Autowired
     ReservableRoomRepository reservableRoomRepository;
 
+    /**
+     * 予約処理.
+     *
+     * @param reservation
+     * @return
+     */
     public Reservation reserve(Reservation reservation) {
         ReservableRoomId reservableRoomId = reservation.getReservableRoom().getReservableRoomId();
         ReservableRoom reservableRoom = reservableRoomRepository.getOne(reservableRoomId);
@@ -39,8 +44,30 @@ public class ReservationService {
         return reservation;
     }
 
+    /**
+     * 予約可能な部屋を取得.
+     *
+     * @param reservableRoomId
+     * @return
+     */
     public List<Reservation> findReservations(ReservableRoomId reservableRoomId) {
         return reservationRepository.findByReservableRoom_ReservableRoomIdOrderByStartTimeAsc(
                 reservableRoomId);
     }
+
+    /**
+     * 予約のキャンセル処理.
+     *
+     * @param reservationId
+     * @param requestUser
+     */
+    public void cancel(Integer reservationId, User requestUser) {
+        Reservation reservation = reservationRepository.getOne(reservationId);
+        if (RoleName.ADMIN != requestUser.getRoleName()
+                && !Objects.equals(reservation.getUser().getUserId(), requestUser.getUserId())){
+            throw new IllegalStateException("要求されたキャンセルは許可できません。");
+        }
+        reservationRepository.delete(reservation);
+    }
+
 }

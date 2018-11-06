@@ -32,6 +32,12 @@ public class Reservation implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
+    /**
+     * 予約時刻の重複のチェック.
+     *
+     * @param target
+     * @return
+     */
     public boolean overlap(Reservation target) {
         if (!Objects.equals(reservableRoom.getReservableRoomId(), target.reservableRoom.getReservableRoomId())) {
             return false;
