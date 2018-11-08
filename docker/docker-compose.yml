@@ -2,17 +2,28 @@ version: "3"
 services:
   web:
     # replace username/repo:tag with your name and image details
-    image: wkodate/get-started:part2
+    image: username/repo:tag
     deploy:
-      replicas: 3
+      replicas: 5
+      restart_policy:
+        condition: on-failure
       resources:
         limits:
           cpus: "0.1"
           memory: 50M
-      restart_policy:
-        condition: on-failure
     ports:
-      - "4000:80"
+      - "80:80"
+    networks:
+      - webnet
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
     networks:
       - webnet
 networks:
