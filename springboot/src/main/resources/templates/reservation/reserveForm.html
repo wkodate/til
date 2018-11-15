@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 <head>
     <meta charset="UTF-8" />
     <title th:text="|${#temporals.format(date, 'yyyy/M/d')}の${room.roomName}|">2016/5/20の豊洲</title>
 </head>
-<body>
+<body th:with="user=${authentication.principal.user}">
 
 <div>
     <a th:href="@{'/rooms/' + ${date}}">会議室一覧へ</a>
@@ -52,6 +52,7 @@
         </td>
         <td>
             <form th:action="@{'/reservations/' + ${date} + '/' + ${roomId}}" method="post"
+                  sec:authorize="${hasRole('ADMIN') or #vars.user.userId == #vars.reservation.user.userId}}"
                   th:if="${user.userId == reservation.user.userId}">
                 <input type="hidden" name="reservationId" th:value="${reservation.reservationId}" />
                 <input type="submit" name="cancel" value="取消" />

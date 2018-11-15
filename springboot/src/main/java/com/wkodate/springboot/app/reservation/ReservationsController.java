@@ -1,12 +1,18 @@
 package com.wkodate.springboot.app.reservation;
 
-import com.wkodate.springboot.domain.model.*;
+import com.wkodate.springboot.domain.model.ReservableRoom;
+import com.wkodate.springboot.domain.model.ReservableRoomId;
+import com.wkodate.springboot.domain.model.Reservation;
+import com.wkodate.springboot.domain.model.User;
 import com.wkodate.springboot.domain.service.reservation.AlreadyReservedException;
 import com.wkodate.springboot.domain.service.reservation.ReservationService;
 import com.wkodate.springboot.domain.service.reservation.UnavailableReservationException;
 import com.wkodate.springboot.domain.service.room.RoomService;
+import com.wkodate.springboot.domain.service.user.ReservationUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -64,7 +70,7 @@ public class ReservationsController {
         model.addAttribute("room", roomService.findMeetingRoom(roomId));
         model.addAttribute("reservations", reservations);
         model.addAttribute("timeList", timeList);
-        model.addAttribute("user", dummyUser());
+        // model.addAttribute("user", dummyUser());
         return "reservation/reserveForm";
     }
 
@@ -79,9 +85,12 @@ public class ReservationsController {
      * @return
      */
     @RequestMapping(method = RequestMethod.POST)
-    String reserve(@Validated ReservationForm form, BindingResult bindingResult,
+    String reserve(@Validated ReservationForm form,
+                   BindingResult bindingResult,
+                   @AuthenticationPrincipal ReservationUserDetails userDetails,
                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
-                   @PathVariable("roomId") Integer roomId, Model model) {
+                   @PathVariable("roomId") Integer roomId,
+                   Model model) {
         if (bindingResult.hasErrors()) {
             return reserveForm(date, roomId, model);
         }
@@ -90,7 +99,7 @@ public class ReservationsController {
         reservation.setStartTime(form.getStartTime());
         reservation.setEndTime(form.getEndTime());
         reservation.setReservableRoom(reservableRoom);
-        reservation.setUser(dummyUser());
+        reservation.setUser(userDetails.getUser());
         try {
             reservationService.reserve(reservation);
         } catch (UnavailableReservationException | AlreadyReservedException e) {
@@ -110,25 +119,19 @@ public class ReservationsController {
      * @return
      */
     @RequestMapping(method = RequestMethod.POST, params = "cancel")
-    String cancel(@RequestParam("reservationId") Integer reservationId, @PathVariable("roomId") Integer roomId,
-                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date, Model model) {
-        User user = dummyUser();
+    String cancel(@RequestParam("reservationId") Integer reservationId,
+                  @AuthenticationPrincipal ReservationUserDetails userDetails,
+                  @PathVariable("roomId") Integer roomId,
+                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
+                  Model model) {
+        User user = userDetails.getUser();
         try {
             reservationService.cancel(reservationId, user);
-        } catch (IllegalStateException e) {
+        } catch (AccessDeniedException e) {
             model.addAttribute("error", e.getMessage());
             return reserveForm(date, roomId, model);
         }
         return "redirect:/reservations/{date}/{roomId}";
-    }
-
-    private User dummyUser() {
-        User user = new User();
-        user.setUserId("taro-yamada");
-        user.setFirstName("太郎");
-        user.setLastName("山田");
-        user.setRoleName(RoleName.USER);
-        return user;
     }
 
 }
