@@ -3,7 +3,6 @@ package com.wkodate.springboot.app.reservation;
 import com.wkodate.springboot.domain.model.ReservableRoom;
 import com.wkodate.springboot.domain.model.ReservableRoomId;
 import com.wkodate.springboot.domain.model.Reservation;
-import com.wkodate.springboot.domain.model.User;
 import com.wkodate.springboot.domain.service.reservation.AlreadyReservedException;
 import com.wkodate.springboot.domain.service.reservation.ReservationService;
 import com.wkodate.springboot.domain.service.reservation.UnavailableReservationException;
@@ -120,18 +119,18 @@ public class ReservationsController {
      */
     @RequestMapping(method = RequestMethod.POST, params = "cancel")
     String cancel(@RequestParam("reservationId") Integer reservationId,
-                  @AuthenticationPrincipal ReservationUserDetails userDetails,
                   @PathVariable("roomId") Integer roomId,
                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
                   Model model) {
-        User user = userDetails.getUser();
         try {
-            reservationService.cancel(reservationId, user);
+            Reservation reservation = reservationService.getOne(reservationId);
+            reservationService.cancel(reservation);
+
         } catch (AccessDeniedException e) {
             model.addAttribute("error", e.getMessage());
             return reserveForm(date, roomId, model);
         }
-        return "redirect:/reservations/{date}/{roomId}";
+        return "redirect://reservation/{date}/{roomId}";
     }
 
 }

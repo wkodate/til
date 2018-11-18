@@ -5,6 +5,8 @@ import com.wkodate.springboot.domain.repository.reservation.ReservationRepositor
 import com.wkodate.springboot.domain.repository.room.ReservableRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.method.P;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,6 +72,15 @@ public class ReservationService {
             throw new AccessDeniedException("要求されたキャンセルは許可できません。");
         }
         reservationRepository.delete(reservation);
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or #reservation.user.userId == principal.user.userId")
+    public void cancel(@P("reservation") Reservation reservation) {
+        reservationRepository.delete(reservation);
+    }
+
+    public Reservation getOne(Integer reservationId) {
+        return reservationRepository.getOne(reservationId);
     }
 
 }
