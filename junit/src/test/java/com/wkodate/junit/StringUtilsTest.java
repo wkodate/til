@@ -6,7 +6,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 /**
- * Created by wkodate on 2018/11/19.
+ * 状態を持たないメソッドのテスト.
  */
 public class StringUtilsTest {
 
