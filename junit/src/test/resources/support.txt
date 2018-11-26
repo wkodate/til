@@ -1,0 +1,7 @@
+GlassFish,Oracle
+GlassFish,DB2
+GlassFish,PostgreSQL
+GlassFish,MySQL
+JBoss,DB2
+JBoss,PostgreSQL
+Tomcat,MySQL
