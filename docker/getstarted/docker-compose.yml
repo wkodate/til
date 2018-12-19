@@ -1,8 +1,7 @@
 version: "3"
 services:
   web:
-    # replace username/repo:tag with your name and image details
-    image: username/repo:tag
+    image: wkodate/get-started:part2
     deploy:
       replicas: 5
       restart_policy:
