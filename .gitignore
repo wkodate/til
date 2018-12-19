@@ -4,6 +4,9 @@ target/
 *.iml
 prometheus/prometheus-2.3.0.darwin-amd64/data/
 
+.data/
+
+# Rails
 *.rbc
 capybara-*.html
 .rspec
