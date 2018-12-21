@@ -1,4 +1,4 @@
 tutorial
 ========
 
-test repository for learning
+My testing repository
