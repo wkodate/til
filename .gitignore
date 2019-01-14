@@ -7,9 +7,9 @@ prometheus/prometheus-2.3.0.darwin-amd64/data/
 
 
 # Rails
-*.rbc
-capybara-*.html
-.rspec
+ruby-on-rails/hello_app/*.rbc
+ruby-on-rails/hello_app/capybara-*.html
+ruby-on-rails/hello_app/.rspec
 ruby-on-rails/hello_app/log
 ruby-on-rails/hello_app/tmp
 ruby-on-rails/hello_app/db/*.sqlite3
@@ -70,6 +70,68 @@ ruby-on-rails/hello_app/.yarn-integrity
 ruby-on-rails/hello_app/storage/*
 ruby-on-rails/hello_app/!/storage/.keep
 
+ruby-on-rails/sample_app/*.rbc
+ruby-on-rails/sample_app/capybara-*.html
+ruby-on-rails/sample_app/.rspec
+ruby-on-rails/sample_app/log
+ruby-on-rails/sample_app/tmp
+ruby-on-rails/sample_app/db/*.sqlite3
+ruby-on-rails/sample_app/db/*.sqlite3-journal
+ruby-on-rails/sample_app/public/system
+ruby-on-rails/sample_app/coverage/
+ruby-on-rails/sample_app/spec/tmp
+ruby-on-rails/sample_app/*.orig
+ruby-on-rails/sample_app/rerun.txt
+ruby-on-rails/sample_app/pickle-email-*.html
+
+# TODO Comment out this rule if you are OK with secrets being uploaded to the repo
+ruby-on-rails/sample_app/config/initializers/secret_token.rb
+ruby-on-rails/sample_app/config/master.key
+
+# Only include if you have production secrets in this file, which is no longer a Rails default
+# config/secrets.yml
+
+# dotenv
+# TODO Comment out this rule if environment variables can be committed
+ruby-on-rails/sample_app/.env
+
+## Environment normalization:
+ruby-on-rails/sample_app/.bundle
+ruby-on-rails/sample_app/vendor/bundle
+
+# these should all be checked in to normalize the environment:
+# Gemfile.lock, .ruby-version, .ruby-gemset
+
+# unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
+ruby-on-rails/sample_app/.rvmrc
+
+# if using bower-rails ignore default bower_components path bower.json files
+ruby-on-rails/sample_app/vendor/assets/bower_components
+ruby-on-rails/sample_app/*.bowerrc
+ruby-on-rails/sample_app/bower.json
+
+# Ignore pow environment settings
+ruby-on-rails/sample_app/.powenv
+
+# Ignore Byebug command history file.
+ruby-on-rails/sample_app/.byebug_history
+
+# Ignore node_modules
+ruby-on-rails/sample_app/node_modules/
+
+# Ignore precompiled javascript packs
+ruby-on-rails/sample_app/public/packs
+ruby-on-rails/sample_app/public/packs-test
+ruby-on-rails/sample_app/public/assets
+
+# Ignore yarn files
+ruby-on-rails/sample_app/yarn-error.log
+ruby-on-rails/sample_app/yarn-debug.log*
+ruby-on-rails/sample_app/.yarn-integrity
+
+# Ignore uploaded files in development
+ruby-on-rails/sample_app/storage/*
+ruby-on-rails/sample_app/!/storage/.keep
 
 # SpringBoot
 *#
