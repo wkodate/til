@@ -10,65 +10,65 @@ prometheus/prometheus-2.3.0.darwin-amd64/data/
 *.rbc
 capybara-*.html
 .rspec
-/log
-/tmp
-/db/*.sqlite3
-/db/*.sqlite3-journal
-/public/system
-/coverage/
-/spec/tmp
-*.orig
-rerun.txt
-pickle-email-*.html
+ruby-on-rails/hello_app/log
+ruby-on-rails/hello_app/tmp
+ruby-on-rails/hello_app/db/*.sqlite3
+ruby-on-rails/hello_app/db/*.sqlite3-journal
+ruby-on-rails/hello_app/public/system
+ruby-on-rails/hello_app/coverage/
+ruby-on-rails/hello_app/spec/tmp
+ruby-on-rails/hello_app/*.orig
+ruby-on-rails/hello_app/rerun.txt
+ruby-on-rails/hello_app/pickle-email-*.html
 
 # TODO Comment out this rule if you are OK with secrets being uploaded to the repo
-config/initializers/secret_token.rb
-config/master.key
+ruby-on-rails/hello_app/config/initializers/secret_token.rb
+ruby-on-rails/hello_app/config/master.key
 
 # Only include if you have production secrets in this file, which is no longer a Rails default
 # config/secrets.yml
 
 # dotenv
 # TODO Comment out this rule if environment variables can be committed
-.env
+ruby-on-rails/hello_app/.env
 
 ## Environment normalization:
-/.bundle
-/vendor/bundle
+ruby-on-rails/hello_app/.bundle
+ruby-on-rails/hello_app/vendor/bundle
 
 # these should all be checked in to normalize the environment:
 # Gemfile.lock, .ruby-version, .ruby-gemset
 
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
-.rvmrc
+ruby-on-rails/hello_app/.rvmrc
 
 # if using bower-rails ignore default bower_components path bower.json files
-/vendor/assets/bower_components
-*.bowerrc
-bower.json
+ruby-on-rails/hello_app/vendor/assets/bower_components
+ruby-on-rails/hello_app/*.bowerrc
+ruby-on-rails/hello_app/bower.json
 
 # Ignore pow environment settings
-.powenv
+ruby-on-rails/hello_app/.powenv
 
 # Ignore Byebug command history file.
-.byebug_history
+ruby-on-rails/hello_app/.byebug_history
 
 # Ignore node_modules
-node_modules/
+ruby-on-rails/hello_app/node_modules/
 
 # Ignore precompiled javascript packs
-/public/packs
-/public/packs-test
-/public/assets
+ruby-on-rails/hello_app/public/packs
+ruby-on-rails/hello_app/public/packs-test
+ruby-on-rails/hello_app/public/assets
 
 # Ignore yarn files
-/yarn-error.log
-yarn-debug.log*
-.yarn-integrity
+ruby-on-rails/hello_app/yarn-error.log
+ruby-on-rails/hello_app/yarn-debug.log*
+ruby-on-rails/hello_app/.yarn-integrity
 
 # Ignore uploaded files in development
-/storage/*
-!/storage/.keep
+ruby-on-rails/hello_app/storage/*
+ruby-on-rails/hello_app/!/storage/.keep
 
 
 # SpringBoot
