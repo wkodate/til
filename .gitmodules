@@ -1,0 +1,3 @@
+[submodule "chef/learn-chef/cookbooks/learn_chef_httpd"]
+	path = chef/learn-chef/cookbooks/learn_chef_httpd
+	url = https://github.com/learn-chef/learn_chef_httpd.git
