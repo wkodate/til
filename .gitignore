@@ -177,15 +177,16 @@ secrets.yml
 
 
 # Chef
-.autotest
-coverage
-.DS_Store
-pkg/*
-tags
-*/tags
-*~
-.chef
-results
+chef/learn-chef/.autotest
+chef/learn-chef/coverage
+chef/learn-chef/.DS_Store
+chef/learn-chef/pkg/*
+chef/learn-chef/tags
+chef/learn-chef/*/tags
+chef/learn-chef/*~
+chef/learn-chef/.chef
+chef/learn-chef/results
+chef/learn-chef/cookbooks/webserver_test/.delivery/
 
 # You should check in your Gemfile.lock in applications, and not in gems
 external_tests/*.lock
