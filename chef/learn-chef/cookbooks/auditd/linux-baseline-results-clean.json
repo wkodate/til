@@ -1,0 +1,6 @@
+{
+  "status": "passed",
+  "code_desc": "Audit Daemon Config max_log_file_action should cmp == \"keep_logs\"",
+  "run_time": 0.00017,
+  "start_time": "2017-12-21 21:37:56 -0500"
+},
