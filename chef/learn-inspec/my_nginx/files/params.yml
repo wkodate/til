@@ -1,0 +1,6 @@
+version: 1.10.3
+modules:
+  - http_ssl
+  - stream_ssl
+  - mail_ssl
+  - http_geoip
