@@ -242,3 +242,18 @@ nodes/
 chef-config/.bundle
 chef-config/Gemfile.lock
 
+**/.idea/
+**/gen/
+**/.DS_Store
+**/Pods/
+**/Podfile.lock
+**/xcuserdata/
+**/*.xcworkspace/
+**/GoogleService-Info.plist
+**/web/functions/node_modules
+**/web-start/functions/node_modules
+**/cloud-functions-start/functions/node_modules
+**/cloud-functions/functions/node_modules
+**/.firebaserc
+**/firebase-debug.log
+**/.firebase
