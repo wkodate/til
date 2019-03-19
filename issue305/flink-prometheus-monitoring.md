@@ -29,7 +29,7 @@ https://flink.apache.org/features/2019/03/11/prometheus-monitoring.html
 
 ## Configuring Prometheus with Flink
 
-設定は手順でできる
+設定は以下の手順でできる
 
 1. `PrometheusReporter`のjarをFlinkクラスタが参照可能なクラスパスに追加
 2. flink-conf.yamlに`PrometheusReporter`の設定を追加
