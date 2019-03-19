@@ -13,27 +13,28 @@ https://sematext.com/blog/opentracing-distributed-tracing-emerging-industry-stan
 * OpenTracingは、分散トレーシングのためのAPI仕様とそのライブラリのこと
 * 分散トレーシングは、マイクロサービスのような分散したシステムのリクエストを分析する
 * CNCFに入っている
-* OpenTracingのゴールは共通のトレーシングのメカニズムを使うこと
+* OpenTracingのゴールは、トレーシングや伝搬メカニズムの共通利用
 
 ## OpenTracing Benefits
 
  * 設定を変えるだけで新しいtracerを作れる
- * レイテンシなどのパフォーマンス問題を効率的に検知できる
- * エラーが起きたときに特定しやすい
- * tracingデータをロギングできる
+ * システムのレイテンシなどのパフォーマンス問題を効率的に検知できる
+ * システムでエラーが起きたときに原因特定をしやすい
+ * トレーシングデータをロギングできる
+ * 最適化に役立つ
 
 ## OpenTracing and Distributed Context Propagation
 
-* Context propagationは、リクエストが目的地に到達するまでのパスを表す
+* Context propagationは、リクエストが目的地に到達するまでのトランザクションパスを表す
+* メッセージヘッダなどの伝搬されたspan contextを抽出し、traceをジョインして伝搬
+  * Span: サービス内の処理
+  * Trace: Spanの最初から最後までの集合
 
 ## Adoption: Who uses OpenTracing
 
-* アプリケーションがモノリシックからマイクロサービスに代わり、可視化やソフトウェアの振る舞いを観測することは必要不可欠になる
-* 複雑なワークフローをデバックするために、いくつかのtracingメカニズムを利用した分散トレーシングが出てきた
-  * Zipkin
-  * Jaeger
-  * AppDash
-* 運用者にとって、システムの問題に対する原因究明や最適化に役立つ
+* アプリケーションがモノリシックからマイクロサービスに代わり、可視化やソフトウェアの振る舞いを観測することは必要不可欠となった
+* この複雑なワークフローをデバックするために、いくつかのトレーシングメカニズムを利用したJaegerなどの分散トレーシングが出てきた。
+* JaegerはUberが開発。GoogleのDapperがインスパイア元
 
 ## Next steps
 
