@@ -4,8 +4,8 @@ Flink and Prometheus: Cloud-native monitoring of streaming applications
 https://flink.apache.org/features/2019/03/11/prometheus-monitoring.html
 
 * FlinkのモニタリングにPrometheusを使う話　
-* 基本的なPrometheusのコンセプトと、FlinkでPrometheusを使うと良い理由について説明
-* 詳細はFlinkForward Berlin 2018の資料
+  * 基本的なPrometheusのコンセプトと、FlinkでPrometheusを使うと良い理由、試してみた
+* 詳細はFlinkForward Berlin 2018の資料にも書いてある
   * [スライド](https://www.slideshare.net/MaximilianBode1/monitoring-flink-with-prometheus)
   * [ビデオ](https://www.ververica.com/flink-forward-berlin/resources/monitoring-flink-with-prometheus)
 
@@ -22,13 +22,18 @@ https://flink.apache.org/features/2019/03/11/prometheus-monitoring.html
 ## Prometheus and Flink in Action
 
 * [デモ用ソースコード](https://github.com/mbode/flink-prometheus-example)  をDockerで実行可能
-* `PrometheusExampleJob`はランダムの数を生成し、mapでカウント、ヒストグラムを生成するアプリケーション
+* アプリケーション`PrometheusExampleJob`をモニタリングしてみる
+  * ランダムの数を生成
+  * mapでカウント
+  * ヒストグラムを生成
 
 ## Configuring Prometheus with Flink
 
+設定は手順でできる
+
 1. `PrometheusReporter`のjarをFlinkクラスタが参照可能なクラスパスに追加
-2. flink-conf.yamlにreporterの設定を追加
-3. prometheus.ymlのPrometheusのscrape設定に追加
+2. flink-conf.yamlに`PrometheusReporter`の設定を追加
+3. prometheus.ymlにPrometheusのscrape設定を追加
 
 ```
 scrape_configs:
@@ -38,7 +43,7 @@ scrape_configs:
 ```
 
 * port 9249,9250,9251などでJob Manager, TaskManagerのメトリクスが見れる
-* 通知はAlertmanagerを使ってメールやSlackに飛ばす。メトリクス可視化はGrafanaで
+* 通知はAlertmanagerを使ってメールやSlackに飛ばす。メトリクス可視化はGrafanaでする
 
 ## Conclusion
 
