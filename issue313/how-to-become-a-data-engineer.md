@@ -1,5 +1,5 @@
 How To Become a Data Engineer
-＝＝＝
+===
 
 データエンジニアのための良記事集、オンラインコースなどもある
 
