@@ -84,3 +84,25 @@ sadf [オプション] [対象データ] -- [sarのオプション]
 * sa2は、sarの定期的に実行するスクリプト。/usr/lib/sa/sa2
 * sysstatは、sa,sadc等を含む管理ツールの名前
 * sadfは、sarコマンドのオプションを指定して私、結果の出力を整形するコマンド
+
+# リソース需要の予測
+
+* リソース状況を可視化するツール
+  * Icinga2
+    * Nagios互換の監視ツール
+  * Nagios
+    * サーバの死活監視やネットワークサービスの状態やリソースの使用状況などを総合的に監視するソフトウェア
+  * collectd
+    * サーバの状態を監視するデーモン
+    * /etc/collectd.confが設定ファイル。LoadPluginで使用するプラグインを指定
+  * MRTG(Multi Router Traffic Grapher)
+    * ネットワークやリソースの使用状況を監視しグラフ化するツール。死活監視はできない
+  * Cacti
+    * MRTGの代替。ネットワークやリソースの使用状況を監視し、グラフ化するツール。ブラウザで設定可能でMRTGより設定が容易。死活監視はできない
+* SNMP(Simple Network Management Protocol)
+  * ネットワーク経由で機器を監視・生業するためのプロトコル
+* リソース状況を監視する理由
+  * https://www.atmarkit.co.jp/ait/articles/0303/15/news004.html
+  * 問題調査のため
+  * キャパシティプランニングのため
+  * 需要予測のため
