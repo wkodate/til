@@ -40,3 +40,35 @@ Linuxカーネル
         * https://kakurasan.hatenadiary.jp/entry/20070724/p1
         * https://www.express.nec.co.jp/linux/distributions/knowledge/system/kernel.html
         * https://www.atmarkit.co.jp/ait/articles/0808/28/news129.html
+        
+        
+### Linuxカーネルのコンパイル
+
+* 初期RAMディスク
+    * http://kwkw.wiki.fc2.com/wiki/Linux%E3%81%AE%E5%88%9D%E6%9C%9FRAM%E3%83%87%E3%82%A3%E3%82%B9%E3%82%AF
+    * 段階的にブートを実現する機能。システム起動時に仮の環境としてメモリ上にファイルシステムを展開し、そこでカーネルを動作させてから本来のファイルシステムをルートにマウントし直す
+    * initrd形式のイメージは、ファイルシステムイメージをgzip圧縮したもの
+    * initramfs形式のイメージは、cpioアーカイブをgzip圧縮したもの
+* Linuxカーネルのコンフィギュレーション
+    * https://www.atmarkit.co.jp/ait/articles/0808/28/news129.html
+    * カーネルコンフィギュレーションは /boot/config-(VERSION) 
+* Linuxカーネル・コンパイル入門
+    * https://tech.nikkeibp.co.jp/it/article/COLUMN/20071016/284752/
+    * カーネルのソースは/usr/src/linuxに展開される。実際には/usr/src/linux-(VERSION)に対してシンボリックリンクが貼られる
+* Linux Kernel Restructuring
+    * https://www.anarg.jp/personal/t-tugawa/note/linux/kernel_restruct.html
+* makeコマンド
+    * makeコマンドは、ソースをコンパイルして実行ファイルを作る(ビルドする)
+    * make mrproper
+        * ビルドする際にソースディレクトリ内を初期化する
+    * make clean
+        * ビルドする際にソースディレクトリ内を初期化する(設定ファイルは残す)
+    * make oldconfig
+        * 現在のカーネルの設定を引き継ぐ
+    * make config
+        * 項目毎に対話的に設定を行う
+* /boot
+    * System.map-(VERSION) はカーネルがメモリ上に展開される際の、シンボルとアドレスのマッピングを記述したファイル(アドレスマップ)
+* カーネルモジュールの依存関係
+    * modules.depファイルは、カーネルモジュールのそれぞれが、別のどのカーネルモジュールに依存しているかという依存関係情報が書かれているファイル
+    * modprobeコマンドはmodules.depを利用して依存関係を解決している
