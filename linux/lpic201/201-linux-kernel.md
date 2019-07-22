@@ -72,3 +72,74 @@ Linuxカーネル
 * カーネルモジュールの依存関係
     * modules.depファイルは、カーネルモジュールのそれぞれが、別のどのカーネルモジュールに依存しているかという依存関係情報が書かれているファイル
     * modprobeコマンドはmodules.depを利用して依存関係を解決している
+
+### カーネルの管理とトラブルシューティング
+
+* udev
+    * udevと呼ばれるデバイスファイルを動的に管理する仕組みのデーモン
+    * udevの動作
+        * デバイスを接続
+        * カーネルが仮想ファイルシステム/sysにデバイス情報を作成
+        * カーネルがudevdにデバイス情報を通知(uevent)
+        * udevdが/sysのデバイス情報を確認
+        * udevdが/devにデバイスファイルを作成
+        * メイン設定ファイルは/etc/udev/udev.conf
+    * 個別のルールファイル
+        * /etc/udev/rules.dディレクトリ内に配置する
+        * ルールファイルの名前は「12-hoge.rules」のように(2桁の番号)-(ルール名).rulesとする
+    * コマンド
+        * udevinfo
+            * udevが認識しているデバイス情報を表示
+        * udevadm info
+            * udev関連のコマンドを統合したコマンド
+        * udevmonitor
+            * udevdの動作状況を監視、コンソールに出力
+    * http://www.usupi.org/sysad/114.html
+    * http://www.usupi.org/sysad/115.html
+* カーネルモジュール
+    * ファイルの拡張子は.ko
+    * コマンド
+        * lsmod
+            * 現在有効にされれているモジュールを全て表示
+        * modinfo
+            * モジュールを指定してその情報を表示
+            * -nオプションでモジュールのファイル名
+        * depmod
+            * カーネルモジューツの依存関係情報ファイルmodules.depを更新する
+        * modprobe
+            * 依存関係を考慮してロード、アンロードが行えるコマンド
+            * -fオプションで強制的に実行
+            * -rオプションでロードではなくアンロードする
+            * -lオプションはロードできるモジュールの一覧を表示
+            * 設定ファイルは/etc/modprobe.conf、最近では/etc/modprobe.d/*.conf
+        * rmmod
+            * 指定したロード済みモジュールをアンロード
+        * insmod
+            * モジュールを動的ロード
+* カーネルパラメータ
+    * カーネル動作の設定
+    * カーネルパラメータを設定するファイルは/etc/sysctl.confまたは/etc/sysctl.dディレクトリ配下のファイル
+    * OS起動時に実行されるスクリプト内でsysctlコマンドがこのファイルを読み込み、設定内容を反映させる
+    * カーネルパラメータを変更する方法は、sysctlコマンドを使う方法と、/proc/sys以下の仮想ファイルに書き込みを行う方法がある
+    * sysctlコマンド
+        * sysctl カーネルパラメータ でそのカーネルパラメータを表示
+        * sysctl -w カーネルパラメータ=値 でカーネルパラメータを変更
+        * sysctl -a カーネルパラメータ一覧を表示
+    * /proc/sys以下にカーネルパラメータを操作するための仮想ファイルが存在する
+    * チューニング https://www.atmarkit.co.jp/flinux/special/proctune/proctune02a.html
+* /proc
+    * プロセス、システムリソースなどの情報を扱うための擬似的なファイルシステム。メモリ上に作成される
+    * /procとは
+        * https://tech.nikkeibp.co.jp/it/article/Keyword/20071214/289515/
+    * PCに接続されたUSBデバイスの情報を確認する
+        * https://www.atmarkit.co.jp/flinux/rensai/linuxtips/510showusbdev.html
+        * lsusbコマンド、もしくは/proc/bus/usb/devicesでUSBデバイスの情報を確認できる
+    * デバイスを表示するコマンド
+        * lsusb
+            * USBデバイスに関する情報を表示
+            * /proc/bus/usb/devicesにも書かれている
+        * lspci
+            * PCIデバイスに関する情報を表示
+        * lsdev
+            * ハードウェアに関する情報を一覧表示
+            * /prod/dma, /proc/interrupts, /proc/ioportsファイル
