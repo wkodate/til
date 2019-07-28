@@ -98,3 +98,73 @@
     * rcスクリプトの実体は/etc/init.dに収められているシェルスクリプト
     * https://tech.nikkeibp.co.jp/it/article/COLUMN/20070605/273739/
     * https://www.atmarkit.co.jp/ait/articles/0206/04/news001.html
+    
+### システムのリカバリ
+
+* GRUB Legacy, GRUB2
+    * Grand Unified Bootloader。Linuxのブートローダ。一般にGRUB2が使われている
+    * GRUBのバージョンが0,9x系のものをGRUB Legacy 1.9以降のものをGRUB2と呼ぶ
+    * BIOS -> MBRのブートローダ -> カーネル -> init の順にブートプロセスが進行
+    * BIOSがMBR(Master Boot Record)を読み込み、ブートローダに制御を移す
+    * grub-install, grub2-installでインストール
+        * https://gentoo.reichsarchiv.jp/item/13
+    * GRUBシェルはgrubコマンドで対話的に操作できる
+    * GRUB2への移行
+        * https://www.ibm.com/developerworks/jp/linux/library/l-grub2/
+    * ブートローダ
+        * https://lpi.or.jp/lpic_all/linux/intro/intro05.shtml
+        * http://www.obenri.com/_install_cent6/loader_cent6.html
+        * http://qref.sourceforge.net/quick/ch-tips.ja.html
+* GRUB Legacy
+    * 設定ファイルは /boot/grub/menu.lst, ディストリビューションによっては/boot/grub/grub.conf, UEFIを使ったシステムは /boot/efi/EFI/***/grub.cfg
+    * title は各設定の名前を指定する項目
+    * GRUBを設定する
+        * http://www.usupi.org/sysad/201.html
+* GRUB2
+    * 設定ファイルは /boot/grub/grub.cfg, CentOS7では/boot/grub2/grub.cfg
+    * menuentryは各設定の名前を指定する項目(GRUBのtitleに相当)
+* UEFI
+    * Unified Extensible Firmware Interface
+    * BIOSに変わる新しいファームウェア
+    * 完全置き換えでなくBIOSと共存するような使用も多くある
+    * UEFI -> ESP(のブートローダ) -> カーネル -> init の順にブートプロセスが進行
+    * UEFI shellは、OSを起動せずにハードウェア周りの設定をシェルで行う
+    * eifbootmgr
+        * UEFIブートマネージャの起動エントリをOS上から操作するコマンド
+    * systemd-boot
+        * systemd独自のUEFIブートマネージャ
+    * U-boot
+        * オープンソースの組恋用のブートローダ
+    * efiboot.img
+        * UEFIでIOSLINUXを使ってブートする際に使われるイメージ
+    * /EFI/BOOT/bootx64.efi
+        * UEFIのブートマネージャ
+    * Secure Boot
+        * システム起動にあたって署名の確認を行い、起動を制限する機能
+    * shim.efi
+        * セキュアブート時に最初に読み込まれるUEFIアプリケーション
+    * grub64.efi
+        * grubを起動するUEFIアプリケーション
+    * http://www.dosv.jp/feature/1103/17.htm
+
+### その他のブートローダ
+
+* SYSLINUX
+    * https://ja.wikipedia.org/wiki/SYSLINUX
+    * FATファイルシステムからLinuxを起動する軽量のブートローダ
+    * FATファイルシステムはMS-DOSやWindowsなどのOSで使用されるファイルシステム
+    * デバイスにインストールするコマンド
+        * syslinux -i|--install デバイス名
+* ISOLINUX
+    * CD-ROMで使用されるISO9660ファイルシステムからLinuxを移動するブートローダ
+* PXELINUX
+    * PXE(Preboot Execution Environment)を使用してネットワークサーバからLinuxを起動するブートローダ
+    * 起動順
+        * DHCPサーバからTFTPサーバのIPアドレスとブートローダ本体のpxelinux.0のパスを取得する
+        * TFTPサーバからpxelinux.0ファイルと設定ファイルを取得
+        * 設定ファイルに従って起動
+    * https://tech.nikkeibp.co.jp/it/article/Keyword/20080530/305494/
+* EXTLINUX
+    * ファイルシステムext2/ext3/ext4/btrfsからLinuxを起動するブートローダ
+    * インストールコマンド
+        * extlinux --install /boot
