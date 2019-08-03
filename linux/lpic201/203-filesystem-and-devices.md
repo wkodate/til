@@ -89,3 +89,61 @@
 * blkid
     * デバイスのラベル、UUID、ファイルシステムの種類などを表示するコマンド
     * https://access.redhat.com/documentation/ja-jp/red_hat_enterprise_linux/6/html/deployment_guide/s2-sysinfo-filesystems-blkid
+    
+### ファイルシステムの作成とオプションの構成
+
+* ファイルシステムを作成するコマンド
+    * mke2fs
+        * ext2/ext3/ext4を作成するコマンド
+        * -j ext3として作成する
+        * -b ブロックサイズをbyte単位で指定
+    * mkfs.xfs
+        * xfsを作成するコマンド
+    * mkfs
+        * いろいろなファイルシステムを作ることができる
+    * https://www.atmarkit.co.jp/ait/articles/0408/24/news093_3.html
+    * https://open-groove.net/linux/linux-mkfs/
+* ファイルシステムをチェックするコマンド
+    * e2fsck
+        * ext2/ext3/ext4のチェック
+    * xfs_check
+        * xfsのチェック
+    * fsck
+        * いろいろなファイルシステムをチェック
+        * https://tech.nikkeibp.co.jp/it/article/COLUMN/20060227/230781/
+* 作成済みファイルシステムに対するコマンド
+    * tune2fs
+        * ext2/ext3/ext4の設定を行う
+        * -j ext2をext3に変換
+        * https://www.atmarkit.co.jp/flinux/rensai/linuxtips/760ext3chk.html
+    * dumpe2fs
+        * ext2/ext3/ext4の詳細を表示する
+    * e2label
+        * ext2/ext3/ext4のラベルを操作
+        * https://www.atmarkit.co.jp/flinux/rensai/linuxtips/925vollabel.html
+* ジャーナリング
+    * 実データをディスクに書き込む前にメタデータを書き込んでおくことで、不正な終了時の不整合を防ぐ機能
+    * https://www.atmarkit.co.jp/ait/articles/0309/17/news002.html
+* オートマウント
+    * 特定のデバイスを必要なときだけ自動でマウントし、利用できるようにする機能
+    * メインの設定ファイル /etc/auto.master、編集したらデーモンの再起動が必要
+    * http://www.maruko2.com/mw/automount_%E3%81%AE%E8%A8%AD%E5%AE%9A
+* ファイルシステムの暗号化
+    * 手順
+        * ブロックデバイスへの暗号化マッピングを作成する
+        * 暗号化マッピングにファイルシステムを作成する
+        * 暗号化ファイルシステムをマウントする
+    * dm-crypt
+        * ブロックデバイスの暗号化方法のひとつ
+        * cryptsetupで暗号化デバイスを作成、管理する
+        * /dev/mapperディレクトリ配下にファイルシステムを作成
+    * LUKS(Linux Unified Key Setup)
+        * Linuxで標準的に使用される暗号化ファイルシステムの仕様
+        * dm-cryptを用いて実装されている
+        * 使用手順
+            * デバイスをLUKSパーティションとして初期化
+            * LUKSパーティションを開く
+            * 開いたLUKSパーティションにファイルシステムを作成する
+            * 暗号化ファイルシステムをマウントする
+    * http://www.usupi.org/sysad/186.html
+    * https://wiki.archlinux.jp/index.php/Dm-crypt/%E3%83%87%E3%83%90%E3%82%A4%E3%82%B9%E3%81%AE%E6%9A%97%E5%8F%B7%E5%8C%96
