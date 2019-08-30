@@ -6,7 +6,6 @@
 * ifconfig
     * ネットワークインターフェースに関する操作を行うコマンド
     * フォーマットは、ifconfig インタフェース名 操作内容
-    * https://www.atmarkit.co.jp/ait/articles/0109/29/news004.html
 * ip
     * ifconfig, route, arpを置き換えるコマンド
     * フォーマットは、ip [オプション] オブジェクト コマンド
@@ -15,20 +14,27 @@
         * addr(address): ネットワークプロトコル
         * route: ルーティング関連
         * neigh(neighbour): ARP等
+    * route
+        * ip route add 宛先アドレス via ゲートウェイのアドレス
 * iwconfig
     * 無線LAN関連の操作を行うコマンド
+    * essid ESSIDを指定
+    * key WEPキーを指定
 * iw
     * 無線デバイスや無線インターフェースの設定を行うコマンド
+    * コマンド
+        * iw dev インターフェース名
+        * iw phy デバイス名
+        * iw phy# デバイス番号
 * iwlist
-    * 無線LANのリンク品質や信号強度を確認できるコマンド
+    * 無線インターフェースの情報を取得できるコマンド
     * scanninig(scanと省略可)を指定して、使用可能なアクセスポイントをスキャンする
-    * https://www.suse.com/ja-jp/documentation/sles11/singlehtml/book_sle_admin/cha.wireless.wlan.html#sec.wireless.wlan.tant.stab
 * arp
     * IPアドレスからMACアドレスを知る
-    * https://www.atmarkit.co.jp/ait/articles/0111/29/news003.html
+    * -i インターフェースを指定
+    * -a 表示対象のホスト名を指定
 * /etc/sysconfig/network
     * RedHat系のネットワークの全体設定を行うファイル
-    * http://www.turbolinux.com/products/server/11s/user_guide/netconffile.html
 * /etc/network/interfaces
     * Debian系OSで各インターフェースを設定するファイル
 * /etc/nsswitch.conf
@@ -39,21 +45,43 @@
 ### 高度なネットワーク構成とトラブルシュート
 
 * ping
-    * -b: ブロードキャストでpingを実行
+    * ICMPパケットを送り、パケットが正しく伝送されるか、パケットの往復にどのくらい時間がかかるかをチェックするためのコマンド
+    * -b ブロードキャストでpingを実行
+    * -i 送信間隔を指定
+    * -s 送信するパケットデータのサイズを指定する
+    * -n 名前解決を行わずIPアドレスのまま結果を送信
     * 重複した応答があるとDUP!をつけて表示
 * netstat
     * ネットワーク状態についての様々な情報が得られるコマンド
-    * -rオプションで、ルーティングテーブルを表示
-    * -lオプションで、LISTENのソケットのみを表示
-    * -iオプション絵、ネットワークインターフェースの統計を表示
+    * -r ルーティングテーブルを表示
+    * -l LISTENのソケットのみを表示
+    * -i ネットワークインターフェースの統計を表示
+* ss
+    * netstatの後継となるコマンド
+* ifconfig
+    * ネットワーク環境の確認、設定を行う
+    * 複数のIPアドレスをネットワークインターフェースに割り当てる
+        * ifconfig eth0:1 IPアドレス
 * route
     * ルーティングテーブルの表示、追加、削除
-    * デフォルトゲートウェイの設定は、route add default gw デフォルトゲートウェイのIPアドレス
+    * 追加
+        * route add [-host|-net] 宛先アドレス gw ゲートウェイのIPアドレス
+    * 削除
+        * route del [-host|-net] 宛先アドレス [gw ゲートウェイのIPアドレス]
+    * デフォルトゲートウェイの設定
+        * route add default gw デフォルトゲートウェイのアドレス
+* ip
+    * ifconfigなどの後継となるコマンド
+    * デフォルトゲートウェイの設定
+        * ip route [ add | del } default via デフォルトゲートウェイのアドレス
 * tcpdump
     * パケットキャプチャができるコマンド
     * 出力をフィルタリングできる
-    * https://thinkit.co.jp/article/730/1?page=0,1
-    * https://prev.net-newbie.com/tcpip/tcp/tcpdump.html
+    * src, dstに続けてhost, port, IPアドレスを指定して送信元、送信先のパケットを対象にフィルタイリングする
+    * andで条件を複数指定できる
+    * -i 監視するインターフェースを指定
+    * -n 名前解決を行わずIPアドレスのまま表示
+    * -X 16進数とASCIIの表でパケットの内容を表示
 * dig
     * IPアドレスとホスト名の変換を行うコマンド。nslookupよりも詳しい情報が得られる
 * mtr
@@ -61,10 +89,32 @@
     * Mytraceroute
 * hostnane
     * 自ホストのホスト名を表示
-    * -a オプションで自ホストのエイリアスを表示
+    * -a, --alias エイリアスを表示
+    * -f, --fqdn FQDNを表示
+    * -d, --domain DNSドメインを表示
+    * -i, --ip-address IPアドレスを表示
 * nmap
     * LISTENポートをスキャンするツール
-    * https://www.atmarkit.co.jp/ait/articles/0801/08/news127.html
-* TCPラッパーは、ネットワークサービスに対するアクセス制御を行うプログラム。デーモン名はtcpd
-    * /etc/hosts.allow, /etc/hosts.denyでアクセス許可、拒否の設定を行う
+    * オプションでスキャンタイプを指定できる。デフォルトはTCPスキャン
+    * -F 有名ポートを対象にした高速スキャン
+    * -O 対象ホストのOS識別
+    * -p ポートしてい
+* NetworkManager
+    * 動的にネットワークの設定を行うプログラム
+* TCPラッパー
+    * ネットワークサービスに対するアクセス制御を行うプログラム。デーモン名はtcpd
+    * アクセス制御の順番
+        * /etc/hosts.allow, /etc/hosts.denyでアクセス許可、拒否の設定を行う
+        * /etc/hosts.allowの条件にマッチすればその時点でアクセスを許可
+        * マッチしなかった場合は/etc/hosts.denyの条件にマッチすればアクセスを拒否
+        * それにもマッチしなければ許可
+    * ファイルの変更を反映させるためにtcpdの再起動は不要
 * デフォルトゲートウェイは外部と接続したルータのIPアドレス
+* ネットワーク関連の設定ファイル
+    * /etc/nsswitch.conf
+        * 名前解決の優先順位の設定
+        * name service switchnお略
+    * /etc/hosts
+        * ホスト名とIPアドレス対応の設定
+    * /etc/resolv.conf
+        * 名前解決に使うDNSサーバの設定
