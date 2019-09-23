@@ -16,18 +16,22 @@
 * iotop
     * プロセス毎のディスクIOを監視するツール
 * sar
+    * system admin reporter
     * sadcコマンド
-        * cronの設定によって定期的に収集し、/var/log/sa/saXXにバイナリ形式で保存
+        * system activity data collector
+        * cronの設定によって定期的に収集し、`/var/log/sa/saXX`にバイナリ形式で保存
     * 定期的な実行
-        * /usr/lib/sa/sa1は、sadcの定期的に実行するスクリプト
-        * /usr/lib/sa/sa2は、sarの定期的に実行するスクリプト
-    * -f 読み込むログファイルを指定
-    * sysstatは、sa,sadc等を含む管理ツールの名前
+        * `/usr/lib/sa/sa1` sadcを定期的に実行するスクリプト
+        * `/usr/lib/sa/sa2` sarを定期的に実行するスクリプト
+    * sysstat
+        * sa,sadc等を含む管理ツールの名前
+    * `-f` 読み込むログファイルを指定
 * sadf
+    * sar data format
     * sadcのログをTSVやXML形式で出力
     * -- をつけてsarコマンドのオプションを渡す
-    * -j JSON形式で出力
-    * -x XML形式で出力
+    * `-j` JSON形式で出力
+    * `-x` XML形式で出力
 * uptime
 * w
 * htop
@@ -47,15 +51,15 @@ CPU、メモリ、ディスクIO、ネットワークなど特定のリソース
     * 詳細は`/proc/meminfo`でも確認できる
 * swapon
     * スワップ領域を有効にするコマンド。-sを使用するとスワップ領域の利用状況を確認できる
-    * -s, --summary サマリを表示
+    * `-s`, `--summary` サマリを表示
 * df
 * netstat
 * ss
     * netstatコマンドの代替コマンド
-    * -a すべてのソケットを表示
-    * -n 数字で表示
-    * -t TCPを表示
-    * -u UDPを表示
+    * `-a` すべてのソケットを表示
+    * `-n` 数字で表示
+    * `-t` TCPを表示
+    * `-u` UDPを表示
 * iptraf
 
 CPU使用率
@@ -70,6 +74,7 @@ CPU使用率
 
 
 ネットワーク
+
 * eth0などはインターフェース名。対応するネットワークドライバが正常にロードされていればOSが自動的に認識してethのあとに番が号う生かされる
 * loはローカルループバックと呼ばれる特別な仮想インターフェース。IPアドレスとして127.0.0.1が割り当てられていて外部と通信することができない
 * nfsiostat
@@ -82,12 +87,13 @@ CPU使用率
 * リソース状況を可視化するツール
     * collectd
         * サーバの状態を監視するデーモン
-        * /etc/collectd.confが設定ファイル。LoadPluginで使用するプラグインを指定
+        * `/etc/collectd.conf`
+            * 設定ファイル。LoadPluginで使用するプラグインを指定
     * Nagios
         * サーバの死活監視やネットワークサービスの状態やリソースの使用状況などを総合的に監視するソフトウェア
     * Icinga2
         * Nagios互換の監視ツール
-        * アイシンガ、と読む
+        * アイシンガと読む
     * MRTG
         * Multi Router Traffic Grapher
         * ネットワークやリソースの使用状況を監視しグラフ化するツール。死活監視はできない
