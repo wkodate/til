@@ -3,70 +3,152 @@
 
 ### RAIDの構成
 
+* RAID
+    * Redundant Arrays of Inexpensive Disks
+    * 複数のハードディスクを組み合わせて利用する技術
+    * RAIDにはいくつかの種類があり、これをRAIDレベルと呼ぶ
+    * /dev/md0, /dev/md1等を使う
 * RAID0
     * ストライピング。複数のディスクを利用
     * 利用可能な容量は、全ディスクの合計
-    * https://www.data-sos.com/raid/raid07.html
 * RAID1
     * ミラーリング。他のディスクにコピーして冗長化
     * 利用可能な容量は、1台分
-    * https://www.data-sos.com/raid/raid08.html
 * RAID5
     * 3台以上で構成し、パリティ領域と呼ばれるデータ復旧用のデータを各ディスクに分散
     * ディスク１台分をパリティ領域として利用
     * 利用可能な容量は、合計から1台引いた分
-    * https://www.data-sos.com/raid/raid09.html
 * mdadmコマンド
+    * multiple device admin
     * RAIDを構築・管理するコマンド
     * あらかじめfdiskコマンドで使用するデバイスのパーティション「0xfd」を設定しておく
-    * 設定ファイル /etc/mdadm.conf 
-        * http://www.obenri.com/_raid_build/mdadm_rebuild.html
+    * 設定ファイル /etc/mdadm.conf、もしくは/etc/mdadm/mdadm.conf
+    * /proc/mdstat
+        * RAIDの状態をチェックできるファイル。RAIDアレイの状態を確認
     * Createモード
+        * -C, —createオプションでCreateモードとして動作
         * RAIDの新規作成
+        * -l, —level RAIDレベルを指定
+        * -n, —raid-devices 利用するデバイス数を指定
+        * -x, —spare-devices 予備デバイスを指定
     * Manageモード
+        * —manageオプションでManageモードとして動作
         * RAIDを構成するデバイスの追加・削除をするコマンド
+        * -a, --add 構成デバイスを追加
+        * -r, --remove 構成デバイスを削除
+        * -f, --fail 構成デバイスに不良マークを付与
     * Miscモード
         * RAIDの状態を表示、詳細を表示、停止をオプションで指定
+        * -Q, —query RAIDの状態を表示
+        * -D, —detail RAIDの詳細情報を表示
+        * -S, —stop RAIDを停止
     * 他にもAssembleモードなどがある
-    * https://open-groove.net/lpic/linux-create-raid-arrays-mdadm/
-* /proc/mdstat
-    * RAIDの状態をチェック。RAIDアレイの状態を確認
 
 ### 記憶装置へのアクセス方法の調整
 
+* ストレージの中でも、ハードディスク、SSD、iSCSIの話
+* ハードディスク、パーティション、ファイルシステムの関係
+    * ハードディスク
+        * /dev/sdaなどのデバイスファイルとして扱う
+        * hdparmコマンドはハードディスクデバイスを引数にとって転送モードの設定を行う
+    * パーティション
+        * データを格納するためにハードディスクを分割する
+        * fdiskコマンドを利用、ハードディスクを引数にとってパーティションを操作
+        * /dev/sda1, /dev/sda2のようにデバイスファイルとして操作可能
+    * ファイルシステム
+        * パーティションはただの領域なので、データを格納するためにパーティション上にファイルシステムを作る必要がある
+        * mkfs, mke2fsコマンドを利用、パーティションを表すデバイス(/dev/sda1)を引数にとってそのパーティション上にファイルシステムを作成
+    * 作成したファイルシステムをmountコマンドでマウントすることによって、ファイルを書き込むことができる
+    * ファイルシステムの設定の変更はtune2fsなどを利用
 * デバイスファイル
     * システムに接続されている物理的なデバイスにアクセスする方法として、/dev内の仮装ファイル(デバイスファイル)がある
-    * IDE接続のハードディスクはhdで始まるデバイスファイル。最近は名前が統合されhdもsdになっている
-    * SCSI/SATA接続のハードディスクはsdで始まるファイルデバイス
+* ハードディスクの管理
+    * IDE(ATA), SATA(Serial ATA), SCSIなどがある
+    * IDEの転送モード
+        * PIOモード
+            * CPUがハードディスクに直接命令して転送。データの読み書き中はCPUは他の作業ができない
+        * DMAモード
+            * 専用コントローラがデータの転送を管理。現在一般的な転送モード
+    * hdparm
+        * hard disk parameter
+        * ハードディスクに関するパラメータを取得・設定するコマンド
+        * オプション
+            * オプションなしだと、現在のパラメータの一覧が表示される
+            * -i identification 詳細情報を表示
+            * -I ドライブから直接詳細情報を得る
+            * -W0 ライトキャッシュをオフ, -W1 ライトキャッシュをオン
+            * -c1 32bit I/Oをオフ, -c1 32bit I/Oをオン
+            * -d0 DMAモードをオフ, -d1 DMAモードをオン
+            * -t バッファキャッシュオフで読み込み速度を計測
+            * -T バッファキャッシュのみで読み込み速度を計測
+        * バッファキャッシュは、ハードディスクから読み出されたデータをキャッシュしておくためのメモリ上に置かれるデータ
+    * IDE接続
+        * Integrated Drive Electronics、パラレルATA
+        * hdで始まるデバイスファイル
+        * 最近は名前が統合されsdになっている
+    * SCSI/SATA接続
+        * Serial AT Attachment
+        * コンピュータと記憶装置を接続するIDE規格の拡張子用の一つ
+        * sdで始まるファイルデバイス
+        * sdaはハードディスク、sda1やsda2はパーティション
     * SATAはATAよりも高速な転送が行える
-    * https://www.debian.org/releases/etch/sparc/apcs04.html.ja
+    * AHCI
+        * Advanced Host Controller Interface
+        * IDEと比べて速なシリアルATA(SATA)を活かせるインターフェース仕様
+        * SATAの仕様を定義し、ストレージとメモリ間のデータ交換などについてインテルが策定した規格
 * SSD
     * フラッシュメモリ、ハードディスクの速度を大幅に改善
-    * Trimは、事前に消去動作を行なってSSDの速度低下を緩和する。fstrimコマンドを利用
-* NVMe(NVM Express)
-    * PCI ExpressバスからSSDに接続するための規格
-* SCSI(Small Compute System Interface)、iSCSI
-    * PCやサーバに接続されたハードディスクなどの周辺機器を制御し、データ転送を行うための規格
+    * Trim
+        * 事前に消去動作を行なってSSDの速度低下を緩和する
+        * fstrimコマンドを利用
+    * NVMe
+        * Non-Volatile Memory Express
+        * PCI ExpressバスからSSDに接続するための規格
+* SCSI
+    * Small Compute System Interface
+    * PCやサーバに接続されたハードディスクなどの周辺機器を制御し、データ転送を行うための規格。信頼性が高い
+    * iSCSIは、TCP/IP上でSCSIプロトコルを利用可能にする仕組み。Internet iSCSI
+    * ストレージを利用するホストをイニシエータ、iSCSIストレージをターゲットと呼ぶ
+        * サーバをイニシエータとして動作させるにはiscsidデーモンを起動する必要
+        * ローカルデータベースに登録済みのiSCSIターゲットに自動的にログインするにはiscsiデーモン
+    * Linuxでは、IDE以外のハードディスクはすべてSCSIデバイスとして扱われる
+    * ローカルストレージと同じようにネットワーク用のストレージを利用できる
+    * 設定
+        * 設定ファイルは、iscsid.conf
+            * node.starup=automaic 自動ログインを行う設定
+            * node.starup=manual 自動でログインを行わない設定
+        * _netdev
+            * iscsiデーモンを起動するまで待ってからマウントするための/etc/fstabのマウントオプション
+    * 必要な作業
+        * iSCSIターゲットの一覧取得およびローカルデータベースへの登録
+            * iscsiadmコマンドのdiscoveryモードでsendtargetsタイプとiSCSIターゲットを指定
+        * 登録済みiSCSIターゲットへログイン
+            * iscsiadmコマンドのnodeモードで-lオプションを指定
+            * サーバ起動時に自動的に使用可能にするには、iscsiデーモンを利用する
     * iscsiadm
         * iscsidをデバイスとして使用するコマンド
-    * iscsid.confは、iscsidデーモンとiscsiadmコマンドの設定ファイル
-    * _netdev は、対象となるデバイスがネットワークを通して利用可能になるまでマウントを待つマウントオプション
-    * http://www.usupi.org/sysad/171.html
-* hdparm
-    * ハードディスクに関するパラメータを取得・設定するコマンド
-    * オプション
-        * -W1 ライトキャッシュをオン
-        * -c1 32bit I/Oをオン
-* WWID(World Wide Idenitifier)
-    * ファイバーチャネルやSCSIによるSANにおいて記憶装置を一位に識別する
-* LUN(Logical Unit Number)
-    * 記憶装置を識別するための論理的な単位
-    * https://www.atmarkit.co.jp/ait/articles/0808/25/news120.html
+        * オプション
+            * -m, —mode モードの指定　g
+            * -t sendtargets 接続先全てのiSCSIターゲットをiSCSIイニシエータのローカルデータベースに保存する
+            * -l, —login iSCSIターゲットにログイン
+            * -u, --logout,  iSCSIターゲットにログイン
+            * -T, —targetname=IQN iSCSIターゲットの指定
+    * lsblk
+        * list block
+        * ブロックデバイス一覧を表示
+    * WWID
+        * World Wide Idenitifier
+        * SANなどにおいて記憶装置を一意に識別する
+        * scsi_idコマンドで、SCSI接続の記憶装置のWWIDの確認ができる
+    * LUN
+        * Logical Unit Number
+        * 記憶装置を識別するための論理的な単位。この単位でサーバから1台のHDDと認識される
 
 ### 論理ボリュームマネージャ
 
 * LVM(Logical Volume Manager)
-    * 物理ボリュームをまとめて仮想的な領域(ボリュームグループ)ろし、そこから仮想的なパーティション領域(論理ボリューム)を切り出して柔軟に記憶領域を管理できる仕組み
+    * 物理ボリュームをまとめて仮想的な領域(ボリュームグループ)とし、そこから仮想的なパーティション領域(論理ボリューム)を切り出して柔軟に記憶領域を管理できる仕組み
+    * mリットは、ボリュームサイズを後から変更できる、物理ディスク容量を超えるサイズの論理ボリュームを作成できる、あとから追加できる
     * LVMを構成する手順
         * fdiskコマンドによるLVM用パーティションの作成
         * pvcreateコマンドによるPV(物理ボリューム)の作成
@@ -74,11 +156,23 @@
         * lvcreateコマンドによるLV(論理ボリューム)の作成
         * mkfsコマンドによるファイルシステムの作成
         * ファイルシステムのマウント
-    * LVMボリュームの円作フィルタ lvm.conf
-    * /dev/VG名/LV名 がその論理ボリュームを表すデバイスファイル
-    * https://tech.nikkeibp.co.jp/it/article/Keyword/20071012/284413/
-    * https://www.itmedia.co.jp/enterprise/0307/11/epn01.html
-    * http://pantora.net/pages/linux/lvm/3/
-    * https://users.miraclelinux.com/technet/document/linux/training/2_2_3.html#training2_2_3_1
+    * LVMボリュームの検索フィルタ lvm.conf
+    * 物理エクステント
+        * LVMによる領域管理の最小単位。物理ボリュームは物理エクステントの集合として管理される
+    * LVMが扱えるデバイス
+        * /dev/mapper/VG名-LV名
+        * /dev/dm-*
+        * /dev/VG名/LV名
+* lvcreate
+    * -L ボリュームサイズを指定
+    * -n 論理ボリュームを指定
+    * -s スナップショットを作成
+* コマンド
+    * **create
+    * **remove
+    * **move
+    * **extend
+    * **reduce
+    * **display
 * スナップショット
     * ある瞬間の論理ボリュームの状態を記録する機能。差分を利用した仕組み
