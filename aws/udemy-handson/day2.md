@@ -25,15 +25,16 @@ Day2 EC2を使ってサーバを立てる
 ## AMIを取得
 
 * AMIはEC2のある断面、EC2インスタンスを作る元になる
-* スナップショットはディスクの断面になるのでEBSを作る元になる
+* スナップショットとは別物。スナップショットはディスクの断面になるのでEBSを作る元になる
+* AMIはスナップショットに管理情報を追加したもの
 * インスタンスを停止させてからAMIを作成、これを利用してインスタンスを生成できる
 
 ## IPアドレスを固定
 
 * 再起動した場合にIPアドレスが変わってしまうのでElastic IPを使う
 * 実行中のインスタンスと関連付けられていないElastic IPはお金がかかるので注意
-* https://aws.amazon.com/jp/premiumsupport/knowledge-center/elastic-ip-charges/
-    * 次の条件が満たされている限り、Elastic IP アドレスに料金は発生しません。
+    * https://aws.amazon.com/jp/premiumsupport/knowledge-center/elastic-ip-charges/
+        * 次の条件が満たされている限り、Elastic IP アドレスに料金は発生しません。
         * Elastic IP アドレスが EC2 インスタンスに関連付けられている。
         * Elastic IP アドレスに関連付けられているインスタンスが実行中である。
         * インスタンスに 1 つの Elastic IP アドレスしか添付されていない。
