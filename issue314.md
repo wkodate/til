@@ -1,5 +1,7 @@
-Streaming Data from the Universe with Apache Kafka
+Issue314
 ===
+
+# Streaming Data from the Universe with Apache Kafka
 
 * Apache Kafkaの天文学でのユースケース
 

@@ -1,5 +1,7 @@
-Apache Hadoop Ozone – Object Store Architecture
+Issue286
 ==
+
+# Apache Hadoop Ozone – Object Store Architecture
 
 開発者向けのHadoop Ozoneの記事。主にシステムアーキテクチャについて。
 
