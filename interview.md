@@ -349,9 +349,22 @@ Hadoop使われる分散ファイルシステム
 # Lambda Architecture
 
 ##  What is streaming and batching?
+
+ストリーミングは低レイテンシの処理、バッチングは高スループットの処理
+
 ##  What is the upside of streaming vs batching?
+
+ストリーミングは、正確でなくてもすぐに知ってインサイトを得ることができる。バッチは正確に大量のデータを処理することができる
+
 ##  What is the difference between lambda and kappa architecture?
+
+ラムダアーキテクチャはバッチレイヤとスピードレイヤが並行で動いている。アーキテクチャを単純化したのがカッパアーキテクチャであり、スピードレイヤのみを残すアーキテクチャ
+
+* カッパアーキテクチャでは、問題が起きた場合にはストリーム処理をやり直す。ストリーム処理のリソースを大量に消費する
+
 ##  Can you sync the batch and streaming layer and if yes how?
+
+あとから処理したバッチレイヤの結果をスピード処理の結果に上書きする
 
 # Python
 
@@ -362,11 +375,36 @@ Hadoop使われる分散ファイルシステム
 # Data Warehouse & Data Lake
 
 ## What is a data lake?
+
+構造化データや非構造化データを貯めることができる分散ストレージ
+
 ## What is a data warehouse?
+
+処理済みの構造化データを貯めてビジネスに活かす
+
 ## Are there data lake warehouses?
+
+
 ## Two data lakes within single warehouse?
+
+
 ## What is a data mart?
+
+データウェアハウスから特定の目的に沿って一部データを抽出
+
 ## What is a slow changing dimension (types)?
+
+現行データと履歴データの両方を保存管理するディメンション。3種類のSCDが存在する
+
+* 3種類のSCD
+    * 上書き
+    * 新バージョンのディメンションレコードの作成
+    * 現行値フィールドの作成
+* BIツールでは多次元モデルと呼ばれるデータモデルを使ってテーブルとカラムの集合を整理して名前をつけている
+    * xx別のyy数(率)のデータについて、xxがディメンション、yyがメジャー
+    * ディメンジョン日付や文字列などが使われる
+    * メジャーは数値が扱われる
+
 ## What is a surrogate key and why use them?
 
 # APIs (REST)
@@ -391,8 +429,14 @@ Hadoop使われる分散ファイルシステム
 # MapReduce
 
 ## What is a use case of mapreduce?
+
+サイト訪問者の集計、複数ソースからのデータ分析、顧客満足度の改善、顧客の洞察、ハードウェアコスト削減
+
 ## Write a pseudo code for wordcount
+
 ## What is a combiner?
+
+Mapperの結果を中間処理するクラス
 
 # Docker & Kubernetes
 
@@ -403,9 +447,20 @@ Hadoop使われる分散ファイルシステム
 # Data Pipelines
 
 ## What is an example of a serverless pipeline?
+
 ## What is the difference between at most once vs at least once vs exactly once?
+
+at most onceは多くても1回処理する(ロストあり重複なし)、at least onceは少なくとも1回処理する(ロストなし重複あり)、exactly onceは確実に1回処理する(ロストなし重複なし)
+
+* exactly onceを実現するには両者の通信を保証するためのコーディネータの存在が必要
+    * コーディネータ不在の場合にどうするかのコンセンサスが必要
+    * コーディネータとのやりとりで時間がかかる
+
 ## What systems provide transactions?
+
 ## What is a ETL pipeline?
+
+ETLパイプラインは、1つのシステムからデータを抽出して変換し、データベースやデータウェアハウスに読み込む一連のプロセスを指す。データパイプラインはもう少し一般的な用語で、システムから別のシステムにデータを移動し、その過程でデータを変換する可能性がある処理のことを指す
 
 # Airflow
 
@@ -416,7 +471,7 @@ Hadoop使われる分散ファイルシステム
 
 # DataVisualization
 
-# What is a BI tool?
+## What is a BI tool?
 
 # Security/Privacy
 
@@ -428,13 +483,20 @@ Hadoop使われる分散ファイルシステム
 # Distributed Systems
 
 ## How clusters reach consensus (the answer was using consensus protocols like Paxos or Raft). Good I didnt have to explain paxos
+
 ## What is the cap theorem / explain it (What factors should be considered when choosing a DB?)
+
 ## How to choose right storage for different data consumers? It's always a tricky question
 
 # Apache Flink
 
 ## What is Flink used for?
+
+データストリームをステートフルに処理する分散処理エンジン
+
 ## Flink vs Spark?
+
+両方ともストリーム処理アプリケーションが目的で利用される。アーキテクチャやコアコンポーネントが異なるので
 
 # GitHub
 ## What are branches?
@@ -450,4 +512,3 @@ Hadoop使われる分散ファイルシステム
 ## What is Scrum?
 ## What is OKR?
 ## What is Jira and what is it used for?
-
