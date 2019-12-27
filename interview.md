@@ -25,12 +25,12 @@ FROM
   user
 ```
 
-|userid |city |population |sum(population |
-|---|---|---|
-|1 |tokyo  |10 |18 |
-|2 |tokyo  |8 |18 |
-|3 |osaka  |7 |7 |
-|4 |nagoya  |6 |6 |
+|userid|city|population|sum(population)|
+|---|---|---|---|
+|1|tokyo|10|18|
+|2|tokyo|8|18|
+|3|osaka|7|7|
+|4|nagoya|6|6|
 
 ## What is a stored procedure?
 
