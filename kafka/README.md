@@ -7,7 +7,7 @@ Kafka
 
 # Consumer
 
-## オブセットコミット
+## オフセットコミット
 
 オフセットをコミットする前にリバランスが実行されると重複が発生する。
 
@@ -16,6 +16,17 @@ Kafka
 自動の場合は `auto.commit.interval.ms` でコミット間隔を指定する。
 
 手動の場合はsync or asyncに合わせてCommitAPIを選択する。
+
+## 信頼性のための設定
+
+* `consumer.id`
+  * consumer groupのID
+* `auto.offset.reset`
+  * 存在しないオフセットを指定した場合に先頭から読むか、最新から読むか
+* `enable.auto.offset`
+  * 自動でオフセットをコミットさせるか、コード内で手動でコミットするか
+* `auto.commit.interval.ms`
+  * 自動オフセットコミットのときのインターバル
 
 # Broker
 
@@ -41,9 +52,21 @@ Kafka
 
 レプリケーション設定
 
-* replication.factor
+* `replication.factor`
   * レプリケーション数。3以上推奨
-* unclean.leader.election.enable
+* `unclean.leader.election.enable`
   * in-syncでないレプリカがリーダーになることを許容するかどうか
-* min.insync.replicas
+* `min.insync.replicas`
   * 書き込みに必要なin-syncレプリカの最小数
+  
+## コンパクション
+
+保存期間よりも古いメッセージを削除するdeleteポリシーと、トピックの各キーの最新の値のみを格納するcompactポリシーがある。
+
+# Kafka Connect
+
+外部データストアとの接続がコネクタの設定だけで書ける。データストアのコネクタが存在しない場合は、Connect APIを使ってアプリケーションを書く。
+
+Confluentが提供しているコネクタ一覧
+
+https://www.confluent.io/product/connectors-repository/
