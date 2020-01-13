@@ -410,20 +410,79 @@ Hadoop使われる分散ファイルシステム
 # APIs (REST)
 
 ##  What does REST mean?
+
+REpresentational State Transfer
+
+Webの設計モデル
+
 ##  What is idempotency?
+
+何回実行しても同じ結果になる性質
+
+RESTも同じリクエストを何度繰り返しても、同じリソース状態になる
+
 ##  What are common REST API frameworks (Jersey and Spring)?
 
 # Apache Spark
 
 ## What is an RDD?
+
+Resilient Distributed Datasets
+
+イミュータブルなデータ要素の分散コレクション
+
+SparkはRDDに対してデータ処理を行う
+
+RDDの操作には変換とアクションがある。
+
+変換は、既存のRDDに処理を加えて新しいRDDを作成していく操作
+
+アクションは、ワーカでの処理結果をまとめ上げて通常のコレクションに変換したりストレージに保存したりする
+
 ## What is a dataframe?
+
+名前をつけたカラムで表現した分散データコレクション
+
+JSON, ORC, Parquetなどさまざまな構造化データを簡単に扱える
+
+データフレームのメリット
+* より少ない量で可読性の高いコードを記述できる
+* Catalystオプティマイザによる処理の最適化が行われる
+
 ## What is a dataset?
+
+RDDとDataFrameの両方の強みを活かすことができる分散データコレクション
+
+Spark SQL実行エンジンのパフォーマンスやロバスト性を提供する一方、JVMオブジェクト上での処理を簡単に表現できる
+
 ## How is a dataset typesafe?
+
+RDDとDatasetは型安全、Dataframeは型安全じゃない
+
 ## What is Parquet?
+
+多くのデータ処理システムでサポートされている列指向フォーマット
+
+SparkSQLはParquetファイルの読み書きをサポートしている
+
 ## What is Avro?
+
+行指向フォーマット
+
 ## Difference between Parquet and Avro
+
 ## Tumbling Windows vs. Sliding Windows
+
+Tumbling Windowは、時間固定でオーバラップしないwindow
+
+Sliding Windowは、時間が場を固定して一定時間でスライドするwindow
+
 ## Difference between batch and stream processing
+
+バッチ処理は一定期間で保存されたデータブロックをまとめて処理
+
+ストリーム処理は短い期間のデータをリアルタイムに処理
+
 ## What are microbatches?
 
 # MapReduce
@@ -496,7 +555,7 @@ ETLパイプラインは、1つのシステムからデータを抽出して変�
 
 ## Flink vs Spark?
 
-両方ともストリーム処理アプリケーションが目的で利用される。アーキテクチャやコアコンポーネントが異なるので
+両方ともストリーム処理アプリケーションが目的で利用される。アーキテクチャやコアコンポーネントが異なる
 
 # GitHub
 ## What are branches?
