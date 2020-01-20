@@ -29,7 +29,7 @@ HTTPサービス
 
 ## Apacheの基本的な設定
 
-### Apacheの設定ファイル
+### Apacheの設定
 
 * メインの設定ファイルはhttpd.conf
     * ソースからインストール
@@ -39,6 +39,17 @@ HTTPサービス
     * Debian
         * /etc/apache2/apache2.conf
 * 機能ごとに複数の設定ファイルに分割し、httpd.confでインクルードして利用する
+* 制御用コマンド
+    * apachectl
+        * RedHat系
+    * apache2ctl
+        * Devian系
+    * サブコマンド
+        * start, stop, restart
+        * graceful
+            * 安全に再起動
+        * configtest
+            * 設定ファイルの構文チェック
 
 ### ディレクティブ
 
@@ -57,25 +68,58 @@ httpd.confの設定項目はディレクティブと呼ばれる
     * サーバ管理者の連絡先アドレスを指定。エラーページなどに表示される
 * Listen
     * 待受ポート
-* LogFormat
-    * ログに記録する項目と形式を定義
+* User
+    * http子プロセスの実行ユーザを指定
+* Group
+    * http子プロセスの実行グループを指定
+* Alias
+    * ディレクトリとパスを指定してディレクトリのエイリアスを指定
 * Redirect
     * 指定したURLへリダイレクト
+    * `Redirect [ステータス] URL-path URL`
 * VirtualHost
     * 1台のサーバで2つ以上のwebサイトを管理するバーチャルホスト設定
     * `<VirtualHost IPアドレス[:ポート番号]>...</VirtualHost>`
+    * 名前ベースのバーチャルホスト
+        * ひとつのIPアドレスに複数のドメイン名を設定
+        * NameVirtualHostディレクティブでIPアドレスを設定する
+    * IPベースのバーチャルホスト
+        * 複数のIPアドレスに複数のドメイン名を設定
+        * ListenディレクティブでIPアドレスを設定
 * ServerAlias
     * サーバのエイリアスを指定
 
 サーバ処理関連のディレクティブ
 
+* Timeout
+    * クライアントからリクエストを受け取ってから完了するまでの時間の最大値を指定
 * KeepAlive
     * ブラウザサーバ間でTCP接続をキープする、KeepAliveの有効無効を指定
     * 1つのTCP接続を使って複数のHTTP処理リクエストをすることができる
-* StartServers, MinSpareServers, MaxSpareServers
-    * 起動時のプロセス数、待機子プロセスの最大最小
+* MaxKeepAliveRequests
+    * KeepAlive時に1つの接続を受け付ける最大リクエスト数を指定
+* KeepAliveTimeout
+    * KeepAlive時にクライアントからのリクエストを完了してから、コネクションを切断せずに次のリクエストを受け取るまでの最大待ち時間を指定
+* StartServers
+    * 起動時のプロセス数
+* MaxSpareServers, MinSpareServers
+    * 待機子プロセスの最大最小を設定
 * MaxRequestWorkers
     * 最大同時接続数
+* MaxConnectionsPerChild
+    * htp子プロセスが処理するリクエストの最大数を指定
+
+ログ関連のディレクティブ
+
+* HostnameLookups
+    * IPアドレスを逆引きホスト名で記録するかどうか指定
+* LogFormat
+    * アクセスログに使われる書式を定義
+* CustomLog
+    * アクセスログのファイル名とLogFormatで定義された書式を指定
+* LogLevel
+    * エラーログに記録するログのレベルを指定
+* ログファイルは/var/log/httpdディレクトリ以下に格納
 
 外部設定ファイル関連のディレクティブ
 
@@ -85,84 +129,123 @@ httpd.confの設定項目はディレクティブと呼ばれる
 * AllowOverride
     * 外部設定ファイルのhttpd.confの上書きを許可
     * <Directory>セクション内でのみ使用できる
+    * パラメータ
+        * AuthConfig
+        * All
+            * すべての設定の変更を許可
+        * None
+            * すべての設定の変更を禁止
 
-モジュール利用のディレクティブ
+モジュール関連のディレクティブ
 
-* LoadModule
+* LoadModuleディレクティブ
     * モジュールをロード
     * apxsコマンドでApacheの動的モジュールのコンパイルとインストールを行う
+* 主なモジュール
+    * mod_authn_file
+        * .htaccessでのユーザ認証機能を提供
+        * データベースからユーザを検索するために利用される
+    * mod_auth_basic
+        * BASIC認証のフロントエンド
+    * mod_auth_digest
+        * ダイジェスト認証のフロントエンド
+    * mod_authz_host
+        * ホストベースのアクセス制御を提供
+    * mod_access_compat
+        * ホストベースのアクセス制御
+    * mod_perl
+        * Perlの機能を提供
 
 ### クライアントアクセスの認証
 
-* 基本認証(BASIC認証)
-    * htttpd.confにユーザ認証設定を追加し、パスワードファイルを用意する
-    * パスワードが平文で流れる
-    * 導入に必要な作業
-        * htpasswdコマンドを使用しパスワードファイルの作成及びユーザの登録を行う
-        * 必要であれば、グループファイルの作成及びグループの登録を行う
-        * Apacheの設定ファイルhttpd.confまたは、外部設定ファイル.htaccessでユーザ認証によるアクセス制御を加えたいディレクトリの設定を行う
-    * htpasswdコマンド
-        * BASIC認証のためのユーザ管理のコマンド
-* ダイジェスト認証
-    * チャレンジレスポンス方式の認証
-    * 盗聴されても直ちにパスワードが漏洩することはない
-    * 現在ではほとんどのブラウザが対応している
-    * htdigestコマンド
-        * ダイジェスト認証のためのユーザ管理のコマンド
-        * 書式
-            * `htdigest [オプション] ファイル名 領域 ユーザ名`
-* ホストベースのアクセス認証
-    * Order, Allow, Deny, Requireディレクティブを使ってホスト名ドメイン名でアクセス制御ができる
-    * Apache2.4では非推奨なのでRequireディレクティブを使う
-* 認証のディレクティブ
-    * AuthUserFile
-        * 作成したパスワードファイル名を指定
-    * AuthGroupFile
-        * 作成したグループファイル名を指定
-    * Order Deny, Allow
-        * Denyディレクティブで広く拒否する範囲を指定し、Allowディレクティブで一部アクセスを許可する範囲を指定する
-        * デフォルトすべて許可
-    * Order Allow, Deny
-        * Allowディレクティブで広く許可する範囲を指定し、Denyディレクティブで一部アクセスを拒否する範囲を指定する
-        * デフォルト全て拒否
-    * Require
-        * 認証対象とするユーザまたはグループを指定
-* Requireディレクティブ
-    * エンティティ
-        * all granted
-            * 全て許可
-        * all denied
-            * 全て拒否
-        * expr
-            * 指定した表現に合致すると許可
-        * ip
-            * 指定したIPアドレスを許可
-        * user
-            * 指定したユーザを許可
-        * all
-        * method
-        * env
-    * 複数の条件をしたい場合のディレクティブ
-        * RequireAll
-            * すべての条件に合致したら真
-        * RequireAny
-            * いずれかの条件に合致したら真
-        * RequireNone
-            * すべての条件に合致しなかったら真
+基本認証(BASIC認証)
 
-### バーチャルホスト
+* htttpd.confにユーザ認証設定を追加し、パスワードファイルを用意する
+* パスワードが平文で流れる
+* 導入に必要な作業
+    * htpasswdコマンドを使用しパスワードファイルの作成及びユーザの登録を行う
+    * 必要であれば、グループファイルの作成及びグループの登録を行う
+    * Apacheの設定ファイルhttpd.confまたは、外部設定ファイル.htaccessでユーザ認証によるアクセス制御を加えたいディレクトリの設定を行う
+* htpasswdコマンド
+    * BASIC認証のためのユーザ管理のコマンド
 
-* 1台のサーバで複数のWebサイトを管理できる
+ダイジェスト認証
+
+* チャレンジレスポンス方式の認証
+* 盗聴されても直ちにパスワードが漏洩することはない
+* 現在ではほとんどのブラウザが対応している
+* htdigestコマンド
+    * ダイジェスト認証のためのユーザ管理のコマンド
+    * 書式
+        * `htdigest [オプション] ファイル名 領域 ユーザ名`
+    * `-c` パスワードファイルの新規作成
+    * `-D` ユーザを削除
+
+ホストベースのアクセス認証
+
+* Order, Allow, Deny, Requireディレクティブを使ってホスト名ドメイン名でアクセス制御ができる
+* Apache2.4では非推奨なのでRequireディレクティブを使う
+
+認証のディレクティブ
+
+* AuthType
+    * 認証方式を指定
+    * BASIC認証の場合はBasic, ダイジェスト認証の場合はDigestを指定
+* AuthName
+    * 認可領域名を指定
+* AuthUserFile
+    * 作成したパスワードファイル名を指定
+* AuthGroupFile
+    * 作成したグループファイル名を指定
+* Order Deny, Allow
+    * Denyディレクティブで広く拒否する範囲を指定し、Allowディレクティブで一部アクセスを許可する範囲を指定する
+    * デフォルトすべて許可
+* Order Allow, Deny
+    * Allowディレクティブで広く許可する範囲を指定し、Denyディレクティブで一部アクセスを拒否する範囲を指定する
+    * デフォルト全て拒否
+* Require
+    * 認証対象とするユーザまたはグループを指定
+
+Requireディレクティブ
+
+* 書式
+    * `Require [not] エンティティ 値`
+* エンティティ
+    * all granted
+        * 全て許可
+    * all denied
+        * 全て拒否
+    * env
+        * 指定した環境変数が設定されていると許可
+    * method
+        * 指定したhttpメソッドに合致すると許可
+    * expr
+        * 指定した表現に合致すると許可
+    * ip
+        * 指定したIPアドレスを許可
+    * user
+        * 指定したユーザを許可
+    * all
+    * method
+* モジュールが提供するエンティティ
+    * mod_authz_core
+        * 下記以外
+    * mod_authz_host
+        * ip, host
+    * mod_authz_user
+        * user, group, valid-user
+* 複数の条件をしたい場合のディレクティブ
+    * RequireAll
+        * すべての条件に合致したら真
+    * RequireAny
+        * いずれかの条件に合致したら真
+    * RequireNone
+        * すべての条件に合致しなかったら真
 
 ### サーバ情報の取得
 
 * mod_statusモジュールでサーバの稼働状況の情報をブラウザで表示できる
 * mod_infoモジュールでサーバの設定情報をブラウザで表示できる
-
-### ログファイル
-
-* アクセスログとエラーログがある
-* /var/log/httpdディレクトリ以下に格納
 
 ## HTTPS向けのApacheの設定
 
