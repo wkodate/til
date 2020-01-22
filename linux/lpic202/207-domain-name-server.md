@@ -52,9 +52,13 @@
     * 代表的なDNSサーバでありLinuxで利用される
     * namedデーモンが起動
 * dnsmasq
-    * DNSサーバとDHCPサーバの機能を提供するソフトウェア
+    * DNSキャッシュサーバとDHCPサーバの機能を提供する軽量なソフトウェア
+    * ディーエヌエス マスクと読む
+    * コンテンツサーバの機能はない
 * djbdns
     * 機能を分割して安全性を高めたDNSサーバ
+    * コンテンツサーバとキャッシュサーバの機能が分かれている
+    * ダニエル・J・バーンスタインによって開発されたのでdjb
 * PowerDNS
     * コンテンツサーバおよびキャッシュサーバ機能を提供するソフトウェア
     * MySQL, RDBをバックエンドデータベースとして利用できる
@@ -113,25 +117,27 @@ BINDの設定はメイン設定ファイル/etc/named.confとゾーンファイ�
 * optionsステートメント
     * namedの動作に関する詳細設定
     * ゾーンファイルに配置するディレクトリを指定
-    * directory
+    * `directory`
         * namedの作業ディレクトリを指定
-    * recursion
+    * `recursion`
         * 再起問い合わせを受け付けるかの設定
-    * recursive-clients
-    * max-cache-size
-    * forward [only|first]
+    * `recursive-clients`
+    * `max-cache-size`
+    * `forward [only|first]`
         * 問い合わせ転送の失敗時の動作を設定
         * first 失敗時に自分で問い合わせする
         * only 失敗時に自分で問い合わせしない
-    * forwarders
+    * `forwarders`
         * 自身が保持しないドメイン情報の問い合わせを転送するDNSサーバのアドレスを指定
-    * allow-query
+    * `allow-query`
         * 問い合わせを受け付けるホストを指定
-    * allow-recursion
+    * `blackhole`
+        * 問い合わせを受け付けないホストを指定
+    * `allow-recursion`
         * 再起問い合わせを受け付けるホストを指定
-    * allow-transfer
+    * `allow-transfer`
         * ゾーン転送を許可するホストを指定
-    * version
+    * `version`
         * BINDのバージョンの問い合わせに対し、出力される文字列を設定
 * named-checkconf
     * named.confの構文チェック
@@ -144,6 +150,7 @@ BINDの設定はメイン設定ファイル/etc/named.confとゾーンファイ�
     * status
         * namedのステータスを表示する
     * reload
+        * 設定を再読み込み
     * halt
         * namedを直ちに停止
     * stop
@@ -168,9 +175,9 @@ BINDの設定はメイン設定ファイル/etc/named.confとゾーンファイ�
     * SOAレコード
         * Start of Authority
         * 管理情報
-        * リソースレコードの最初に記載
+        * リソースレコードの最初に記載する
         * 書式
-            * ＜ドメイン＞ IN SOA ＜ネームサーバのFQDN＞ ＜管理者のメールアドレス＞ (各更新時間に関する秒数を定義）
+            * `＜ドメイン＞ IN SOA ＜ネームサーバのFQDN＞ ＜管理者のメールアドレス＞ (各更新時間に関する秒数を定義）`
         * @はドメイン名を表す
     * NSレコード
         * Name Server
@@ -182,7 +189,10 @@ BINDの設定はメイン設定ファイル/etc/named.confとゾーンファイ�
         * ホスト名に対応するIPアドレスを定義
     * AAAAレコード
     * CNAMEレコード
+        * Canonical Name
+        * ある名前に対する別名を記入する
     * PTRレコード
+        * Pointer
         * IPアドレスに対応する名前(FQDN)を記述。主に逆引きゾーンの定義に使用
 * named-checkzoneコマンド
     * ゾーンファイルの構文チェック、整合性チェックを行う
@@ -215,14 +225,17 @@ BINDの設定はメイン設定ファイル/etc/named.confとゾーンファイ�
 * DNS Security
 * ゾーン情報に公開鍵暗号方式の電子署名を行い、ゾーン情報が改ざんされていないこと、DNS応答が正当な管理者によって行われたものであることを保証
 * DNSサーバ、クライアントの双方が対応している必要がある
+* dnssec-keygenコマンドで鍵を生成
+    * `-a` アルゴリズム
+    * `-b` 鍵長ビット数
+    * `-n` 鍵のオーナータイプを指定。公開鍵の生成には`ZONE`, 共通鍵の生成には`HOST`を指定
 
 ### TSIG
 
 * Transaction Signatures
 * マスターDNSサーバとスレーブDNSサーバで共有秘密鍵を使ってDNSサーバの偽装やなりすましを防ぐ仕組み
 * マスターDNSで共通鍵を使ってゾーンデータに署名し、スレーブDNSサーバでそれを検証する
-* dnssec-keygenコマンドで共通鍵を生成
-    * -n 鍵のオーナータイプを指定
+* クライアントとサーバの時刻が一致している必要がある
 * /etc/named.confのkeyステートメントに共通鍵を設定、serverステートメントにIPアドレスと共通鍵名を設定
 * 不正なクライアントからのrndcコマンドの操作防止
 
