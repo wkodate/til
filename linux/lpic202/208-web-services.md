@@ -289,6 +289,9 @@ Requireディレクティブ
     * 認証局にCSRを提出し、その後、中間CA証明書とサーバ証明書が認証局より発行される
     * 秘密鍵と中間CA証明書、サーバ証明書をサーバの所定の場所で設置し、ApacheのSSL/TLS用の設定ファイルssl.confでそれぞれのファイルを指定する
     * Apacheを再起動する
+* SSLをVirtualHostで利用する
+    * 名前ベースの場合、ホスト名を識別する前位にSSL通信を確立しなければならない。クライアントがSNIに対応していればSSLを使用できる
+    * IPベースの場合、クライアントに依存せずにSSLを使える
 
 ### 証明書
 
@@ -319,12 +322,6 @@ Requireディレクティブ
     * 自身の公開鍵
     * ブラウザに内蔵されている
 
-### opensslコマンド
-
-* SSL証明書や鍵作成に利用
-* 自己認証局でサーバ証明書を作成するにはcaサブコマンドを使用する
-    * `openssl ca [-out 出力ファイル名] -infiles CSRファイル名`
-
 ### 関連ファイル
 
 * server.key
@@ -334,6 +331,19 @@ Requireディレクティブ
 * server.crt
     * サーバ証明書
 
+### opensslコマンド
+
+* SSL証明書や鍵作成に利用
+* 自己認証局でサーバ証明書を作成
+    * ca を使用する
+    * `openssl ca [-out 出力ファイル名] -infiles CSRファイル名`
+* CSR(サーバ証明書発行要求)
+    * req を使用
+    * `openssl req -new -key 秘密鍵ファイル名 [-out 出力ファイル名]`
+* 秘密鍵の作成
+    * genrsa を使用
+    * `openssl genrsa [-out 出力ファイル名] [鍵長]`
+
 ### ディレクティブ
 
 ssl.confのディレクティブ
@@ -341,10 +351,20 @@ ssl.confのディレクティブ
 * ServerTokens
     * HTTPヘッダに出力されるバージョン情報を指定
     * 通常はProd
+    * Apacheのバージョンを含めるかどうかも設定できる
 * ServerSignature
     * エラーメッセージなどのフッタ表示の有効、無効の指定
 * SSLCertificateKeyFile
-    * サーバ秘密鍵ファイル
+    * サーバの秘密鍵のファイルを指定
+* SSLCertificateFile
+    * サーバ証明書のファイルを指定。中間CA証明書があるときは1つにまとめて指定
+* SSLVerifyClient
+    * クライアント認証のレベルを指定。requireでクライアント証明書が必須
+    * クライアント認証は、認証局にCSR(証明書の署名要求)を提出し、認証局の秘密鍵で署名された証明書を発行してもらう
+* SSLCACertificateFile
+    * クライアント認証に使用するCA証明書のファイルを指定
+* SSLCACertificatePath
+    * クライアント認証に使用するCA証明書のファイルが置かれたディレクトリを指定
 * SSLProtocol
     * 使用可能なSSLプロトコルを指定
 * SSLEngine
@@ -367,43 +387,57 @@ ssl.confのディレクティブ
 
 /etc/squid/squid.conf 
 
+* http_port
+    * Squidが利用するポート番号
+* hierarchy_stoplist
+    * キャッシュを利用しない文字列を指定
+* maximum_object_size
+    * キャッシュされるデータのサイズ
 * maximum_object_size_in_memory
     * メモリにキャッシュされる最大ファイルサイズ
+* ipcache_size
+    * IPアドレスの名前解決をキャッシュする数
 * cache_dir
     * キャッシュディレクトリとパラメータ
 * cache_mem
     * メモリ上のキャッシュサイズ
+* request_header_max_size
+    * HTTPリクエストヘッダの最大サイズ
+* request_body_max_size
+    * HTTPリクエストボディの最大サイズ
 * auth_param
     * ユーザ認証の方式等を設定
 
-### ACLタイプ
+### アクセス制御の設定
 
 squid.confの設定項目aclでACLを定義し、http_accessでアクセス制御を行う
 
-* aclの書式
-    * `acl acl名 aclタイプ 文字列|ファイル名`
-* http_accessの書式
-    * `http_access deny|allow [!]acl名 ...`
-    * 「!」を付加すると「acl名」の内容が反転
-
-
-### アクセス制御の設定
-
 * acl
     * ホストやプロトコルの集合にACL名をつける
+    * ポート番号、IPアドレスなどさあざまなタイプを指定することができる
     * 書式
         * `acl ACL名 ACLタイプ 文字列もしくはファイル名`
+        * ファイル名はダブルクォーテーションで囲う
     * ACLタイプ
         * src
             * クライアントのIPアドレス
+        * dst
+            * 宛先のIPアドレス
         * srcdomain
             * クライアントのドメイン名
         * arp
             * MACアドレス
+        * proto
+            * プロトコル
+        * url_regex
+            *  正規表現を使ったURL
+        * proxy_auth
+            * ユーザ認証の対象
 * http_access
-    * アクセス制御を設定する
+    * アクセス制御を設定する。設定したACLを利用
     * 書式
         * `http_access allow|deny ACL名`
+        * 「!」を付加すると「acl名」の内容が反転
 
 ## Nginxの実装
 
@@ -414,7 +448,8 @@ squid.confの設定項目aclでACLを定義し、http_accessでアクセス制�
 
 ### 設定
 
-* /etc/nginx/nginx.conf
+/etc/nginx/nginx.conf
+
 * /etc/nginx/, /etc/nginx/conf.d/ 以下に複数のファイルを配置してnginx.confに読み込んで利用
 * `-t` nginx.confファイルの構文をチェック
 
@@ -437,6 +472,7 @@ nginx.confのディレクティブ
     * webで公開するHTMLを保存する最上位のディレクトリの指定
 * proxy_pass
     * プロキシ先の指定
+    * location内で使用
 * proxy_set_header
     * プロキシ先に送られるリクエストヘッダフィールドの再定義、追加
 * fastcgi_pass
