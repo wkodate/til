@@ -38,16 +38,19 @@
         * Windows 2000 Server以降に採用されているディレクトリサービス
         * 認証にKerberosを使用
 * NetBIOS
-    * ネットワーク用API
+    * Microsoftネットワークで採用されているネットワーク用API
+    * ネットワーク内で一意になる名前をつけて識別
+    * NetBIOS名によって通信対象のソフトウェアを区別する
+* WINSサーバ
+    * Windows Internet Naming Service
+    *  NetBIOSとIPアドレスの名前解決を行うサーバ
 * SMB
     * Server Message Block
     * Windowsのネットワークサービス(ファイル共有やプリンタ共有)を提供するプロトコル
 * CIFS
     * Common Internet File System
     * SMBを拡張したプロトコル
-* WINSサーバ
-    * Windows Internet Naming Service
-    *  NetBIOSとIPアドレスの名前解決を行うサーバ
+    * Windowsで使われるファイル共有プロトコルについて、SMBと呼んだりSMB/CIFSと呼んだりがある
 
 ### Sambaサーバの概要
 
@@ -68,9 +71,22 @@
         * ブラウズ機能の提供とNetBIOSによる名前解決
         * 137/udp, 138/udp
     * winbindd
-        * Winbind機能
-            * Samba側からWindowsユーザの情報を利用可能にする機能
-            * WindowsユーザのSID(Security ID)をLinuxユーザのUID・GIDにマッピングする
+        * Winbind機能を提供
+    * Samba4がドメインコントローラとして稼働する場合は、起動するプログラムがsambaというプログラムに統一されている
+* Samba4からの機能
+    * Active Directoryドメインのドメインコントローラの構築が可能
+        * 認証はKerberosを使用
+        * DNSによる名前解決
+        * LDAPを内蔵
+    * ファイルサービスはSMB2だけでなくSMB3にも対応
+* Winbind機能
+    * Samba側からWindowsユーザの情報を利用可能にする機能
+    * WindowsユーザのSID(Security ID)をLinuxユーザのUID・GIDにマッピングする
+    * 動作の概要
+        * Sambaサーバへアクセスするとき、Windowsクライアントにログオンしたユーザ名、パスワードがSambaに送信される
+        * Sambaは認証情報をドメインコントローラに問い合わせ、ドメインコントローラが認証作業を行う
+        * 認証に成功すると、SambaはUIDをWinbind機構に問い合わせる。SambaはWinbind機構からNSSを利用してユーザ情報を取得する
+        * 作成されたLinuxユーザのUIDを使用して、Sambaの共有上のファイルへアクセスする
 
 ### Sambaサーバの設定
 
@@ -180,15 +196,19 @@
 * `preferred master = yes | no`
     * ブラウザ選定を要求するかしないかを指定
 
-Windbind関連の設定
+Winbind関連の設定
 
 * `idmap config * : backend = バックエンド`
     * idmap機構で使用するバックエンドの指定。tbd, ldapなど
+* `idmap config * : range = 最小UID・GID - 最大UID・GID`
+    * Linuxユーザに割り当てるUID・GIDの範囲の指定
 
 ### homes, printers, 任意の名前のセクションの設定
 
 全般の設定
 
+* `comment = コメント`
+    * ブラウジングした際に表示される説明を指定
 * `path = ディレクトリ名`
     * 共有ディレクトリのパスを指定
 * `writable = yes | no`
@@ -212,10 +232,19 @@ Windbind関連の設定
 
 パーミッション関連の設定
 
+* `create mask = 値`
+    * ファイルに適用可能なパーミッションを指定
+* `force create mode = 値`
+    * 必ずファイルに適用されるパーミッションを指定
 * `directory mask = 値`
     * ディレクトリに適用可能なパーミッションを指定
 * `force directory mode = 値`
     * 必ずディレクトリに適用されるパーミッションを指定
+
+プリンタ設定
+
+* `printable = yes | no` `print ok = yes | no`
+    * /etc/samba/smb.conf で共有プリンタの設定を行うための設定
 
 ### Active Directoryドメインへの参加設定
 
@@ -224,7 +253,7 @@ Windbind関連の設定
 * `realm = レルム名`
     * ドメイン名(レルム名)の指定()大文字でFQDNを指定
 * `security = ads`
-* Active Directoryドメインに参加するには net ad join コマンドを実行する
+* Active Directoryドメインに参加するには`net ad join`コマンドを実行する
 
 ### Samba管理コマンド
 
@@ -240,23 +269,24 @@ Windbind関連の設定
     * 書式
         * `smbcontrol [対象] [メッセージタイプ]`
     * 対象
-        * all
+        * `all`
             * smbd, nmbd, winbinddの全てのプロセスにブロードキャスト
-        * デーモン名 または PID
-            * いずれか指定されたデーモンのpidフィアルに記載されたプロセスID、または直接指定したプロセスIDにメッセージが送られる
+        * `デーモン名` または `PID`
+            * いずれか指定されたデーモンのpidファイルに記載されたプロセスID、または直接指定したプロセスIDにメッセージが送られる
     * メッセージタイプ
-        * close-share
+        * `close-share`
             * 指定した共有をクローズ
             * 対象はsmbdのみ
-        * kill-client-ip
+        * `kill-client-ip`
             * 指定したIPアドレスのクライアントを切断
             * 対象はsmbdのみ
-        * reload-config
+        * `reload-config`
             * 指定したデーモンに設定の再読み込みを指せる
-        * ping
+        * `ping`
             * 指定した対象にpingし応答が来た対象のPIDを表示
 * smbclientコマンド
     * Windowsネットワーク上の共有リソースにアクセスできるコマンド
+    * Samba4ではCIFS(Common Internet File System)を使用してアクセスする。mount.cifsコマンド, mount -t cifs を使用しても同様に
     * `-N` 認証を行わない
     * `-L`,`--list`指定したホストで利用可能な共有リソースを表示
     * `-U`,`--user` 接続するユーザを指定
@@ -266,14 +296,21 @@ Windbind関連の設定
         * `samba-tool サブコマンド`
         * `dns` DNS管理を行う
         * `domain` ドメイン管理を行う
+        * `testparm` 設定ファイルの構文チェックを行う
+        * `user` ユーザ管理を行う
 * smbpasswdコマンド
     * Sambaユーザの管理
     * `smbpasswd [オプション] [Sambaユーザ名]`
-    * `-a` Sambaユーザの作成
-    * `-d` Sambaユーザの無効化
+    * `-a` ユーザの作成
+    * `-d` ユーザの無効化
+    * `-e` ユーザの有効化
+    * `-x` ユーザの削除
 * pdbeditコマンド
     * Sambaのユーザ管理
+    * Samba3.0系から使える
     * `-L` ユーザの一覧を表示
+    * `-a` ユーザの追加
+    * `-x` ユーザの削除
 * CIFS Supportが有効になっていれば、mountコマンドを使って共有ディレクトリをLinuxをマウントすることができる。オプションは「-t cifs」を使用する
 
 ## NFSサーバの設定
