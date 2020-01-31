@@ -78,10 +78,15 @@ httpd.confの設定項目はディレクティブと呼ばれる
 * Redirect
     * 指定したURLへリダイレクト
     * `Redirect [ステータス] URL-path URL`
+        * ステータス
+            * `permanent` または `301`
+                * リソースが永久に移動
+            * `temp` または `302`
+                * 一時的なリダイレクト(デフォルト)
     * クライアント側の処理を指示
 * Alias
     * ディレクトリとパスを指定してディレクトリのエイリアスを指定
-    * サーバ側で処理を実行
+    * サーバ側で処理を実行。Webサーバが移行後の新しいページを直接クライアントへ返す
 * ErrorDocument
     * エラー発生時の処理を指定
     * `ErrorDocument エラーコード ファイル名|文字列|URL`
@@ -120,22 +125,24 @@ httpd.confの設定項目はディレクティブと呼ばれる
 
 ログ関連のディレクティブ
 
-* HostnameLookups
+* `HostnameLookups on|off`
     * IPアドレスを逆引きホスト名で記録するかどうか指定
-* LogFormat
+* `LogFormat 書式 書式名`
     * アクセスログに使われる書式を定義
-* CustomLog
-    * アクセスログのファイル名とLogFormatで定義された書式を指定
-* LogLevel
+* `CustomLog ファイル名 書式名`
+    * アクセスログのファイル名と、LogFormatで定義された書式を指定
+* `ErrorLog ファイル名`
+    * エラーログファイルを指定
+* `LogLevel ログレベル`
     * エラーログに記録するログのレベルを指定
 * ログファイルは/var/log/httpdディレクトリ以下に格納
 
 外部設定ファイル関連のディレクティブ
 
-* AccessFileName
+* `AccessFileName ファイル名`
     * 外部設定ファイル名を指定
     * デフォルトは.htaccess
-* AllowOverride
+* `AllowOverride パラメータ`
     * 外部設定ファイルによるhttpd.confの上書きを許可
     * <Directory>セクション内でのみ使用できる
     * パラメータ
@@ -148,11 +155,22 @@ httpd.confの設定項目はディレクティブと呼ばれる
         * None
             * すべての設定の変更を禁止
 
+例）全てのユーザのホームディレクトリ「/home/*」において、外部設定ファイル「.htaccess」による設定をすべて許可する場合
+
+```
+AccessFileName .htaccess
+<Directory "/home/*">
+AllowOverride All
+</Directory>
+```
+
 モジュール関連のディレクティブ
 
 * LoadModuleディレクティブ
-    * 動的モジュールをロード
-    * apxsコマンドでApacheの動的モジュールのコンパイルとインストールを行う
+    * 動的(DSO: Dynamic Shared Object)モジュールをロード
+    * apxsコマンド
+        * APache eXtenSion tool
+        * Apacheの動的モジュールのコンパイルとインストールを行う
     * `LoadModule モジュール名 モジュールのファイル名`
 * 主なモジュール
     * mod_authn_file
@@ -207,6 +225,17 @@ httpd.confの設定項目はディレクティブと呼ばれる
     * `-c` パスワードファイルの新規作成
     * `-D` ユーザを削除
 
+ダイジェスト認証の設定例
+
+```
+<Directory "/home/test/html">
+AuthType Digest
+AuthName "private"
+AuthUserFile /tmp/htdigest
+Require user test1 test2
+</Directory>
+```
+
 ホストベースのアクセス認証
 
 * Order, Allow, Deny, Requireディレクティブを使ってホスト名ドメイン名でアクセス制御ができる
@@ -235,28 +264,31 @@ httpd.confの設定項目はディレクティブと呼ばれる
     * デフォルト全て拒否
 * Require
     * 認証対象とするユーザまたはグループを指定
+    * ユーザの場合
+        * `Require user ユーザ名 ユーザ名 ....`
+    * グループの場合
+        * `Require group グループ名 グループ名 ....`
 
 Requireディレクティブ
 
 * 書式
     * `Require [not] エンティティ 値`
+* 複数の条件を指定したい場合は、<RequireAll><RequireAny><RequireNone>の3つのディレクティブを使う
 * エンティティ
-    * all granted
+    * `all granted`
         * 全て許可
-    * all denied
+    * `all denied`
         * 全て拒否
-    * env
+    * `env`
         * 指定した環境変数が設定されていると許可
-    * method
+    * `method`
         * 指定したhttpメソッドに合致すると許可
-    * expr
+    * `expr`
         * 指定した表現に合致すると許可
-    * ip
+    * `ip`
         * 指定したIPアドレスを許可
-    * user
+    * `user`
         * 指定したユーザを許可
-    * all
-    * method
 * モジュールが提供するエンティティ
     * mod_authz_core
         * 下記以外
@@ -271,6 +303,33 @@ Requireディレクティブ
         * いずれかの条件に合致したら真
     * RequireNone
         * すべての条件に合致しなかったら真
+
+Apache2.2までのアクセス制御設定の例
+
+```
+<Directory "/var/www/html/private">
+Order Deny,Allow
+Deny from all
+Allow from 192.168.10.0/24
+</Directory>
+```
+
+Apache2.4のアクセス制御設定の例(単独条件)
+
+```
+Require ip 192.168.0
+```
+
+Apache2.4のアクセス制御設定の例(複数条件)
+
+```
+<Directory "/var/www/html/private">
+<RequireAny>
+Require ip 192.168.10
+Require group root
+</RequireAny>
+</Directory>
+```
 
 ### サーバ情報の取得
 
@@ -334,40 +393,41 @@ Requireディレクティブ
 ### opensslコマンド
 
 * SSL証明書や鍵作成に利用
-* 自己認証局でサーバ証明書を作成
-    * ca を使用する
-    * `openssl ca [-out 出力ファイル名] -infiles CSRファイル名`
 * CSR(サーバ証明書発行要求)
-    * req を使用
+    * `req` を使用
     * `openssl req -new -key 秘密鍵ファイル名 [-out 出力ファイル名]`
 * 秘密鍵の作成
-    * genrsa を使用
+    * `genrsa` を使用
     * `openssl genrsa [-out 出力ファイル名] [鍵長]`
+* 自己認証局でサーバ証明書を作成
+    * `ca` を使用する
+    * `openssl ca [-out 出力ファイル名] -infiles CSRファイル名`
 
 ### ディレクティブ
 
 ssl.confのディレクティブ
 
-* ServerTokens
+* `ServerTokens`
     * HTTPヘッダに出力されるバージョン情報を指定
     * 通常はProd
     * Apacheのバージョンを含めるかどうかも設定できる
-* ServerSignature
+* `ServerSignature`
     * エラーメッセージなどのフッタ表示の有効、無効の指定
-* SSLCertificateKeyFile
+* `SSLCertificateKeyFile`
     * サーバの秘密鍵のファイルを指定
-* SSLCertificateFile
+* `SSLCertificateFile`
     * サーバ証明書のファイルを指定。中間CA証明書があるときは1つにまとめて指定
-* SSLVerifyClient
+* `SSLVerifyClient`
     * クライアント認証のレベルを指定。requireでクライアント証明書が必須
     * クライアント認証は、認証局にCSR(証明書の署名要求)を提出し、認証局の秘密鍵で署名された証明書を発行してもらう
-* SSLCACertificateFile
+* `SSLCACertificateFile`
     * クライアント認証に使用するCA証明書のファイルを指定
-* SSLCACertificatePath
+    * 中間CA証明書とサーバ証明書を1ファイルにまとめて指定
+* `SSLCACertificatePath`
     * クライアント認証に使用するCA証明書のファイルが置かれたディレクトリを指定
-* SSLProtocol
+* `SSLProtocol`
     * 使用可能なSSLプロトコルを指定
-* SSLEngine
+* `SSLEngine`
     * SSLの有効無効を指定
     * 有効なコンテキストは、サーバ設定ファイル、またはバーチャルホスト
         * コンテキストは、ディレクティブが有効な範囲
@@ -382,30 +442,33 @@ ssl.confのディレクティブ
 ### Squid
 
 * Linuxで最もよく利用されているプロキシサーバ
+* スクウィッド
 
 ### 設定ファイル
 
 /etc/squid/squid.conf 
 
-* http_port
+* `http_port`
     * Squidが利用するポート番号
-* hierarchy_stoplist
+* `hierarchy_stoplist`
     * キャッシュを利用しない文字列を指定
-* maximum_object_size
+* `maximum_object_size`
     * キャッシュされるデータのサイズ
-* maximum_object_size_in_memory
+* `maximum_object_size_in_memory`
     * メモリにキャッシュされる最大ファイルサイズ
-* ipcache_size
+* `ipcache_size`
     * IPアドレスの名前解決をキャッシュする数
-* cache_dir
+* `cache_dir ディレクトリ名`
     * キャッシュディレクトリとパラメータ
-* cache_mem
+* `cache_mem バイト数`
     * メモリ上のキャッシュサイズ
-* request_header_max_size
+* `cache_log ファイル名`
+    * キャッシュのログ
+* `request_header_max_size`
     * HTTPリクエストヘッダの最大サイズ
-* request_body_max_size
+* `request_body_max_size`
     * HTTPリクエストボディの最大サイズ
-* auth_param
+* `auth_param`
     * ユーザ認証の方式等を設定
 
 ### アクセス制御の設定
@@ -416,34 +479,67 @@ squid.confの設定項目aclでACLを定義し、http_accessでアクセス制�
     * ホストやプロトコルの集合にACL名をつける
     * ポート番号、IPアドレスなどさあざまなタイプを指定することができる
     * 書式
-        * `acl ACL名 ACLタイプ 文字列もしくはファイル名`
+        * `acl ACL名 ACLタイプ 文字列|ファイル名`
         * ファイル名はダブルクォーテーションで囲う
     * ACLタイプ
-        * src
+        * `src IPアドレス/マスク`
             * クライアントのIPアドレス
-        * dst
+        * `dst IPアドレス/マスク`
             * 宛先のIPアドレス
-        * srcdomain
+        * `srcdomain ドメイン名`
             * クライアントのドメイン名
-        * arp
+        * `dstdomain ドメイン名`
+            * クライアントのドメイン名
+        * `port ポート番号`
+            * 宛先のポート番号
+        * `arp`
             * MACアドレス
-        * proto
+        * `proto`
             * プロトコル
-        * url_regex
-            *  正規表現を使ったURL
-        * proxy_auth
+        * `method メソッド名`
+            * HTTPリクエストのメソッド
+        * `time S|M|T|W|H|F|A 開始(時:分)-終了(時:分)`
+            * 曜日と時間
+            * S〜Aは日曜から土曜
+            * 月曜日から金曜日の9:00から18:00の間をACL名eigyobiとして定義する場合
+                * `acl eigyobi time MTWHF 09:00-18:00`
+        * `url_regex 文字列`
+            * 正規表現を使ったURL
+            * 正規表現のリストが格納されているファイルを指定することもできる。その場合はダブルクォーテーションで囲う
+                * `acl blacklist url_regex "/var/squid/blacklist_url"`
+        * `proxy_auth`
             * ユーザ認証の対象
 * http_access
     * アクセス制御を設定する。設定したACLを利用
     * 書式
         * `http_access allow|deny ACL名`
         * 「!」を付加すると「acl名」の内容が反転
+        * 上から順に処理され、1つの条件にマッチしたらそれ以降の条件はチェックされない
+        * 2つ以上のACL名を指定した場合、ANDj王権ですべての条件が一致した場合のみアクセス制御が適用される
+
+ACLの設定例
+
+```
+acl all src 0.0.0.0/0.0.0.0
+acl localmembers src 192.168.10.0/255.255.255.0
+acl SSL port 443
+acl OK_port port 80 443
+acl CONNECT method CONNECT
+acl clients srcdomain test.com
+acl eigyobi time MTWHF 09:00-18:00
+
+http_access allow localmembers OK_port
+http_access deny !OK_port
+http_access deny CONNECT !SSL
+http_access allow clients
+http_access allow eigyobi
+```
 
 ## Nginxの実装
 
 ### Nginx
 
-* Nginxは高速で動作し負荷に強いWebサーバ。リバースプロキシサーバ、メールプロキシサーバの機能も有している
+* 高速で動作し負荷に強いWebサーバ。リバースプロキシサーバ、メールプロキシサーバの機能も有している
 * マスタープロセスと複数のワーカープロセスから構成される
 
 ### 設定
@@ -458,28 +554,64 @@ squid.confの設定項目aclでACLを定義し、http_accessでアクセス制�
 nginx.confのディレクティブ
 
 * 階層を持つことができるものをコンテキストと呼ぶ
-* http
+* 最上位にある階層はmainコンテキスト
+* mainコンテキストの下には、http, server, locationの順に階層構造を形成
+* `http {}`
     * httpサーバとしての設定
-* server
+    * main内で使用
+* `server {}`
     * バーチャルホストの設定
-* location
+    * http内で使用
+* `location プレフィックス URIにパスの条件 {}`
     * 条件にマッチするリクエストURLに対する設定
-* listen
+    * server, location内で使用
+* `listen IPアドレス:ポート;`
     * リクエストを受け付けるIPアドレスとポート番号
-* index
+    * server内で使用
+* `index ファイル名 ...;`
     * インデックスとして返すファイル名の指定
-* root
+* `root パス;`
     * webで公開するHTMLを保存する最上位のディレクトリの指定
-* proxy_pass
-    * プロキシ先の指定
-    * location内で使用
-* proxy_set_header
+* `proxy_pass URL;`
+    * プロキシ先の指定。リバースプロキシの設定
+    * location内で使用し、リクエスト転送先であるWebサーバを指定する
+* `proxy_set_header フィールド 値;`
     * プロキシ先に送られるリクエストヘッダフィールドの再定義、追加
-* fastcgi_pass
+* `fastcgi_pass IPアドレス:ポート;`
     * FastCGIの設定
-* fastcgi_param
+* `fastcgi_param パラメータ 値;`
     * FastCGIにわたすパラメータ設定の指定
 
+全体的な設定
+
+```
+...
+http {
+    httpサーバとしての共通の設定
+    server {
+        バーチャルホストの設定
+        location URIのパスの条件 {
+            条件にマッチしたリクエストURIに対する設定
+        }
+        ...
+    }
+    ...
+}
+```
+
+「www.example.com」へのリクエスト全てを「192.168.1.10」へ転送する場合
+
+```
+server {
+    listen 80;
+    server_name www.example.com;
+    location / {
+        proxy_pass http://192.168.1.10/
+        proxy_set_header Host $host;
+        proxy_pass_header Server;
+    }
+}
+```
 
 ### リバースプロキシの設定
 
