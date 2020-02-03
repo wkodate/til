@@ -50,6 +50,7 @@
     * NISドメイン名
     * NISサーバのアドレス
     * WINSサーバのアドレス
+* DHCPクライアントで動作するデーモンは、dhclient, dhcpcd
 * LPICでは、標準的なDHCPサーバである ISC DHCP について問われる
     * Internet Software Consortium
 
@@ -95,7 +96,9 @@ DHCPサーバの設定ファイル「/etc/dhcpd.conf」の書式
     * ブロードキャストアドレスを指定
 * `option ntp-servers IPアドレス;`
     * NTPサーバのIPアドレスを指定
-* `option nis-servers`
+* `option nis-domain ドメイン名`
+    * NISドメイン名を指定
+* `option nis-servers IPアドレス`
     * NISサーバのIPアドレスを指定
 * `option netbios-name-servers IPアドレス`
     * WINSサーバのIPアドレスを指定
@@ -402,30 +405,6 @@ auth required pam_nologin.so
     * /etc/init.d/slapd start
     * systemctl start slapd.service
 
-slapd.confファイルの例
-
-```
-# グローバルセクション
-include /etc/openldap/schema/core.schema
-include /etc/openldap/schema/cosine.schema
-include /etc/openldap/schema/inetorgperson.schema
-
-pidfile /var/run/openldap/slapd.pid
-argsfile /var/run/openldap/slapd.args
-
-# データベースセクション（databaseディレクティブから開始）
-database bdb
-suffix "dc=my-domain,dc=com"
-rootdn "cn=Manager,dc=my-domain,dc=com"
-rootpw secret
-directory /var/lib/ldap
-
-access to * by * read
-
-index objectClass eq,pres
-index ou,cn,mail,surname,givenname eq,pres,sub
-```
-
 ### slapd.confのディレクティブ
 
 グローバルセクションで使用するディレクティブ
@@ -457,6 +436,30 @@ index ou,cn,mail,surname,givenname eq,pres,sub
     * 属性に作成するインデックスの種類を指定
 * `directory ディレクトリ`
     * データベースファイルを格納するディレクトリを指定
+
+slapd.confファイルの例
+
+```
+# グローバルセクション
+include /etc/openldap/schema/core.schema
+include /etc/openldap/schema/cosine.schema
+include /etc/openldap/schema/inetorgperson.schema
+
+pidfile /var/run/openldap/slapd.pid
+argsfile /var/run/openldap/slapd.args
+
+# データベースセクション（databaseディレクティブから開始）
+database bdb
+suffix "dc=my-domain,dc=com"
+rootdn "cn=Manager,dc=my-domain,dc=com"
+rootpw secret
+directory /var/lib/ldap
+
+access to * by * read
+
+index objectClass eq,pres
+index ou,cn,mail,surname,givenname eq,pres,sub
+```
 
 ### slapd.confのアクセスディレクティブ
 
@@ -540,7 +543,7 @@ index ou,cn,mail,surname,givenname eq,pres,sub
     * `-l` 追加するエントリが記述されているファイルを指定
 * slapcatコマンド
     * データベースからデータLDIFファイルとして出力
-    * `-l` 出力するLDIFファイルを指定
+    * `-l` 出力するLDIFファイルを指定。ldifファイル
 * slaptestコマンド
     * slapd.confの構文をチェック
 * slapindexコマンド
@@ -591,6 +594,8 @@ index ou,cn,mail,surname,givenname eq,pres,sub
     * 書式
         * `ldappasswd [-x] [-h LDAPサーバ] -D 認証に利用する識別名 [-w 認証ユーザのパスワード] -s 新パスワード 変更するユーザ名`
         * 対話的に新パスワードを入力した場合は、-Sオプションのみを指定
+        * `-w`パスワード
+        * `-s` 新しいパスワード。set new passwd
 
 
 
