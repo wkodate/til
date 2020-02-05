@@ -38,8 +38,8 @@
         * Windows 2000 Server以降に採用されているディレクトリサービス
         * 認証にKerberosを使用
 * NetBIOS
-    * Microsoftネットワークで採用されているネットワーク用API
     * ネットワーク内で一意になる名前をつけて識別
+    * Microsoftネットワークで採用されているネットワーク用API
     * NetBIOS名によって通信対象のソフトウェアを区別する
 * WINSサーバ
     * Windows Internet Naming Service
@@ -87,6 +87,8 @@
         * Sambaは認証情報をドメインコントローラに問い合わせ、ドメインコントローラが認証作業を行う
         * 認証に成功すると、SambaはUIDをWinbind機構に問い合わせる。SambaはWinbind機構からNSSを利用してユーザ情報を取得する
         * 作成されたLinuxユーザのUIDを使用して、Sambaの共有上のファイルへアクセスする
+* Inhostsファイル
+    * NetBIOS名とIPアドレスの対応が記述されているファイル
 
 ### Sambaサーバの設定
 
@@ -143,7 +145,7 @@
     * `ads`
         * Active Directoryでの認証
 * `passdb backend = 認証方式`
-    * security=userの場合smbpasswd, tdbsam, ldapsamなどの認証方式を指定して変更
+    * Saｍba3.0以降、security=userの場合、smbpasswd, tdbsam, ldapsamなどの認証方式を指定して変更
     * smbpasswd
         * テキスト形式のパスワードファイル。smbpasswdファイル
     * tdbsam
@@ -166,6 +168,7 @@
 
 * `username map = ファイル名`
     * ユーザ名のマッピング情報を格納したファイルを指定
+    * 書き方は「Linuxユーザ名 = Windowsユーザ名」
 * `guest account = ゲストユーザ名`
     * ゲスト認証を許可する場合、ゲストユーザのユーザ名を指定
 * `map to guest = Never | Bad User | Bad Password`
@@ -198,6 +201,7 @@
 
 Winbind関連の設定
 
+* idmapはWindowsユーザとLinuxのユーザのマッピングを行う機能
 * `idmap config * : backend = バックエンド`
     * idmap機構で使用するバックエンドの指定。tbd, ldapなど
 * `idmap config * : range = 最小UID・GID - 最大UID・GID`
@@ -221,6 +225,7 @@ Winbind関連の設定
     * アクセス可能なユーザを指定
 * `guest ok = yes | no` または `public = yes | no`
     * ゲストログインを許可するかどうか
+    * yesの場合はパスワード入力なしでゲストとしてログインされる
 * `hide files = /ファイル名/`
     * 表示させたくないファイルやディレクトリを指定。アクセスは可能
 * `veto files = /ファイル名/`
@@ -253,7 +258,6 @@ Winbind関連の設定
 * `realm = レルム名`
     * ドメイン名(レルム名)の指定()大文字でFQDNを指定
 * `security = ads`
-* Active Directoryドメインに参加するには`net ad join`コマンドを実行する
 
 ### Samba管理コマンド
 
@@ -294,10 +298,11 @@ Winbind関連の設定
     * Samba4での管理のメインツール。ドメインの管理、DNSの管理、セキュリティ関連の操作などができる
     * 書式
         * `samba-tool サブコマンド`
-        * `dns` DNS管理を行う
-        * `domain` ドメイン管理を行う
-        * `testparm` 設定ファイルの構文チェックを行う
-        * `user` ユーザ管理を行う
+        * サブコマンド
+            * `dns` DNS管理を行う
+            * `domain` ドメイン管理を行う
+            * `testparm` 設定ファイルの構文チェックを行う
+            * `user` ユーザ管理を行う
 * smbpasswdコマンド
     * Sambaユーザの管理
     * `smbpasswd [オプション] [Sambaユーザ名]`
@@ -311,6 +316,12 @@ Winbind関連の設定
     * `-L` ユーザの一覧を表示
     * `-a` ユーザの追加
     * `-x` ユーザの削除
+* Sambaユーザを追加する場合は、Linuxシステム上に同名のユーザが存在している必要がある
+* net
+    * リモートのWindowsマシンを管理できる
+    * `net [オプション] [プロトコル] サブコマンド [オプション]`
+    * `net ads join`コマンドでActive Directoryドメインに参加
+    * `net ads testjoin`コマンドで、Active Directoryドメインに参加しているかどうかを確認することができる
 * CIFS Supportが有効になっていれば、mountコマンドを使って共有ディレクトリをLinuxをマウントすることができる。オプションは「-t cifs」を使用する
 
 ## NFSサーバの設定
@@ -375,6 +386,7 @@ Winbind関連の設定
     * マウントしているNFSクライアントを調べるコマンド
     * オプション
         * `-a` NFSクライアントのホスト名とマウントされているディレクトリを表示
+        * `-e NFSサーバ名` 指定したサーバでエクスポートしているディレクトリを表示
 * nfsstatコマンド
     * NFSの統計情報を確認するコマンド
 
@@ -382,17 +394,37 @@ Winbind関連の設定
 
 * NFSを使ってリモートファイルシステムをマウントするにはmountコマンドを使う
 * /etc/fstabファイルでNFSクライアント起動時に自動的にマウント
+* ソフトマウント
+    * トラブル発生時にタイムアウトしてプログラムを終了
+    * retransでタイムアウトまでの再試行回数を指定
+* ハードマウント
+    * NFSサーバの応答があるまで再試行を続ける
 * mountコマンド
     * NFSサーバでエクスポートされているディレクトリをマウントするコマンド
     * `mount [-t nfs] [-o マウントオプション] NFSサーバ名：エクスポートディレクトリ マウントポイント`
     * マウントオプション
-        * `nolock` ファイルをロックしない
-        * `soft` ソフトマウントする
-        * `hard` ハードマウントする
-        * `retrans` ソフトマウント時の再試行回数を指定
-        * `intr` ハードマウント時の割り込みを受け付け
-        * `rsize` 読み取りのブロックサイズを指定
-        * `wsize` 書き込みのブロックサイズを指定
+        * `nolock`
+            * ファイルをロックしない
+        * `soft`
+            * ソフトマウントする
+        * `hard`
+            * ハードマウントする
+        * `retrans`
+            * ソフトマウント時の再試行回数を指定
+            * retransmissions
+        * `intr`
+            * ハードマウント時の割り込みを受け付け
+            * interrupt
+        * `rsize`
+            * 読み取りのブロックサイズを指定
+            * read size
+        * `wsize`
+            * 書き込みのブロックサイズを指定
+            * write size
+    * NFSサーバnfsserverの/home/shareディレクトリを/mntにソフトマウントする例。再試行回数を5とする
+        * `mount -t nfs -o soft,retrans=5 nfsserver:/home/share /mnt`
+    * NFSサーバnfsserverの/home/shareディレクトリを/mntにハードマウントする例。割り込みを受け付ける
+        * `mount -t nfs -o hard,intr nfsserver:/home/share /mnt`
 
 ### NFS v3とNFS v4
 
