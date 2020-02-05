@@ -139,7 +139,7 @@ DHCPサーバの設定ファイル「/etc/dhcpd.conf」の書式
     * ステートレス自動設定
         * IPv6のRAを用いた設定
     * ステートフル自動設定
-        * DHCPサーバえ状態を管理
+        * DHCPサーバで状態を管理
     * DHCPv6(DHCPv4との互換なし)
 * 割当可能なアドレス
     * ユニークローカルアドレス
@@ -204,7 +204,7 @@ DHCPサーバの設定ファイル「/etc/dhcpd.conf」の書式
     * `pam_listfile.so`
         * 任意のファイルを用いてプログラムのアクセス制御を行う
     * `pam_nologin.so`
-        * /etc/nologinファイルが有る場合、一般ユーザのログインを拒否
+        * /etc/nologinファイルがある場合、一般ユーザのログインを拒否
     * `pam_securetty.so`
         * rootでのログインを/etc/securetty ファイルに記述された端末にのみ許可
     * `pam_sss.so`
@@ -214,6 +214,7 @@ DHCPサーバの設定ファイル「/etc/dhcpd.conf」の書式
         * 引数にnullokを指定すると空のパスワードを許可する
     * `pam_warn.so`
         * 認証時やパスワードの変更時にログを記録
+        * 管理者に警告を送信
     * `pam_wheel.so`
         * root権限のアクセスをwheelグループのメンバーに制限
 
@@ -288,7 +289,7 @@ auth required pam_nologin.so
         * `属性名1=値1, 属性名2=値2, 属性名3=値3, ...`
     * `objectClass`
         * オブジェクトクラス
-        * 必須
+        * 必須属性。全てのオブジェクトクラスの基底クラスであるtopは、objectClass属性が必須となっている
     * `cn`
         * 一般名称(Common Name)
     * `dc`
