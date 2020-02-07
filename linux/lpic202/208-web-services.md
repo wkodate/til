@@ -39,6 +39,7 @@ HTTPサービス
     * Debian
         * /etc/apache2/apache2.conf
 * 機能ごとに複数の設定ファイルに分割し、httpd.confでインクルードして利用する
+* 静的モジュールはApacheインストール時に組み込む、動的モジュールはapxsコマンドでインストールする
 * 制御用コマンド
     * apachectl
         * RedHat系
@@ -60,19 +61,21 @@ httpd.confの設定項目はディレクティブと呼ばれる
 
 * DocumentRoot
     * web上で公開するファイルのディレクトリを指定
-* ServerRoot
+* `ServerRoot ディレクトリ名`
     * httpdが利用するトップディレクトリを指定
-* ServerName
+* `ServerName サーバのホスト名`
     * Apacheが稼働しているホストのホスト名
-* ServerAdmin
+* `ServerAdmin メールアドレス`
     * サーバ管理者の連絡先アドレスを指定。エラーページなどに表示される
+* `ServerAlias サーバの別名`
+    * サーバのエイリアス別名を指定。名前ベースのVirtualHostでのサーバの別名を指定する
 * Listen
     * 待受ポート
 * User
     * http子プロセスの実行ユーザを指定
 * Group
     * http子プロセスの実行グループを指定
-* DirectoryIndex
+* `DirectoryIndex ファイル名 ...`
     * インデックスとして返すファイル名を指定(複数可)
     * 左から順に最初に見つかったファイルが表示される
 * Redirect
@@ -96,37 +99,39 @@ httpd.confの設定項目はディレクティブと呼ばれる
     * `<VirtualHost IPアドレス[:ポート番号]>...</VirtualHost>`
     * 名前ベースのバーチャルホスト
         * ひとつのIPアドレスに複数のドメイン名を設定
-        * NameVirtualHostディレクティブでIPアドレスを設定する
+        * `NameVirtualHost`ディレクティブでIPアドレスを設定する
+        * SSLはクライアントがSNIに対応していれば使用できる
+            * バーチャルホストはHTTPヘッダでどのホスト宛の通信か決まるため、SSLセッションが形成される時点ではどのVirtualHostとの通信化がわからない
+            * SNI(Server Name Indication)を使ってSSL接続時にサーバ名を確認する
     * IPベースのバーチャルホスト
         * 複数のIPアドレスに複数のドメイン名を設定
-        * ListenディレクティブでIPアドレスを設定
-* ServerAlias
-    * サーバのエイリアスを指定。名前ベースのVirtualHostでのサーバの別名を指定する
+        * `Listen`ディレクティブでIPアドレスを設定
+        * SSLはクライアントに依存せずに使用できる
 
 サーバ処理関連のディレクティブ
 
-* Timeout
+* `Timeout 秒数`
     * クライアントからリクエストを受け取ってから完了するまでの時間の最大値を指定
-* KeepAlive
+* `KeepAlive on|off`
     * ブラウザサーバ間でTCP接続をキープする、KeepAliveの有効無効を指定
     * 1つのTCP接続を使って複数のHTTP処理リクエストをすることができる
-* MaxKeepAliveRequests
+* `MaxKeepAliveRequests リクエスト数`
     * KeepAlive時に1つの接続を受け付ける最大リクエスト数を指定
-* KeepAliveTimeout
+* `KeepAliveTimeout 秒数`
     * KeepAlive時にクライアントからのリクエストを完了してから、コネクションを切断せずに次のリクエストを受け取るまでの最大待ち時間を指定
-* StartServers
+* `StartServers 子プロセス数`
     * 起動時のプロセス数
-* MaxSpareServers, MinSpareServers
-    * 待機子プロセスの最大最小を設定
-* MaxRequestWorkers
+* `MaxSpareServers 子プロセス数`, `MinSpareServers 子プロセス数`
+    * 待機子プロセスの最大、最小を設定
+* `MaxRequestWorkers 子プロセス数`
     * 生成されるhttpd子プロセスの最大数を指定(同時に応答するリクエストの最大数)
-* MaxConnectionsPerChild
+* `MaxConnectionsPerChild リクエスト数`
     * http子プロセスが処理するリクエストの最大数を指定
 
 ログ関連のディレクティブ
 
 * `HostnameLookups on|off`
-    * IPアドレスを逆引きホスト名で記録するかどうか指定
+    * クライアントのIPアドレスをログファイルに記載する際、IPアドレスを逆引きホスト名で記録するかどうか指定
 * `LogFormat 書式 書式名`
     * アクセスログに使われる書式を定義
 * `CustomLog ファイル名 書式名`
@@ -146,13 +151,13 @@ httpd.confの設定項目はディレクティブと呼ばれる
     * 外部設定ファイルによるhttpd.confの上書きを許可
     * <Directory>セクション内でのみ使用できる
     * パラメータ
-        * AuthConfig
+        * `AuthConfig`
             * 認証関係の設定を許可
-        * Limit
+        * `Limit`
             * Order, Allow, Denyディレクティブの設定を許可
-        * All
+        * `All`
             * すべての設定の変更を許可
-        * None
+        * `None`
             * すべての設定の変更を禁止
 
 例）全てのユーザのホームディレクトリ「/home/*」において、外部設定ファイル「.htaccess」による設定をすべて許可する場合
@@ -173,26 +178,30 @@ AllowOverride All
         * Apacheの動的モジュールのコンパイルとインストールを行う
     * `LoadModule モジュール名 モジュールのファイル名`
 * 主なモジュール
-    * mod_authn_file
+    * `mod_authn_file`
         * .htaccessでのユーザ認証機能を提供
         * データベースからユーザを検索するために利用される
-    * mod_auth_basic
+    * `mod_auth_basic`
         * BASIC認証のフロントエンド
-    * mod_auth_digest
+    * `mod_auth_digest`
         * ダイジェスト認証のフロントエンド
-    * mod_authz_host
+    * `mod_authz_host`
         * ホストベースのアクセス制御を提供
-    * mod_user
+    * `mod_user`
         * ユーザベースのアクセス制御
-    * mod_access_compat
-        * ホストベースのアクセス制御
+    * `mod_access_compat`
+        * ホストベースのアクセス制御(互換機能)
+        * accessのcompatibility用モジュール
         * 2.3で非推奨となっており旧バージョンとの互換用
-    * mod_ssl
+    * `mod_so`
+        * 動的(DSO)モジュールを組み込む機能を提供
+    * `mod_ssl`
         * SSLによる暗号化通信を提供
-    * mod_perl
-* Perlの機能を提供
-* httpコマンド
-    * モジュールを確認できる
+    * `mod_perl`
+    * `mod_php`
+* httpdコマンド
+    * 静的に組み込まれているモジュールを確認できる
+    * httpdコマンドのオプションはapachectlコマンドでも使用することができる
     * `-l` 静的に組み込まれたモジュールを表示
     * `-M` 静的・動的に踏み込まれたモジュールを表示
 
@@ -210,6 +219,9 @@ AllowOverride All
     * BASIC認証のためのユーザ管理のコマンド
     * 書式
         * `htpasswd [オプション] ファイル名 ユーザ名`
+    * オプション
+        * `-c` パスワードファイルの新規作成
+        * `-D` ユーザを削除
     * オプション無しだと、パスワードの変更およびユーザの追加になる
 
 ダイジェスト認証
@@ -221,9 +233,10 @@ AllowOverride All
 * htdigestコマンド
     * ダイジェスト認証のためのユーザ管理のコマンド
     * 書式
-        * `htdigest [オプション] ファイル名 領域 ユーザ名`
-    * `-c` パスワードファイルの新規作成
-    * `-D` ユーザを削除
+        * `htdigest [オプション] ファイル名 認可領域 ユーザ名`
+    * オプション
+        * `-c` パスワードファイルの新規作成
+        * `-D` ユーザを削除
 
 ダイジェスト認証の設定例
 
@@ -268,9 +281,12 @@ Require user test1 test2
         * `Require user ユーザ名 ユーザ名 ....`
     * グループの場合
         * `Require group グループ名 グループ名 ....`
+    * 指定したパスワードファイルに登録されているすべてのユーザを認証対象とする
+        * `Require valid-user`
 
 Requireディレクティブ
 
+* Apache2.4ではアクセス制御にRequireディレクティブを使う
 * 書式
     * `Require [not] エンティティ 値`
 * 複数の条件を指定したい場合は、<RequireAll><RequireAny><RequireNone>の3つのディレクティブを使う
@@ -279,12 +295,12 @@ Requireディレクティブ
         * 全て許可
     * `all denied`
         * 全て拒否
-    * `env`
+    * `env 環境変数`
         * 指定した環境変数が設定されていると許可
-    * `method`
+    * `method httpメソッド`
         * 指定したhttpメソッドに合致すると許可
-    * `expr`
-        * 指定した表現に合致すると許可
+    * `expr 表現`
+        * 指定した表現に合致すると許可。条件文を書く
     * `ip`
         * 指定したIPアドレスを許可
     * `user`
@@ -296,6 +312,7 @@ Requireディレクティブ
         * ip, host
     * mod_authz_user
         * user, group, valid-user
+    * mod_authzのzは認可、authorization
 * 複数の条件をしたい場合のディレクティブ
     * RequireAll
         * すべての条件に合致したら真
@@ -408,17 +425,19 @@ Require group root
 ssl.confのディレクティブ
 
 * `ServerTokens`
-    * HTTPヘッダに出力されるバージョン情報を指定
+    * HTTPレスポンスヘッダに出力されるバージョン情報を指定
     * 通常はProd
     * Apacheのバージョンを含めるかどうかも設定できる
-* `ServerSignature`
+* `ServerSignature on|off`
     * エラーメッセージなどのフッタ表示の有効、無効の指定
 * `SSLCertificateKeyFile`
     * サーバの秘密鍵のファイルを指定
 * `SSLCertificateFile`
-    * サーバ証明書のファイルを指定。中間CA証明書があるときは1つにまとめて指定
+    * サーバ証明書のファイルを指定
+    * 中間CA証明書があるときは1つにまとめて指定
 * `SSLVerifyClient`
-    * クライアント認証のレベルを指定。requireでクライアント証明書が必須
+    * クライアント認証のレベルを指定
+    * requireでクライアント証明書が必須
     * クライアント認証は、認証局にCSR(証明書の署名要求)を提出し、認証局の秘密鍵で署名された証明書を発行してもらう
 * `SSLCACertificateFile`
     * クライアント認証に使用するCA証明書のファイルを指定
@@ -427,6 +446,10 @@ ssl.confのディレクティブ
     * クライアント認証に使用するCA証明書のファイルが置かれたディレクトリを指定
 * `SSLProtocol`
     * 使用可能なSSLプロトコルを指定
+* `SSLCipherSuite`
+    * 使用可能な暗号スイートを指定
+    * 鍵長が128bitより大きく、MD5を使用していない暗号スイートを使用する例
+        * `SSLCipherSuite HIGH:MEDIUM:!MD5`
 * `SSLEngine`
     * SSLの有効無効を指定
     * 有効なコンテキストは、サーバ設定ファイル、またはバーチャルホスト
@@ -448,18 +471,19 @@ ssl.confのディレクティブ
 
 /etc/squid/squid.conf 
 
-* `http_port`
+* `http_port [IPアドレス:]ポート番号`
     * Squidが利用するポート番号
-* `hierarchy_stoplist`
+* `hierarchy_stoplist 文字列`
     * キャッシュを利用しない文字列を指定
 * `maximum_object_size`
     * キャッシュされるデータのサイズ
 * `maximum_object_size_in_memory`
     * メモリにキャッシュされる最大ファイルサイズ
-* `ipcache_size`
+* `ipcache_size 数`
     * IPアドレスの名前解決をキャッシュする数
 * `cache_dir ディレクトリ名`
     * キャッシュディレクトリとパラメータ
+    * パラメータは、ディレクトリの最大容量、ディレクトリの数、サブディレクトリの数など
 * `cache_mem バイト数`
     * メモリ上のキャッシュサイズ
 * `cache_log ファイル名`
@@ -468,12 +492,17 @@ ssl.confのディレクティブ
     * HTTPリクエストヘッダの最大サイズ
 * `request_body_max_size`
     * HTTPリクエストボディの最大サイズ
-* `auth_param`
+* `auth_param 認証方式 program 認証プログラム パスワードファイル`
     * ユーザ認証の方式等を設定
+    * パスワードファイル「/usr/local/passwd」に記載されているユーザ全員をBASIC認証の対象とする例
+        * `auth_param basic program /usr/local/squid/libexec/ncsa_auth /usr/local/passwd`
 
 ### アクセス制御の設定
 
-squid.confの設定項目aclでACLを定義し、http_accessでアクセス制御を行う
+* BASIC認証によるユーザ認証
+    * auth_paramで認証方式(basic)、認証プログラム、パスワードファイルを指定
+    * aclでproxy_authを使用して認証対象を定義
+    * http_accessでアクセス制御を行う
 
 * acl
     * ホストやプロトコルの集合にACL名をつける
@@ -505,17 +534,23 @@ squid.confの設定項目aclでACLを定義し、http_accessでアクセス制�
                 * `acl eigyobi time MTWHF 09:00-18:00`
         * `url_regex 文字列`
             * 正規表現を使ったURL
-            * 正規表現のリストが格納されているファイルを指定することもできる。その場合はダブルクォーテーションで囲う
+            * 正規表現のリストが格納されているファイルを指定することもできる。その場合はファイル名をダブルクォーテーションで囲う
                 * `acl blacklist url_regex "/var/squid/blacklist_url"`
-        * `proxy_auth`
+        * `urlpath_regex 文字列`
+            * 正規表現を使ったURL(プロトコルとホスト名を除く)
+            * 例）testという文字列を含むURL（プロトコルとホスト名を除く）をACL名Unwantedとして定義する場合
+                * `acl Unwanted urlpath_regex test`
+        * `proxy_auth ユーザ名`
             * ユーザ認証の対象
+            * 例）ユーザhogeを認証対象として、ACL名passwordを定義する場合
+            * `acl password proxy_auth hoge`
 * http_access
     * アクセス制御を設定する。設定したACLを利用
     * 書式
         * `http_access allow|deny ACL名`
         * 「!」を付加すると「acl名」の内容が反転
         * 上から順に処理され、1つの条件にマッチしたらそれ以降の条件はチェックされない
-        * 2つ以上のACL名を指定した場合、ANDj王権ですべての条件が一致した場合のみアクセス制御が適用される
+        * 2つ以上のACL名を指定した場合、AND条件ですべての条件が一致した場合のみアクセス制御が適用される
 
 ACLの設定例
 
@@ -568,6 +603,9 @@ nginx.confのディレクティブ
 * `listen IPアドレス:ポート;`
     * リクエストを受け付けるIPアドレスとポート番号
     * server内で使用
+* `server_name 名前 ...;`
+    * バーチャルホストの名前の指定
+    * server内で使用
 * `index ファイル名 ...;`
     * インデックスとして返すファイル名の指定
 * `root パス;`
@@ -577,8 +615,11 @@ nginx.confのディレクティブ
     * location内で使用し、リクエスト転送先であるWebサーバを指定する
 * `proxy_set_header フィールド 値;`
     * プロキシ先に送られるリクエストヘッダフィールドの再定義、追加
+    * ヘッダフィールドのHostに変数$hostの値を指定する例
+        * `proxy_set_header Host $host;`
 * `fastcgi_pass IPアドレス:ポート;`
-    * FastCGIの設定
+    * FastCGIサーバの指定
+    * FastCGIはWebアプリケーション用のインターフェース
 * `fastcgi_param パラメータ 値;`
     * FastCGIにわたすパラメータ設定の指定
 
