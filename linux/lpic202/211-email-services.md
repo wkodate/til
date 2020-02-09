@@ -79,6 +79,8 @@
         * 自サーバのホスト名を指定
     * `mydomain`
         * 自サーバのドメイン名を指定
+    * `myorigin`
+        * メールアドレスの@以降に使用するドメインを指定
     * `inet_interfaces`
         * メールを受け取るネットワークインターフェースを指定
     * `mydestination`
@@ -88,12 +90,13 @@
     * `mail_spool_directory`
         * メールスプールディレクトリを指定
     * `home_mailbox`
-        * ユーザのホームディレクトリ配下のメールスプールディレクトリを指定
-        * mail_spool_directoryと療法で指定した場合は、home_mailboxの記述が優先される
+        * ユーザのホームディレクトリ配下のメールスプールディレクトリを指定(ホームディレクトリからの相対パス)
+        * home_mailboxとmail_spool_directoryを両方指定した場合は、home_mailboxの記述が優先される
     * `mailbox_command`
         * ローカル配送を行うプログラム(MDA)を指定
     * `disable_vrfy_command`
         * SMTPコマンドのVRFYの使用を無効化(yes), 有効化(no)を指定
+        * 有効なメールアカウントを知られるとスパムメールを配信される可能性があるため無効にしておくべき
 * TLS設定
     * Postfix2.2でTLSを強制するためには、smtps, smtpd_use_tls, smptd_enforce_tlsの設定が必要
     * `smtpd_use_tls`(2.3以前)
@@ -116,6 +119,7 @@
 * 各フィールド
     * `chroot`
         * chroot jail環境で動作させるかどうかの指定
+        * yとすると指定したデーモンをchroot jailモードで起動させることができ、セキュリティ向上
 * TLS設定
     * `smtps`
         * コメントを外して設定を有効化
@@ -124,12 +128,18 @@
 
 * postfixコマンド
     * Postfixを制御
+    * `start`, `stop`
+        * 起動、停止
+    * `abort`
+        * 強制停止
     * `flush`
         * メールキュー内にあるメールを直ちに再送する
+    * `reload`
+        * 設定ファイルを再読み込み
     * `check`
         * 設定ファイルの構文をチェックする
 * postconfコマンド
-    * Postfixの設定値を表示
+    * Postfixの設定値を確認、表示
     * `-n` デフォルトから変更されている設定項目を表示
 
 ### Postfixのcanonical機能
@@ -155,15 +165,16 @@
 * /etc/aliases
     * メールアカウントのエイリアスを設定するファイル
     * メーリングリストなどで使用される
-* 書式
-    * `アカウント名： 受け取りユーザ名[,受け取りユーザ名 ...]`
-* 別名
-    * `|コマンド`
-        * 指定したコマンドにメールのメッセージを渡す
-    * `user@domain`
-        * 指定したメールアドレスにメールを転送
-    * `:include:/ファイルのパス`
-        * 指定したファイルに記述された内容を別名として読み込む
+    * 書式
+        * `アカウント名： 受け取りユーザ名[,受け取りユーザ名 ...]`
+    * 別名
+        * `|コマンド`
+            * 指定したコマンドにメールのメッセージを渡す
+        * `user@domain`
+            * 指定したメールアドレスにメールを転送
+        * `:include:/ファイルのパス`
+            * 指定したファイルに記述された内容を別名として読み込む
+            * メーリングリストなど利用者管理が大変な場合にファイルを利用する
 * newaliasesコマンド
     * /etc/aliasesファイルの設定を反映
 
@@ -172,20 +183,27 @@
 * メールキュー
     * 処理待ちメールが一時的に保持される場所
     * メールキューの保存場所
-        * Postfix: /var/spool/postfixディレクトリ以下のサブディレクトリ
-        * sendmail: /var/spool/mqueueディレクトリ以下に格納される
+        * /var/spool/postfixディレクトリ以下のサブディレクトリ(Postfix)
+        * /var/spool/mqueueディレクトリ以下に格納される(sendmail)
     * メールキューの表示
-        * Postfix: mailqコマンド
-        * sendmail: postqueue -p コマンド
-    * sendmailコマンド
-        * `-bp`, `mailq` メールキューを表示する
-        * `-q` メールキュー内にあるメールを直ちに再送する
-    * mailqコマンド
-        * メールキューを表示するコマンド
+        * `postqueue -p`(Postfix)
+            * -p: produce a traditional sendmail-style queue listing
+        * `sendmail -bp`(sendmail)
+        * `mailq`
+    * 再送
+        * `postqueue -f`(Postfix)
+            * flush the queue: attempt to deliver all queued mail
+        * `postfix flush`(Postfix)
+        * `sendmail -q`(sendmail)
+    * メール削除
+        * `postsuper -d`(Postfix)
+        * `rm -f /vr/spool/mqueue/*`(sendmail)
 * メールボックス
     * メールサーバが受け取ったメールの格納場所
     * Postfix
         * ホームディレクトリ以下にmbox形式、Maildir形式
+            * Maildir形式は、cur, tmp, newというサブディレクトリに分類し、1メール1ファイルとして保存する
+            * mbox形式は、各ユーザのメールが1つのファイルに保存される(1ユーザに1ファイル)
     * sendmail
         * /var/spool/mailディレクトリ以下にあるユーザ名のテキストファイル
 * SMTPコマンド
@@ -199,11 +217,6 @@
         * 本文を入力
     * QUIT
         * SMTPセッションを終了
-
-## 電子メール配信の管理
-
-* Maildir形式
-    * cur, tmp, newというサブディレクトリに分類し、1メール1ファイルとして保存する
 
 ### Sieve
 
@@ -249,7 +262,6 @@
 * MTAで受信したメールをそれぞれのユーザに配信するソフトウェアであり、MDAのひとつ
 * .procmailrc ファイルにフィルタリングの設定
 
-
 ## メールボックスアクセスの管理
 
 * MRA
@@ -257,7 +269,7 @@
     * POPやIMAPプロトコルを使ってメールボックスからメールを取り出すソフトウェア
     * Dovecot
     * Courier IMAP(クーリエ アイマップ)
-        * IMAPをサポートするMRA
+        * Maildir形式のメールボックスの胃をサポートする、IMAPをサポートするMRA
 * プロトコルとポート
     * SMTP: 25
     * POP3: 110
@@ -282,6 +294,8 @@
         * psコマンドの出力に詳細(ユーザ名、IPアドレス)を表示する
     * `mail_location`
         * メール格納方法および格納場所を指定
+    * `mechanisms`
+        * 認証方式を指定
 
 ### /etc/dovecot/conf.d/10-ssl.conf
 
@@ -289,15 +303,20 @@
 * 設定項目
     * `ssl`
         * yesでSSL/TLS有効化
+        * 1.xでは`ssl_disable = no`
     * `ssl_cert`
         * 「<サーバ証明書のパス」 でサーバ証明書を指定
+        * 1.xでは`ssl_cert_file = サーバ証明書のパス`
     * `ssl_key`
         * 「<サーバ秘密鍵のパス」 で秘密鍵を指定
+        * 1.xでは`ssl_key_file = サーバ秘密鍵のパス`
 
 ### Dovecot管理コマンド
 
 * doveconfコマンド
     * Dovecotの設定内容を出力
+    * `-n` デフォルト以外の設定を表示
+    * `-c` 設定ファイルを指定。デフォルトは`/etc/dovecot/dovecot.conf`
 * doveadmコマンド
     * Dovecotの管理用コマンド
     * 起動や再起動はできない
@@ -314,4 +333,6 @@
             * パスワードを生成する
         * `who`
             * サーバにログイン中のユーザ情報を表示
+            * dovecot.confにverbose_proctitle=yesを記述すれば、psコマンドで確認できる
+
 

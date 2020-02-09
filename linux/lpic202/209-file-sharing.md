@@ -72,7 +72,7 @@
         * 137/udp, 138/udp
     * winbindd
         * Winbind機能を提供
-    * Samba4がドメインコントローラとして稼働する場合は、起動するプログラムがsambaというプログラムに統一されている
+    * Samba4がドメインコントローラとして稼働する場合は、起動するプログラムが`samba`というプログラムに統一されている
 * Samba4からの機能
     * Active Directoryドメインのドメインコントローラの構築が可能
         * 認証はKerberosを使用
@@ -146,6 +146,8 @@
         * Active Directoryでの認証
 * `passdb backend = 認証方式`
     * Saｍba3.0以降、security=userの場合、smbpasswd, tdbsam, ldapsamなどの認証方式を指定して変更
+    * 例）
+        * `passdb backend = tdbsam:/etc/samba/passdb.tdb`
     * smbpasswd
         * テキスト形式のパスワードファイル。smbpasswdファイル
     * tdbsam
@@ -154,6 +156,8 @@
         * LDAPサーバを使用した認証
 * `smb passwd file = ファイル名`
     * security=user の場合、smbpasswdで認証を行う際のパスワードファイルの指定
+    * 例）
+        * `smb passwd file = /etc/samba/smbpasswd`
 * `password server = NetBIOS名 | IPアドレス`
     * security = user | domain | ads の場合、認証を別のサーバで行う際のパスワード
 
@@ -169,7 +173,7 @@
 パスワードに関わる設定
 
 * `username map = ファイル名`
-    * ユーザ名のマッピング情報を格納したファイルを指定
+    * ユーザ名のマッピング情報を格納したファイルを指定。WindowsユーザをLinuxユーザにマッピング
     * 書き方は「Linuxユーザ名 = Windowsユーザ名」
 * `guest account = ゲストユーザ名`
     * ゲスト認証を許可する場合、ゲストユーザのユーザ名を指定
@@ -262,8 +266,12 @@ Winbind関連の設定
 * `workgroup = ドメイン名`
     * NetBIOS名の指定(短いドメイン名)
 * `realm = レルム名`
-    * ドメイン名(レルム名)の指定()大文字でFQDNを指定
+    * ドメイン名(レルム名)の指定大文字でFQDNを指定
 * `security = ads`
+* `server role`
+    * Sambaの動作モードを指定
+    * `active directory domain controller`(ADドメインのコントローラ)、`standalone`(スタンドアロンサーバ)、`member server`(ドメインのメンバサーバ)などを指定
+    * Samba4からの設定
 
 ### Samba管理コマンド
 
@@ -272,6 +280,7 @@ Winbind関連の設定
     * Sambaサーバに接続されているクライアント、使用中の共有、ロックされているファイルを表示
 * nmblookupコマンド
     * マスターブラウザの検索、ワークグループ内のホストの検索、NetBIOS名の問い合わせなどを行うコマンド
+    * `nmblookup [オプション] NetBIOS名|IPアドレス|ワークグループ名`
     * `-M` マスターブラウザを調べる
     * `-A` 引数をIPアドレスとみなす
 * smbcontrolコマンド
@@ -353,6 +362,7 @@ Winbind関連の設定
         * portmapの対応
     * rpcinfoコマンド
         * RPCサービスのプログラム番号、プロトコル、ポート番号などを調べることができる
+        * `-p` 指定したホストで動作しているRPCサービスの一覧を表示する
 * 疑似ファイルシステムを使って、複数のファイルシステムをクライアント側から1つのツリーとしてマウントできるようになる
     * サーバ側のツリーのルートとなるファイルシステムにfsid=0を設定する
     * ツリーのはいかに見せたい他のファイルシステムをバインドマウントする
@@ -376,26 +386,36 @@ Winbind関連の設定
     * `root_squash`
         * root権限を剥奪。アクセス時に匿名アカウント権限で実行
         * デフォルト設定
+    * `all_squash`
+        * すべてのリクエストを匿名アカウント権限で実行
     * `sync`
         * サーバとクライアント側の書き込みを同期
     * `fsid`
         * fsid=0で、疑似ファイルシステムのルートディレクトリであることを示す
+        * file system id
 
 ### NFSサーバのコマンド
 
 * exportfsコマンド
     * 現在のエクスポート状況を表示したり、/etc/exportsの変更を反映させるコマンド
     * オプション
-        * `-a` 全てのディレクトリをエクスポート
+        * `-a` 全てのディレクトリをエクスポートまたアンエクスポート
+            * export or unexport all directories
         * `-r` すべてのディレクトリを再エクスポート
             * `/etc/init.d/nfs reload`と同じ
+            * reexport
         * `-u` ディレクトリをアンエクスポート
+            * unexport
         * `-v` 詳細なエクスポート状況を表示。引数を指定しない場合でもエクスポート状況を表示できる
 * showmountコマンド
     * マウントしているNFSクライアントを調べるコマンド
     * オプション
-        * `-a` NFSクライアントのホスト名とマウントされているディレクトリを表示
-        * `-e NFSサーバ名` 指定したサーバでエクスポートしているディレクトリを表示
+        * `-a`,`--all`
+            * NFSクライアントのホスト名とマウントされているディレクトリを表示
+            * NFSサーバ側で使用するコマンド
+        * `-e NFSサーバ名`,`--exports`
+            * 指定したサーバでエクスポートしているディレクトリを表示
+            * NFSクライアント側で使用するコマンド
 * nfsstatコマンド
     * NFSの統計情報を確認するコマンド
 
@@ -447,3 +467,4 @@ Winbind関連の設定
 * rpc.idmapd
     * NFS v4のみ必要
     * /etc/idmapd.confの設定により、クライアントのユーザ名、グループ名とUID,GIDのマッピングを行う
+

@@ -123,6 +123,7 @@ DHCPサーバの設定ファイル「/etc/dhcpd.conf」の書式
     * dhclient
     * pump
     * dhcpcd
+* dhcpd.leasesファイルにDHCPクライアントに貸し出したIPアドレスなどの情報が記録されている
 
 ### DHCPリレーエージェント
 
@@ -264,6 +265,7 @@ auth required pam_nologin.so
         * `-f ファイル名` 設定ファイルの指定
         * `-u ユーザ名` slapdを起動するユーザの指定
         * `-g グループ名` slapdを起動するグループの指定
+        * `-r ディレクトリ名` ルートディレクトリとするディレクトリの指定
 * SSSD
     * System Security Service Daemon
     * リモートにある認証システムの情報をキャッシュし、クライアント側で認証できるようにする仕組み
@@ -471,8 +473,12 @@ index ou,cn,mail,surname,givenname eq,pres,sub
     * コメントは行頭に「#」をつける。途中にコメントを入れることはできない
     * by以降は順番に処理され、条件にマッチするとそれ以降の条件は処理されない
     * `by anonymous auth` はLDAPサーバにアクセスする際は必ず認証を行う必要があるので必要。ないとそもそも認証ができなくなる
-* マッチする条件がない場合は、`access to  * by * none`が適用され、アクセスが拒否される
-* アクセス制御の設定を何も記述しない場合は、`access to * by * read`と同じ条件が適用され、全てのデータを全てのユーザが参照できるようになる
+* マッチする条件がない場合
+    * アクセスが拒否される
+    * `access to  * by * none`が適用される
+* アクセス制御の設定を何も記述しない場合
+    * 全てのデータを全てのユーザが参照できるようになる
+    * `access to * by * read`、`access to *  by anonymous read  by * none`と同じ条件が適用される
 * アクセス制御対象
     * `*`
         * すべてのエントリ
@@ -597,6 +603,4 @@ index ou,cn,mail,surname,givenname eq,pres,sub
         * 対話的に新パスワードを入力した場合は、-Sオプションのみを指定
         * `-w`パスワード
         * `-s` 新しいパスワード。set new passwd
-
-
 
