@@ -1,0 +1,11 @@
+alertmanager:
+  persistentVolume:
+    size: 1Gi
+    storageClass: "gp2"
+server:
+  persistentVolume:
+    size: 1Gi
+    storageClass: "gp2"
+  retention: "12h"
+pushgateway:
+  enabled: false
