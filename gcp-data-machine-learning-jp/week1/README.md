@@ -173,17 +173,171 @@ SQL
 
 ## レコメンデーション システム
 
+* レコメンデーションシステムには、データ、モデル、インフラが必要になる
+* if文だとスケールしない、コードベースが複雑になるので、MLで自動に学習する
+* Machine Learning = Examples, not rules
+    * 機械学習はルールではなく、実例で何かをコンピュータに教えること
+* ユーザのレーティングを取り込む(暗黙的な評価も含む)→トレーニングをしてユーザ毎の評価を予測→ユーザの他の物件への評価+対象物件への他のユーザからの評価をつかってレコメンデーション
+* 評価予測の頻度は、1日に一度や週に一度でよくバッチで良い
+
 ## 課題: クラウドへのワークロードの移行
+
+* オンプレでHadoopやSparkをクラウドへ移行する
+* Spark MLのジョブをCloud Dataprocで実行し、評価をCloud SQLのRDBMSに移行する
+* データが非構造化データの場合、Cloud Strorage
+* 構造化データの場合
+    * トランザクショナルワークロードの場合
+        * SQLの場合
+            * 一つのストレージで十分ならCloud SQL
+            * スケールが必要ならCloud Spanner
+        * No-SQLの場合
+            * Cloud DataStore
+    * データ分析ワークロードの場合
+        * ミリ秒レイテンシの場合、Cloud Bigtable
+        * 秒レイテンシの場合、BigQuery
+* Cloud SQLはフルマネージドなRDBMS
+
+オンプレミスとクラウド
+
+* SparkジョブをCloud Dataprocで実行
+* オンプレだとクラスタの容量が固定されてしまう、GCPなら柔軟に変更できる
+* Cloud Dataproc
+    * クラスタの管理が不要でHadoopが使える
+    * 既に存在するHadoopのワークロードを簡単に置き換えることができる
+    * ComputeとStorageを分けるためにGCSに接続する
+        * ジョブごとにクラスタを起動停止できる
+    * クラスタのサイズは可変
+        * オートスケーリングの機能があるのでリソースを柔軟に変更できる
+        * プリエンティブルVM(有効期限が短い安いインスタンス)を使用できる
 
 ## ラボ: Cloud SQL と Spark ML を使用して商品を推奨する
 
-## テスト
+* 物件レコメンドシステムのMLワークロードをオンプレのHadoopクラスタからクラウドに移行させる
+* 流れ
+    * Cloud SQLインスタンスを作ってテーブルにデータを入れる
+    * Cloud ShellでSQLを使ってレンタルデータを調べる
+    * Dataprocの起動
+    * レコメンデーションを作るためにPySparkで書かれたモデルでレコメンドを作成
+    * Cloud SQLでインサートした行を調べる
 
 ### 学習用教材
 
+* Hadoop から Google Cloud Platform への移行
+    * https://cloud.google.com/solutions/migration/hadoop/hadoop-gcp-migration-overview?hl=ja
+* Cloud SQL のドキュメント
+    * https://cloud.google.com/sql/?hl=ja
+* Cloud Dataproc のドキュメント
+    * https://cloud.google.com/dataproc/?hl=ja
+
 # Week3: BigQuery ML で訪問者の購入を予測する
 
+## BigQuery の概要
+
+* BigQueryの特徴
+    * サーバレス
+    * 従量課金モデル
+    * 保存データはデフォルトで暗号化
+    * 地理的な保存場所を指定、IAMで特定の行のみのACL設定が可能
+    * AIやMLワークロードの基盤になる
+* GitHubのデータを使って、開発者がタブとスペースどちらを好むのかをBigQueryを使って集計するデモ
+
+## 大規模なデータセットを SQL で探索、分析する
+
+* BigQueryのサービス
+    * BigQuery Storage Service。データ用のフルマネージドストレージ
+    * BigQuery Query Service。高速SQLクエリエンジン
+* セキュリティとしてView, Editor, Ownerなどのロールがある
+
+## BigQuery にデータセットを取り込んで保存する
+
+* データセットのストレージとメタデータを管理
+* BigQueryの外部のデータソース(例えばCloud Storage)にあるデータに対してもクエリを実行できる
+* ストリーミングで挿入する行の最大サイズは1MB、最大スループットは10万レコード/秒
+* 列に構造型のデータ型でデータを保存できる。この場合JOIN不要
+
+## BigQuery ML で SQL を使用して機械学習を適用する
+
+モデルの種類の選択
+
+* 過去のデータから正しい答えが取得できそうな場合は教師あり学習
+    * ラベル列が数値データなら予測
+        * 線形回帰
+    * ラベル列が文字列データなら分類
+        * 路地スティク回帰、2高ロジスティック回帰
+    * レコメンデーション
+        * 行列分解(Matrix Factorization)
+* 過去のデータから正しい答えが取得できない場合は教師なし学習
+    * クラスタリング
+
+学習
+
+* モデルによって顧客の生涯価値(LTV)を予測するシナリオ
+* featureカラムがモデルの入力になる
+* モデルの作成にはすごく時間がかかるが、BigQuery内の構造化データセットでMLを操作できる
+    * SQLでモデルを作成する
+    * SQLで予測クエリを書く
+    * 結果を得る
+
+BigQuery ML(BQML)のフェーズ
+
+* BigQueryにデータを取り込みでETL
+* 特徴の選択、前処理
+* BigQueryにモデルを作成
+* モデルのパフォーマンスを評価
+* 予測に使用
+
+BigQuery MLの主な機能
+
+* `CREATE MODEL` モデルを作成
+* `ML.WEIGHTS`　重みの重要度を確認
+* `ML.EVALUATE`　パフォーマンスを評価
+* `ML.PREDICT`　予測
+
+BigQuery MLチートシート
+
+* Label
+    * labelという名前のカラムをつくるもしくはinput_label_colsを使う
+* Feature
+    * CREATE文の後のSELECT文で`ML.FEATURE_INFO`でデータ列としてモデルに渡す
+* Model
+    * BigQueryで作られるオブジェクト
+* Model Types
+    * 線形回帰、ロジスティック回帰。`CREATE MODEL`でモデルを作成
+* Training Progress
+    * `ML.TRAINING_INFO`でトレーニングの進捗を確認
+* Inspect Weights
+    * `ML.WEIGHTS`で予測対象のラベルに関連してモデルに学習させた各特徴の重要度を確認できる
+* Evaluation
+    * `ML.EVALUATE`でモデルの性能を確認
+* Prediction
+    * `ML.PREDICT`で予測
+
+## ラボ: BigQuery ML で訪問者の購入を予測する
+
+## 学習用教材
+
+* Cloud Pub/Sub のドキュメント
+    * https://cloud.google.com/pubsub/?hl=ja
+* Cloud Dataflow のドキュメント
+    * https://cloud.google.com/dataflow/?hl=ja
+* データポータルのドキュメント
+    * https://developers.google.com/datastudio/?hl=ja
+* ブログ: BigQuery での Google スプレッドシートの使用
+    * https://cloud.google.com/blog/products/g-suite/connecting-bigquery-and-google-sheets-to-help-with-hefty-data-analysis
+
 # Week4: Cloud Pub/Sub と Cloud Dataflow を使用してストリーミング データ パイプラインを作成する
+
+## データパイプラインの構築
+
+## Cloud Pub/Subによるメッセージ指向アーキテクチャ
+
+## スケーリングに対応したストリーミング データ パイプラインを設計、実装する
+
+## 分析情報をダッシュボードで可視化する
+
+## ラボ: Cloud Dataflow を使用してストリーミング データ パイプラインを作成する
+
+## 学習用教材
 
 # Week5: Vision API と Cloud AutoML を使用して、構築済みのモデルで画像を分類する
 
