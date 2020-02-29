@@ -327,18 +327,113 @@ BigQuery MLチートシート
 
 # Week4: Cloud Pub/Sub と Cloud Dataflow を使用してストリーミング データ パイプラインを作成する
 
-## データパイプラインの構築
-
 ## Cloud Pub/Subによるメッセージ指向アーキテクチャ
 
-## スケーリングに対応したストリーミング データ パイプラインを設計、実装する
+* 分散メッセージのチャレンジングなこと
+    * 様々な処理やデバイスからのデータストリーミング。不正データ、遅延データなども含まれる
+    * 分散イベント通知。パブリッシュしたメッセージを他のサービスがサブスクライブできる必要がある
+    * スケール
+    * 信頼性(重複なし)
+* 入力は様々なイベント、Dataflowが処理してBigQueryやCloud Storageにためる
+* パブリッシャーとサブスクライバーが疎結合になっている
 
-## 分析情報をダッシュボードで可視化する
+## スケーリングに対応したストリーミング データ パイプラインを設計、実装する、分析情報を可視化
+
+* データエンジニアがパイプラインを構築する際の2つの課題
+    * パイプライン設計
+        * バッチとストリーミングの両方に互換性があるか
+        * SDKに集約やウィンドウ機能は必要か、遅延データを処理できるか
+        * 既存のテンプレートやソリューションはあるか
+    * パイプラインの本番導入
+        * メンテナンスのオーバーヘッド
+        * インフラの信頼性
+        * 拡張性
+        * 異常検知方法
+        * ベンダーロックイン
+* パイプライン設計の課題はApache Beamが、本番導入の課題はCloud Dataflowが満たしている
+* データポータルで可視化
 
 ## ラボ: Cloud Dataflow を使用してストリーミング データ パイプラインを作成する
 
+* Pub/Sub, Dataflow, Data Studioを使ってリアルタイムIoTダッシュボードを作る
+* 使うのは、BigQuery, Cloud Dataflow, Cloud Pub/Sub, Data Studio Dathboards/BI
+* ステップ
+    * Pub/SubにストリーミングタクシーTopicをセットアップ
+    * Dataflowジョブを作成
+    * BigQueryに出力、ジョブの監視
+    * 結果をSQLで分析、ビューの作成
+    * Data Studioで主要なメトリクスを可視化
+
 ## 学習用教材
+
+* Cloud Pub/Sub のドキュメント
+    * https://cloud.google.com/pubsub/docs/?hl=ja
+* Cloud Dataflow のドキュメント
+    * https://cloud.google.com/dataflow/docs/?hl=ja
+* データポータルのドキュメント
+    * https://developers.google.com/datastudio/?hl=ja
 
 # Week5: Vision API と Cloud AutoML を使用して、構築済みのモデルで画像を分類する
 
-# Week6 まとめ
+## 非構造化データセットを使った機械学習
+
+* 非構造化データにMLを利用する
+* 自分でルールを決めるのではなく、ニューラルネットワークに大量の画像を与えてルールを決めてもらう
+
+## 適切なMLアプローチの選択
+
+AIへのアプローチ
+
+* Video Intelligence API、Cloud Vision APIなどの構築済みモデルを使用
+* BigQuery MLを使った構造化データのカスタムモデルを作成
+* TensorFlowなどでモデルを構築
+
+Dialogflow
+
+* 自然な会話を実現するプラットフォーム
+* 感情分析、コンテンツ分類、多言語サポート
+* Twitter, Slack, Facebookなど多くのアプリに対応している
+
+AutoML Vision
+
+* コードを書く必要がない
+* Vision APIに空の画像を入れると天候のラベルとパーセンテージを返す
+* AutoML Vision
+    * 機械学習の経験のない開発者が使える
+    * 独自の画像データの分類に使われる
+* Vision API
+    * 認識できないラベルをモデルに学習
+
+## ラボ: 構築済みの ML モデルで画像を分類する
+
+* 構築済みのMLモデルを使って画像を分類しラベル付けをする
+* Cloud Vision APIのラベルの限界を確認し、AutoMLと独自の画像でモデルを拡張する
+
+## カスタムモデルの構築
+
+GCPの機械学習
+
+* BigQuery MLを使ってSQLでモデルを作成
+* データセットをAutoMLに読み込みトレーニングすることで高精度のモデルを作成
+* Kerasで独自のモデルを作成
+
+## 学習用教材
+
+* Cloud AutoML
+    * https://cloud.google.com/automl/?hl=ja
+* BigQuery ML
+    * https://cloud.google.com/bigquery-ml/docs/bigqueryml-intro?hl=ja
+* TensorFlow でのカスタム ML モデルの作成
+    * https://www.tensorflow.org/tutorials/?hl=ja
+* AutoML Vision のドキュメント
+    * https://cloud.google.com/vision/automl/docs/?hl=ja
+* Vision API のドキュメント
+    * https://cloud.google.com/vision/?hl=ja#resources
+* ML on GCP Coursera コース（TensorFlow について学ぶ）
+    * https://www.coursera.org/specializations/machine-learning-tensorflow-gcp
+
+# 参考資料
+
+* https://towardsdatascience.com/how-to-hire-a-machine-learning-team-b8055fff57f
+* https://hackernoon.com/top-10-roles-for-your-data-science-team-e7f05d90d961
+
