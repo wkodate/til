@@ -1,4 +1,4 @@
-merpay インフラ Talk #5 ~GCP関連の技術編~
+merpay インフラ Talk #5 ~ GCP関連の技術編 ~
 ==
 
 # Spannerの窯問題について
