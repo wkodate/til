@@ -19,14 +19,32 @@ Log
         * Layoutで書式化。LoggingEventのインスタンスを文字列として返す
     * LoggingEventの送信
         * ロギングされたイベントをAppenderの宛先に送信
-* 構成要素
-    * Appender
-        * どこにどんなレイアウトで出力するか
-        * name属性とclass属性は必須
-        * layout属性
-            * 受け取った変換イベントを文字列に変換
-    * Logger
-        * パッケージやクラスに対してどのログレベルで出力するか
-        * name属性とlevel属性は必須
-    * Root
-        * Loggerで指定されていないものについて、どのログレベル以上でどのAppenderに出力するか
+
+## 構成要素
+
+* Appender
+    * どこにどんなレイアウトで出力するかの出力先
+    * コンソールやファイル、DBなど
+    * name属性とclass属性は必須
+    * layout属性
+        * 受け取った変換イベントを文字列に変換
+* Logger
+    * パッケージやクラスに対してどのログレベルで出力するか
+    * name属性とlevel属性は必須
+* Root
+    * Loggerで指定されていないものについて、どのログレベル以上でどのAppenderに出力するか
+
+## 設定ファイルの構文
+
+* configuration要素
+    * appender要素
+        * アペンダーの設定
+        * name属性とclass属性が必須
+    * logger要素
+        * ロガーを指定
+        * name属性とlevel属性が必要
+        * appender-ref要素で参照しているアペンダーを割り当てることができる
+    * root要素
+        * ルートロガーを指定
+        * level属性を指定できる
+        * 複数のappender-refを含めることができる
