@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+
+<body>
+    <div class="frame">
+        <h1 class="frame__title">JavaScript</h1>
+
+        <div class="frame__inner">
+            <script>
+                const cnt = parseInt(prompt('160円の商品を幾つ購入しますか'))
+                if (Number.isFinite(cnt)) {
+                    document.write(`${cnt*160}円です`);
+                } else {
+                    document.write('数字で入力してください');
+                }
+
+            </script>
+        </div>
+    </div>
+</body>
+
+</html>

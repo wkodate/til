@@ -87,7 +87,7 @@ GEM
     nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
     pg (0.21.0)
-    rack (2.0.8)
+    rack (2.2.3)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (5.2.2.1)
@@ -158,7 +158,7 @@ GEM
       sprockets-rails (>= 2.0, < 4.0)
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.4)
+    websocket-extensions (0.1.5)
 
 PLATFORMS
   ruby
