@@ -257,3 +257,8 @@ chef-config/Gemfile.lock
 **/.firebaserc
 **/firebase-debug.log
 **/.firebase
+
+# Github Pages
+_site
+.sass-cache
+.jekyll-metadata
