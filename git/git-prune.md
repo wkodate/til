@@ -13,7 +13,7 @@ $ git remote prune <name>
 
 ### Example
 
-`feature-1` branch has been already deleted.
+`feature-1` branch in remote has been already deleted.
 
 ```
 $ git fetch --prune origin
