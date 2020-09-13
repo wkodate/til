@@ -1,9 +1,4 @@
-Today I Learned
-========
-
 [![Build Status](https://travis-ci.org/wkodate/til.svg?branch=master)](https://travis-ci.org/wkodate/til)
-
-https://wkodate.github.io/til/
 
 ## Page of Contents
 - [Ansible](#ansible)
@@ -23,7 +18,7 @@ https://wkodate.github.io/til/
 
 ## AWS
 
-- [Solution Atchitect Associate](aws/cetification/solutions-architect-associate.md)
+- [Solution Atchitect Associate](aws/certification/solutions-architect-associate.md)
 - [Well-Architected Framework](aws/certification/well-architected-framework.md)
 - [JAWS-UG Beginner #17](aws/jawsug_beginner/jawsug_beginner_17.md)
 - [JAWS-UG Beginner #20](aws/jawsug_beginner/jawsug_beginner_20.md)
