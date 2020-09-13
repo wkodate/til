@@ -1,3 +1,6 @@
+Kotlin Grammer
+==
+
 * `val`で変数を定義。immutable。基本的にはこれを使う。`var`は変更する場合のみ
 * `List`は中身の変更が不可、`mutableList`は変更可能。同様に`mutableMap`もある
 * 参照先が同じかどうか`===`、構造の等価性(equalsメソッドによる同一性チェック)は`==` 
