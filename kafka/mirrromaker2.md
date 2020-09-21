@@ -7,17 +7,27 @@ MirrorMaker2
 
 [A look inside Kafka Mirrormaker 2 - Cloudera Blog](https://blog.cloudera.com/a-look-inside-kafka-mirrormaker-2/)
 
+## Limitation of MM1
 
-## Feature
+MM1 was insufficient for some use cases.
 
-* Change configuration dynamically
+Because...
+
+* Topic that are created will need to be repartitioned manually.
+* ACL and configuration changes are not synced accross clusters.
+* Rebalancing causes latency spikes.
+* There are no support for migration of producer or consumer between mirrored clusters.
+* There are no support for exactly-once delivery.
+* No support active-active pairs.
+
+## MM2 design
+
+* Kafka Connect framework. (including both source and sink connector)
+* Detect new topics and partitions.
+* Change configuration dynamically.
 * Sync cluster properties across clusters
+* Manages downstream topic ACL
+* Support active/active cluster
 * Improve performance by reducing rebalances
 
-## Architecture
 
-MirrorMaker2 based on Kafka Connector framework (Kafka source and sink connector)
-
-As with MirrorMaker1, remote-consume and local-produce is recommended.
-
-For bidirectional active-active setup, Automatic naming of replicated topics by MirrorMaker2 between 2 datacenters
