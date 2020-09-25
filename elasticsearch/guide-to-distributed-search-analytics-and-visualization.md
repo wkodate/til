@@ -76,7 +76,10 @@ Masterノードはクラスタ内で常に1台存在する。
 
 Masterノードがダウンしたときに昇格する候補ノードをMaster-eligibleノードと呼ぶ。デフォルトはすべてのノード
 
-高可用性構成にするためには、Master-eligibleノードは3以上の奇数台構成にする。また、`discoverty.zen.minimum_master_nodes`の数をMaster-eligibleノード数の過半数に設定する
+スプリットブレイン(Elasticsearchクラスタが3つに分断されてしまう)を防ぐためにMaster-eligibleノードは3以上の奇数台構成にする。
+
+`discoverty.zen.minimum_master_nodes`の数をMaster-eligibleノード数の過半数に設定する
+
 
 #### Dataノード
 
@@ -94,18 +97,137 @@ Masterノードがダウンしたときに昇格する候補ノードをMaster-e
 
 クライアントからのリクエストのハンドリングのみを実行する
 
+#### ディスカバリ
+
+クラスタへのノード参加、Masterノード選定の仕組み
+
+Zen discoveryというメカニズムが使われている。
+
+これを利用するためには、クラスタ名とmasterノードを設定する
+
+```
+cluster.name: my-cluster
+discovery.zen.ping.unicast.hosts: ["master1", "master2", "master3"]
+discovery.zen.minimum_master_nodes: 2
+```
+
 ### シャード分割、レプリカ
 
+シャード数はインデックス作成時に決める必要がある。レプリカ数は作成後も変更可能
 
+#### シャード数の検討
 
-クラスタ参加に関する設定
+* 拡張可能なノード数に合わせてシャード数を設定する
+* インデックスに格納するデータサイズが十分小さい場合(20-30GB程度)はシャード数を1に設定する
 
-* `cluster.name`
-* `discovery.zen.ping.unicast.hosts`
-* `discovery.zen.minimum_master_nodes`
+#### レプリカ数の検討
 
-クラスタ名を設定し、
+* 検索負荷が高い場合にはレプリカ数も増やす
+* バルクインデックスなどバッチ処理の際はレプリカ数を一時的に0にする
 
+### Elasticsearchの基本設定
+
+Elasticsearchの設定ファイル
+
+| ファイル名 | 用途 |
+| -- | -- |
+| `elasticsearch.yml` | Elasticsearchサーバのデフォルト設定 |
+| `jvm.options` | JVMオプションの設定 |
+| `log4j2.properties` | Elasticsearchサーバのデフォルト設定 |
+
+#### `elasticsearch.yml`
+
+```
+$ cat /usr/local/etc/elasticsearch/elasticsearch.yml.default
+# ======================== Elasticsearch Configuration =========================
+#
+# NOTE: Elasticsearch comes with reasonable defaults for most settings.
+#       Before you set out to tweak and tune the configuration, make sure you
+#       understand what are you trying to accomplish and the consequences.
+#
+# The primary way of configuring a node is via this file. This template lists
+# the most important settings you may want to configure for a production cluster.
+#
+# Please consult the documentation for further information on configuration options:
+# https://www.elastic.co/guide/en/elasticsearch/reference/index.html
+#
+# ---------------------------------- Cluster -----------------------------------
+#
+# Use a descriptive name for your cluster:
+#
+cluster.name: elasticsearch_wkodate
+#
+# ------------------------------------ Node ------------------------------------
+#
+# Use a descriptive name for the node:
+#
+#node.name: node-1
+#
+# Add custom attributes to the node:
+#
+#node.attr.rack: r1
+#
+# ----------------------------------- Paths ------------------------------------
+#
+# Path to directory where to store the data (separate multiple locations by comma):
+#
+path.data: /usr/local/var/lib/elasticsearch/
+#
+# Path to log files:
+#
+path.logs: /usr/local/var/log/elasticsearch/
+#
+# ----------------------------------- Memory -----------------------------------
+#
+# Lock the memory on startup:
+#
+#bootstrap.memory_lock: true
+#
+# Make sure that the heap size is set to about half the memory available
+# on the system and that the owner of the process is allowed to use this
+# limit.
+#
+# Elasticsearch performs poorly when the system is swapping the memory.
+#
+# ---------------------------------- Network -----------------------------------
+#
+# Set the bind address to a specific IP (IPv4 or IPv6):
+#
+#network.host: 192.168.0.1
+#
+# Set a custom port for HTTP:
+#
+#http.port: 9200
+#
+# For more information, consult the network module documentation.
+#
+# --------------------------------- Discovery ----------------------------------
+#
+# Pass an initial list of hosts to perform discovery when this node is started:
+# The default list of hosts is ["127.0.0.1", "[::1]"]
+#
+#discovery.seed_hosts: ["host1", "host2"]
+#
+# Bootstrap the cluster using an initial set of master-eligible nodes:
+#
+#cluster.initial_master_nodes: ["node-1", "node-2"]
+#
+# For more information, consult the discovery and cluster formation module documentation.
+#
+# ---------------------------------- Gateway -----------------------------------
+#
+# Block initial recovery after a full cluster restart until N nodes are started:
+#
+#gateway.recover_after_nodes: 3
+#
+# For more information, consult the gateway module documentation.
+#
+# ---------------------------------- Various -----------------------------------
+#
+# Require explicit names when deleting indices:
+#
+#action.destructive_requires_name: true
+```
 
 ## 第3章 ドキュメント/インデックス/クエリの操作
 
