@@ -231,6 +231,132 @@ path.logs: /usr/local/var/log/elasticsearch/
 
 ## 第3章 ドキュメント/インデックス/クエリの操作
 
+### CRUD操作
+
+#### Create
+
+インデックスやドキュメントタイプがない場合には自動的に作成される
+
+```
+$ curl -XPOST 'http://localhost:9200/my_index/my_type/' \
+-H 'Content-Type: application/json' \
+-d '{"name":"Taro", "age":30, "city":"Tokyo"}'
+```
+
+#### Read
+
+```
+$ curl -XGET 'http://localhost:9200/my_index/my_type/1'
+
+{
+  "_index" : "my_index",
+  "_type" : "my_type",
+  "_id" : "1",
+  "_version" : 1,
+  "_seq_no" : 0,
+  "_primary_term" : 1,
+  "found" : true,
+  "_source" : {
+    "name" : "Taro",
+    "age" : 30,
+    "city" : "Tokyo"
+  }
+}
+```
+
+検索
+
+システム全体、my_index内、my_type内から検索できる
+
+```
+$ curl -XGET 'http://localhost:9200/my_index/my_type/_search?pretty' \
+-H 'Content-Type: application/json' \
+-d '{"query": {"match":{"city":"Osaka"}} }'
+
+{
+  "took" : 399,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 1,
+      "relation" : "eq"
+    },
+    "max_score" : 0.6931471,
+    "hits" : [
+      {
+        "_index" : "my_index",
+        "_type" : "my_type",
+        "_id" : "ml_Vw3QBEtGUi7eQ5KGR",
+        "_score" : 0.6931471,
+        "_source" : {
+          "name" : "Hanako",
+          "age" : 25,
+          "city" : "Osaka"
+        }
+      }
+    ]
+  }
+}
+```
+
+#### Update
+
+```
+$ curl -XPUT 'http://localhost:9200/my_index/my_type/1' \
+-H 'Content-Type: application/json' \
+-d '{"name":"Taro", "age":80, "city":"Tokyo"}'
+
+$ curl -XGET 'http://localhost:9200/my_index/my_type/1?pretty'
+
+{
+  "_index" : "my_index",
+  "_type" : "my_type",
+  "_id" : "1",
+  "_version" : 2,
+  "_seq_no" : 2,
+  "_primary_term" : 1,
+  "found" : true,
+  "_source" : {
+    "name" : "Taro",
+    "age" : 80,
+    "city" : "Tokyo"
+  }
+}
+```
+
+#### Delete
+
+```
+$ curl -XDELETE 'http://localhost:9200/my_index/my_type/1'
+
+$ curl -XGET 'http://localhost:9200/my_index/my_type/1?pretty'
+
+{
+  "_index" : "my_index",
+  "_type" : "my_type",
+  "_id" : "1",
+  "found" : false
+}
+```
+
+### インデックスとドキュメントタイプの管理
+
+デフォルト値と異なるレプリカ数やシャード数を持つインデックスを作成したい場合は、明示的にインデックスを作成する
+
+Elasticsearchの自動推測ではなく明示的にデータ型指定したい場合は、明示的にドキュメントタイプを作成する
+
+#### インデックステンプレート
+
+日時で作成されるインデックスすべてに共通のマッピングを定義して動的に自動生成するための定義ファイル
+
+インデックス名の条件(`index_patterns`)とシャード数などの設定(`settings`)、マッピング(`mappings`)を定義する
+
 ## 第4章 Analyzer/Aggregation/スクリプティングによる高度なデータ分析
 
 ## 第5章 システム運用とクラスタの管理
