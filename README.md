@@ -6,22 +6,21 @@ til
 ## Page of Contents
 - [Ansible](#ansible)
 - [AWS](#aws)
-- [GCP](#gcp)
-- [Git](#git)
-- [Go](#go)
-- [Java](#java)
-- [Kotlin](#kotlin)
-- [Kubernetes](#kubernetes)
-- [Linux](#linux)
-- [SQL](#sql)
 - [DataEngineering](#dataengineering)
 - [DataEngWeekly](#dataengweekly)
 - [Elasticsearch](#elasticsearch)
 - [Flink](#flink)
+- [GCP](#gcp)
+- [Git](#git)
+- [Go](#go)
+- [Java](#java)
 - [Kafka](#kafka)
+- [Kotlin](#kotlin)
+- [Kubernetes](#kubernetes)
+- [Linux](#linux)
 - [Prometheus](#prometheus)
+- [SQL](#sql)
 - [Storm](#storm)
-
 
 ## Ansible
 
@@ -50,10 +49,37 @@ til
   - [day13](aws/udemy-aws-14days/day13.md)
   - [day14](aws/udemy-aws-14days/day14.md)
 
+## DataEngineering
+
+- [1001 Data Engineering Interview Questions](data-engineering/interview.md)
+
+## DataEngWeekly
+
+- [Issue286](DataEngWeekly/issue286.md)
+- [Issue288](DataEngWeekly/issue288.md)
+- [Issue289](DataEngWeekly/issue289.md)
+- [Issue305](DataEngWeekly/issue305.md)
+- [Issue312](DataEngWeekly/issue312.md)
+- [Issue313](DataEngWeekly/issue313.md)
+- [Issue314](DataEngWeekly/issue314.md)
+- [Issue330](DataEngWeekly/issue330.md)
+- [Issue331](DataEngWeekly/issue331.md)
+- [Issue332](DataEngWeekly/issue332.md)
+
+## Elasticsearch
+
+- [Elasticsearch実践ガイド](elasticsearch/guide-to-distributed-search-analytics-and-visualization.md)
+
+## Flink
+
+- [Flink Elasticsearch Connector](flink/elasticsearch-connector.md)
+
 ## GCP
 
 - [GCP Hands-on](gcp/gcp-handson.md)
 - [merpayインフラTalk #5 ~ GCP関連の技術編 ~](gcp/workshop/191113_merpay_infra.md)
+- [Google Cloud Platform Big Data and Machine Learning Fundamentals](gcp/gcp-big-data-and-ml-fundamentals.md)
+- [Serverless Machine Learning with Tensorflow on Google Cloud Platform](gcp/serverless-ml-with-tensorflow-on-gcp.md)
 
 ## Git
 
@@ -70,6 +96,12 @@ til
 - [GraalVM](java/graalvm/README.md)
 - [Logger](java/logger/README.md)
 - [Java本格入門](java/java-acroquest.md)
+
+## Kafka
+
+- [Overview](kafka/README.md)
+- [Mirrormaker2](kafka/mirrormaker2.md)
+
 
 ## Kotlin
 
@@ -98,45 +130,15 @@ til
   - [211 Email Services](linux/lpic202/211-email-services.md)
   - [212 System Security](linux/lpic202/212-system-security.md)
 
+## Prometheus
+
+- [Overview](prometheus/README.md)
+
 ## SQL
 
 - [SQLZOO](sql/sqlzoo/README.md)
 - [スッキリわかるSQL入門](sql/sukkiri/README.md)
 
-## DataEngineering
-
-- [1001 Data Engineering Interview Questions](data-engineering/interview.md)
-
-## DataEngWeekly
-
-- [Issue286](data-engineering/DataEngWeekly/issue286.md)
-- [Issue288](data-engineering/DataEngWeekly/issue288.md)
-- [Issue289](data-engineering/DataEngWeekly/issue289.md)
-- [Issue305](data-engineering/DataEngWeekly/issue305.md)
-- [Issue312](data-engineering/DataEngWeekly/issue312.md)
-- [Issue313](data-engineering/DataEngWeekly/issue313.md)
-- [Issue314](data-engineering/DataEngWeekly/issue314.md)
-- [Issue330](data-engineering/DataEngWeekly/issue330.md)
-- [Issue331](data-engineering/DataEngWeekly/issue331.md)
-- [Issue332](data-engineering/DataEngWeekly/issue332.md)
-
-## Elasticsearch
-
-- [Elasticsearch実践ガイド](data-engineering/elasticsearch/guide-to-distributed-search-analytics-and-visualization.md)
-
-## Flink
-
-- [Flink Elasticsearch Connector](data-engineering/flink/elasticsearch-connector.md)
-
-## Kafka
-
-- [Overview](data-engineering/kafka/README.md)
-- [Mirrormaker2](data-engineering/kafka/mirrormaker2.md)
-
-## Prometheus
-
-- [Overview](data-engineering/prometheus/README.md)
-
 ## Storm
 
-- [Overview](data-engineering/storm/README.md)
+- [Overview](storm/README.md)
