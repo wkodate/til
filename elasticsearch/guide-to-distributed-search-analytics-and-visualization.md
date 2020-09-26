@@ -361,4 +361,77 @@ Elasticsearchの自動推測ではなく明示的にデータ型指定したい�
 
 ## 第5章 システム運用とクラスタの管理
 
+### 運用監視と設定変更
+
+#### 動作状況の確認
+
+確認方法
+
+* _cat API
+* クラスタAPI
+* X-pack Monitoring機能
+* Elasticsearchのログ
+
+##### _cat API
+
+簡易的な状態を確認できる
+
+エンドポイントに`_cat/<確認項目名>`を指定してGETメソッドを実行
+
+| _cat APIのエンドポイント | 出力内容 |
+| -- | -- |
+| `_cat/health` | クラスタのhealth状態 |
+| `_cat/indices` | クラスタのインデックス状態 |
+
+`_cat/health`
+
+```
+$ curl -XGET 'http://localhost:9200/_cat/health?v'
+epoch      timestamp cluster            status node.total node.data shards pri relo init unassign pending_tasks max_task_wait_time active_shards_percent
+1601022093 08:21:33  elasticsearch_brew yellow          1         1     11  11    0    0        3             0                  -                 78.6%
+```
+
+クラスタのstatus
+
+| status | 意味 |
+| -- | -- |
+| `green` | インデックスのすべてのプライマリシャード、レプリカシャードが配置されている |
+| `yellow` | プライマリシャードはすべて配置されているが、配置できていないレプリカシャードがある |
+| `red` | 配置できていないプライマリシャードがある |
+
+`_cat/indices`
+
+```
+$ curl -XGET 'http://localhost:9200/_cat/indices?pretty'
+green  open .apm-custom-link                   O0Jrw-XHS6qGkhU39W1djQ 1 0      0    0    208b    208b
+green  open .kibana_task_manager_1             o79nzbZ0SBClJXsl47TxjQ 1 0      6 6303 796.5kb 796.5kb
+green  open .kibana-event-log-7.9.1-000001     Pa48GsmzTM-o8klyYZ-q4Q 1 0      1    0   5.5kb   5.5kb
+yellow open my_index                           iRgsI7fMTWaAMHywkSWpgg 1 1      1    0  13.5kb  13.5kb
+yellow open my-index                           Py4cUY_ZQF-arnY3yIrpcQ 1 1      1    0   4.7kb   4.7kb
+green  open .apm-agent-configuration           nXbYkLMRRTali7UF0DFywQ 1 0      0    0    208b    208b
+green  open .async-search                      Qo0fQfcFR8SrC0YTlWeNaQ 1 0      0    0    231b    231b
+green  open .kibana_2                          0BFsACQTTN6NzxGGNiIqdQ 1 0   1815    2  11.3mb  11.3mb
+yellow open metricbeat-7.9.1-2020.09.12-000001 7J91cTjRTBS2jscViaU7hA 1 1 356864    0 102.7mb 102.7mb
+green  open .kibana_1                          kO_nEgmqS5aPMq6pL9i4vw 1 0     11    0  37.4kb  37.4kb
+```
+
+##### クラスタAPI
+
+_cat APIと比べて詳細な状態を確認できる
+
+| クラスタAPIのエンドポイント | 出力内容 |
+| -- | -- |
+| `_cluster/health` |  |
+| `_cluster/state` |  |
+| `_nodes` |  |
+| `_nodes/stats` |  |
+
+### クラスタの管理
+
+### スナップショットとリストア
+
+### インデックス管理とメンテナンス
+
+### refreshとflush
+
 ## 第6章 Elastic Stack インテグレーション
