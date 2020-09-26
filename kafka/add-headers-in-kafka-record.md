@@ -11,6 +11,26 @@ This is an operation on MacOS.
 
 `Kafka Producer(Java) -> Kafka(http://localhost:9200) -> Kafka Consumer(kafkacat)`
 
+## Message protocol
+
+```
+Message =>
+        Length => varint
+        Attributes => int8
+        TimestampDelta => varlong
+        OffsetDelta => varint
+        KeyLen => varint
+        Key => data
+        ValueLen => varint
+        Value => data
+        Headers => [Header] <------------ NEW Added Array of headers
+         
+Header =>
+        Key => string (utf8) <------------------------------- NEW UTF8 encoded string (uses varint length)
+        Value => bytes  <------------------------------------ NEW header value as data (uses varint length)
+```
+
+Ref. [KIP-82#Wire protocol change - add array of headers to end of the message format](https://cwiki.apache.org/confluence/display/KAFKA/KIP-82+-+Add+Record+Headers#KIP82AddRecordHeaders-Wireprotocolchange-addarrayofheaderstoendofthemessageformat)
 
 ## Run Kafka cluster
 
@@ -35,7 +55,9 @@ $ /usr/local/Cellar/kafka/2.4.1/bin/kafka-topics --version
 
 ## Kafka Producer
 
-This is Producer code.
+This is a Producer code. 
+
+[HeaderKafkaProducer.java](https://github.com/wkodate/til/blob/master/kafka/src/main/java/com/wkodate/kafka/HeaderKafkaProducer.java)
 ```
 private List<Header> headers;
 
@@ -97,3 +119,7 @@ Headers: header-key1=header-value1,header-key2=header-value2: Message value: Thi
 ```
 
 I confirmed that records contain message and headers as expected.
+
+## Reference
+
+[KIP-82 - Add Record Headers](https://cwiki.apache.org/confluence/display/KAFKA/KIP-82+-+Add+Record+Headers)
