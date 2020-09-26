@@ -1,0 +1,1 @@
+brew services stop grafana

@@ -1,0 +1,47 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
+}
+
+
+// artifact properties
+mainClassName = 'org.wkodate.flink.ElasticsearchConnectorJob'
+
+ext {
+    javaVersion = '1.8'
+    flinkVersion = '1.11.2'
+    scalaBinaryVersion = '2.11'
+}
+
+
+group 'com.wkodate'
+version '1.0-SNAPSHOT'
+sourceCompatibility = javaVersion
+targetCompatibility = javaVersion
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://repository.apache.org/content/repositories/snapshots/" }
+}
+
+dependencies {
+    compile "org.apache.flink:flink-streaming-java_${scalaBinaryVersion}:${flinkVersion}"
+    compile "org.apache.flink:flink-clients_${scalaBinaryVersion}:${flinkVersion}"
+    compile "org.apache.flink:flink-connector-elasticsearch7_${scalaBinaryVersion}:${flinkVersion}"
+    testCompile "junit:junit:4.12"
+}
+
+run.classpath = sourceSets.main.runtimeClasspath

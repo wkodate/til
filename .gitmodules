@@ -1,3 +1,0 @@
-[submodule "data-engineering"]
-	path = data-engineering
-	url = https://github.com/wkodate/data-engineering.git
