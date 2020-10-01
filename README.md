@@ -102,6 +102,7 @@ til
 - [Overview](kafka/README.md)
 - [Mirrormaker2](kafka/mirrormaker2.md)
 - [Add Headers in Kafka Record](kafka/add-headers-in-kafka-record.md)
+- [Setting quotas](kafka/setting-quotas.md)
 
 ## Kotlin
 
