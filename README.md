@@ -111,6 +111,7 @@ til
 ## Kubernetes
 
 - [Kubernetes Seminar](kubernetes/seminar.md)
+- [Kubernetes完全ガイド](kubernetes/kubernetes-perfect-guide/README.md)
 
 ## Linux
 
