@@ -58,3 +58,55 @@ pod "sample-pod" deleted
 リソース作成にも`kubectl apply`を使うべき
 * 使い分けが不要
 * 混在して使用すると、apply実行時に差分を検出できない
+
+#### 再起動
+
+Deploymentに紐づくすべてのPodを再起動する
+```
+$ kubectl rollout restart deployment sample-deployment
+deployment.apps/sample-deployment restarted
+```
+
+#### アノテーションとラベル
+
+各リソースにメタデータを付与できる。
+
+| 名称 | 概要 |
+| -- | -- |
+| アノテーション | システムコンポーネントが利用するメタデータ |
+| ラベル | リソースの管理に利用するメタデータ |
+
+
+#### コンテナとローカルマシン間でのファイルコピー
+
+ローカルマシンからコンテナ
+
+```
+$ kubectl cp sample-deployment-7bf986f9cf-dnsnj:etc/hostname ./hostname
+
+$ cat hostname
+sample-deployment-7bf986f9cf-dnsnj
+```
+
+コンテナからローカルマシン
+
+```
+$ k cp hostname sample-deployment-7bf986f9cf-dnsnj:/tmp/newfile
+
+$ k exec -it sample-deployment-7bf986f9cf-dnsnj -- ls /tmp
+newfile
+```
+
+#### Podが起動しないときのデバッグ
+
+1. `kubectl logs`コマンドを使ってログを確認する
+2. `kubetcl describe`コマンドでEventsの項目を確認する
+    * リソースが枯渇していてスケジューリングができない
+    * スケジューリングポリシーに該当するノードが存在しない
+    * ボリュームのマウントに失敗した 
+3. `kubectl run`コマンドを使って実際にコンテナのシェルで確認する
+
+```
+kubectl run --image=nginx:1.16 --restart=Never --rm -it sample-debug --command -- /bin/sh
+```
+
