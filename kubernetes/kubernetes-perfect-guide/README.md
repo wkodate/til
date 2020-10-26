@@ -112,6 +112,17 @@ kubectl run --image=nginx:1.16 --restart=Never --rm -it sample-debug --command -
 
 # 第5章 Workloads APIs
 
+リソース
+
+* Pod
+* ReplicaController
+* ReplicaSet
+* Deployment
+* DaemonSet
+* StatefulSet
+* Job
+* CronJob
+
 ## リソースの関係
 
 Tier3がTier2を管理し、Tier2がTier1を管理する
@@ -175,3 +186,104 @@ ReplicaSetとの違いは、起動するPodを停止することを前提にし�
 Jobを管理するリソース
 
 Kubernetes1.4まではScheduledJobという名称だった。
+
+# 第7章 Config&Storage APIs
+
+リソース
+
+* Secret
+* ConfigMap
+* PersistentColumeClaim
+
+## Kubernetesの環境変数
+
+以下で観光変数を埋め込むことが可能
+
+* 静的設定
+* Podの情報
+* コンテナの情報
+* Secretリソースの機密情報
+* ConfigMapリソースの設定値
+
+### 静的設定
+
+`spec.containers[].env`に指定
+
+### Podの情報
+
+`fieldRef`で参照できる
+
+### コンテナの情報
+
+`resourceFieldRef`で参照できる
+
+## Secret
+
+ユーザ名やパスワードなどの機密情報をコンテナに渡す。
+
+Secretの分類
+
+| type | 概要 |
+| -- | -- |
+| `Opaque` | 一般的な汎用用途 |
+| `kubernetes.io/tls` | TLS証明書用 |
+| `kubernetes.io/basic-auth` | Basic認証用 |
+| `kubernetes.io/dockerconfigjson` | Dockerレジストリの認証情報用 |
+| `kubernetes.io/ssh-auth` | SSHの認証情報用 |
+| `kubernetes.io/service-account-token` | Service Accountのトークン用 |
+| `bootstrap.kubernetes.io/token` | Bootstrapトークン用 |
+
+### 一般的な汎用用途のSecret (Opaque)
+
+作成方法のパターン
+
+* kubectlでファイルから値を参照して作成する(--from-file)
+* kubectlでenvfileから値を参照して作成する(--from-env-file)
+* kubectlで直接値を渡して作成する(--from-literal)
+* マニフェストから作成する(-f)
+
+#### ファイルから値を参照して作成(--from-file)
+
+base64でエンコードされて保存される
+
+```
+$ echo -n "root" > ./username
+$ echo -n "rootpassword" > ./password
+$ kubectl create secret generic --save-config sample-db-auth --from-file=./username --from-file=./password
+secret/sample-db-auth created
+
+$ kubectl get secret sample-db-auth -o json | jq .data
+{
+  "password": "cm9vdHBhc3N3b3Jk",
+  "username": "cm9vdA=="
+}
+```
+
+### Secretの利用
+
+* 環境変数として渡す
+* Volumeとしてマウントする
+
+#### 環境変数として渡す
+
+特定のkeyを渡す場合は、`spec.containers[].env`の`valueFrom.secretKeyRef`を使って指定する
+
+すべてのkeyを渡す場合は、`spec.containers[].envFrom`の`secretRef`を使って指定
+
+#### Volumeとしてマウントする
+
+特定のkeyをマウントする場合は、`spec.volumes[]`の`secret.items[]`を使って指定する
+
+すべてのkeyをマウントする場合は、`spec.volumes[]`の`secret.secretName`を使って指定
+
+## ConfigMap
+
+設定情報などのKey-Valueで保持できるデータを保存しておくリソース
+
+### ConfigMapの作成
+
+* kubectlでファイルから値を参照して作成する(--from-file)
+* kubectlで直接値を渡して作成する(--from-literal)
+* マニフェストから作成する(-f)
+
+### ConfigMapの利用
