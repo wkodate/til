@@ -11,3 +11,9 @@ Updated config for entity: client-id 'clientA'.
 ```
 
 By default, the quota is unlimited.
+
+Noted: `client-id` is different from `group-id`
+
+`group.id`: https://kafka.apache.org/documentation/#group.id
+
+`client.id`" https://kafka.apache.org/documentation/#client.id

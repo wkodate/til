@@ -1,7 +1,6 @@
 Elasticsearch実践ガイド
-
+===
 ## 第1章 Elasticsearchとは
-
 
 Elasticsearchは全文検索をするソフトウェア
 
@@ -382,8 +381,11 @@ Elasticsearchの自動推測ではなく明示的にデータ型指定したい�
 | -- | -- |
 | `_cat/health` | クラスタのhealth状態 |
 | `_cat/indices` | クラスタのインデックス状態 |
+| `_cat/aliases` | インデックスエイリアスの状態 |
+| `_cat/nodes` | ノードの状態 |
+| `_cat/master` | マスターノードの情報 |
 
-`_cat/health`
+`?v`オプションをつけるとヘッダ情報も表示できる
 
 ```
 $ curl -XGET 'http://localhost:9200/_cat/health?v'
@@ -399,7 +401,7 @@ epoch      timestamp cluster            status node.total node.data shards pri r
 | `yellow` | プライマリシャードはすべて配置されているが、配置できていないレプリカシャードがある |
 | `red` | 配置できていないプライマリシャードがある |
 
-`_cat/indices`
+`_cat/indices` を実行
 
 ```
 $ curl -XGET 'http://localhost:9200/_cat/indices?pretty'
@@ -421,17 +423,56 @@ _cat APIと比べて詳細な状態を確認できる
 
 | クラスタAPIのエンドポイント | 出力内容 |
 | -- | -- |
-| `_cluster/health` |  |
-| `_cluster/state` |  |
-| `_nodes` |  |
-| `_nodes/stats` |  |
+| `_cluster/health` | クラスタ状態(サマリ) |
+| `_cluster/state` | クラスタ状態(詳細) |
+| `_nodes` | ノード状態 |
+| `_nodes/stats` | ノードの統計情報 |
+
+##### X-pack Monitoring機能
+
+X-packを使うとElasticsearch自身の監視・状態確認をKibanaから確認できる
 
 ### クラスタの管理
 
+ノード単位のRolling restartができる
+
+ノードの拡張をする場合の流れ
+
+1. シャードの再配置を無効化
+2. 新規追加するノードの設定
+3. ノード起動
+4. シャードの再配置を有効化
+
 ### スナップショットとリストア
+
+インデックスデータのバックアップができる
 
 ### インデックス管理とメンテナンス
 
+#### エイリアス
+
+エイリアスの用途
+
+* 実体のインデックスの変更時に参照先を切り替える目的でエイリアスを使う
+* 複数のインデックスを一つのエイリアスに束ねて横断検索する
+
 ### refreshとflush
 
+refreshは、ドキュメントをクエリによって検索できるようになる機能
+
+flushは、ノードが突然停止した場合に備えてドキュメントデータを定期的にディスクに書き込んでおく機能
+
 ## 第6章 Elastic Stack インテグレーション
+
+### Kibana
+
+よくある使い方
+
+1. `Management` -> `Index Patterns`: インデックス名をKibanaに登録する
+2. `Discover`: 登録したインデックスのデータが検索可能化を確認する
+3. `Visualize`: グラフ、表などによるチャートを構成する
+4. `Dashboard`: Visualizeで構成したチャートを組み合わせてダッシュボードを構成する
+
+### X-Pack
+
+Elastic Stackの機能に加えて、セキュリティ、アラート、モニタリング、レポート、グラフ、機械学習の機能を単一パッケージにまとめた拡張機能
