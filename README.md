@@ -28,6 +28,7 @@ til
 ## Airflow
 
 - [Quick Start](airflow/README.md)
+- [Glossary](airflow/glossary.md)
 
 ## Ansible
 
