@@ -1,4 +1,4 @@
-package com.wkodate
+package com.wkodate.sample
 
 class Sample {
 

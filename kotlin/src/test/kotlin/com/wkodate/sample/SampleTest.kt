@@ -1,4 +1,4 @@
-package com.wkodate
+package com.wkodate.sample
 
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.assertThat
