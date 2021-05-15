@@ -60,7 +60,7 @@ til
 ## DataEngineering
 
 - [1001 Data Engineering Interview Questions](data-engineering/interview.md)
-- [Designing Data-Intensive Applications](data-engineering/designing-data-intensive-applications.md)
+- [Designing Data-Intensive Applications - Part 1](data-engineering/designing-data-intensive-applications-part1.md)
 
 ## DataEngWeekly
 
