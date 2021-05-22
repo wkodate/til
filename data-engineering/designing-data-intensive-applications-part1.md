@@ -145,8 +145,9 @@ OLTP(Online transaction processing): オンライントランザクション処�
 
 OLAP(Online analytic processing): オンライン分析処理
 
-特性比較
+ユーザ --> OLTPシステム --> OLAPシステム <-- ビジネスアナリスト
 
+特性比較
 
 | | Read | Write | データの内容 | データサイズ |
 |-|-|-|-|-|
@@ -170,3 +171,74 @@ OLAP(Online analytic processing): オンライン分析処理
   * データウェアハウスにおいて、集約処理をキャッシュして参照できるビュー
 
 # Chapter 4. Encoding and Evolution
+
+ファイルにデータを書いたり、ネットワーク経由でデータを送信するような、メモリ共有していない他のプロセスに送信する場合、バイト列にエンコードしなければならない
+
+インメモリ->バイト列をエンコーディング(シリアライゼーション)、バイト列->インメモリをデコーディング(デシリアライゼーション)と呼ぶ
+
+## データエンコードのフォーマット
+
+スキーマのメリット
+* バイナリJSONよりもはるかにコンパクト
+* でコードにはスキーマが必要になるため、常に最新の状態になっていることが保証される
+* スキーマのデータベースを管理することで、互換性をデプロイ前にチェックできる
+* スキーマからのコード生成によって、コンパイル時に肩チェックができる
+
+### 言語固有フォーマット
+
+多くのプログラミング言語にエンコーディングライブラリが用意されている。
+
+Javaなら`java.io.Serializable`, Pythonなら`pickle`
+
+特徴
+
+* これらは最低限のコードでSerdeできるので便利
+* 他の言語でデータを読むのが難しいため、一時的な目的の場合を除けば、言語固有のエンコーディングするのはよくない
+
+### JSON, XML、バイナリエンコーヂング
+
+* テキスト形式であり、人間が読めるフォーマット
+* XMLは数字と文字列の区別がない
+* JSONは整数と浮動小数点を区別しない
+* バイナリ文字列がサポートされていない
+* スキーマを持たない
+* MesagePackはJSONのバイナリエンコーディング. 圧縮効率はよくない
+
+### Thrift, Protocol Buffer
+
+* Protocol BufferはGoogle, ThriftはFacebookで開発されたバイナリエンコーディングライブラリ
+* スキーマ定義からクラスを生成するツールを使って、スキーマのエンコードやでコードができる
+* フィールドタグを使って前方互換性、後方互換性を保つ
+
+Protocol Bufferのスキーマ定義例
+```
+message Person {
+  required string user_name = 1;
+  optional int64 favorite_number = 2;
+  required string interests = 3;
+}
+```
+
+### Avro
+
+* Hadoopのサブプロジェクトとして作られた
+* フィールドタグがないのでコンパクト
+* WriterとReaderのスキーマは同一である必要がなく、互換性があれば良い
+* 互換性を保つため、追加や削除ができるのはデフォルト値を持っているフィールドだけ
+* 動的に生成されたスキーマと相性が良い
+
+Avroのスキーマ定義例
+```
+{
+  "type": "record",
+  "name": "Person",
+  "fields": [
+    {"name": "userName", "type": "string"},
+    {"name": "favoriteNumber", "type": ["null", "long"], "default": null},
+    {"name": "interests", "type": ["null", "array"], "items": "string"}
+  ],
+
+}
+```
+
+## データフローの形態
