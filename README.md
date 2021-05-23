@@ -78,6 +78,7 @@ til
 ## Elasticsearch
 
 - [Elasticsearch実践ガイド](elasticsearch/guide-to-distributed-search-analytics-and-visualization.md)
+- [Elasticsearch performance](elasticsearch/elasticsearch-performance.md)
 
 ## Flink
 
