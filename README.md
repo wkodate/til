@@ -147,6 +147,10 @@ til
 
 - [Overview](prometheus/README.md)
 
+## Shell
+
+- [Shell one liner 160](sh/shellgei160/README.md)
+
 ## SQL
 
 - [SQLZOO](sql/sqlzoo/README.md)
