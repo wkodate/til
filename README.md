@@ -22,6 +22,7 @@ til
 - [Kubernetes](#kubernetes)
 - [Linux](#linux)
 - [Prometheus](#prometheus)
+- [Shell](#shell)
 - [SQL](#sql)
 - [Storm](#storm)
 
