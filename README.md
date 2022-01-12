@@ -150,7 +150,7 @@ til
 
 ## Shell
 
-- [Shell one liner 160](sh/shellgei160/README.md)
+- [Shell one liner 160](shell/shellgei160/README.md)
 
 ## SQL
 
