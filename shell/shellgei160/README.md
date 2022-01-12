@@ -110,6 +110,15 @@ $ grep 10 * | wc -l
 $ grep 10 * | awk -F : '{print $1}' | xargs rm
 ```
 
+grepの`-l`オプションを使えばファイル名だけを出力できるのでawkを使う必要はなさそう。
+
+man grepの結果
+
+>      -l, --files-with-matches
+>             Only the names of files containing selected lines are written to standard output.  grep will only search a file until a match has been found, making
+>             searches potentially less expensive.  Pathnames are listed once per file searched.  If the standard input is searched, the string ``(standard
+>             input)'' is written.
+
 ### 確認
 
 ```
