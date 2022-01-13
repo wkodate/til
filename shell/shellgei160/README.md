@@ -123,3 +123,45 @@ ls: 34854: No such file or director
 $ ls | wc -l
    99999
 ```
+
+## 5. 設定ファイルからの情報抽出
+
+ntp.confからpool項目にあるサーバ名を抽出する
+
+### 準備
+
+用意されたntp.confをpoolでgrepすると以下の通り。pool項目は、先頭がpoolで始まる行を表している。
+```
+$ cat ntp.conf | grep pool
+# on 2011-02-08 (LP: #104525). See http://www.pool.ntp.org/join.html for
+pool 0.ubuntu.pool.ntp.org iburst
+pool 1.ubuntu.pool.ntp.org iburst
+pool 2.ubuntu.pool.ntp.org iburst
+pool 3.ubuntu.pool.ntp.org iburst
+pool ntp.ubuntu.com
+# Needed for adding pool entries
+```
+
+### 実行
+
+先頭がpoolで始まる行の2列目を抽出
+
+```
+$ cat ntp.conf | grep "^pool" | awk '{print $2}'
+0.ubuntu.pool.ntp.org
+1.ubuntu.pool.ntp.org
+2.ubuntu.pool.ntp.org
+3.ubuntu.pool.ntp.org
+ntp.ubuntu.com
+```
+
+grepの代わりにawkで行抽出するときは、`awk '$n=="STRING"'`が使える。これはn列目がSTRING文字列の行を抽出している。
+
+```
+$ cat ntp.conf | awk '$1=="pool"' | awk '{print $2}'
+0.ubuntu.pool.ntp.org
+1.ubuntu.pool.ntp.org
+2.ubuntu.pool.ntp.org
+3.ubuntu.pool.ntp.org
+ntp.ubuntu.com
+```
