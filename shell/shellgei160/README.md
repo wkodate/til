@@ -165,3 +165,39 @@ $ cat ntp.conf | awk '$1=="pool"' | awk '{print $2}'
 3.ubuntu.pool.ntp.org
 ntp.ubuntu.com
 ```
+
+## 6. 端末に模様を描く
+
+ワンライナーで以下を出力する
+
+```
+    x
+   x
+  x
+ x
+x
+```
+
+### 実行
+
+seqで5から1まで順に渡し、awkはその分だけスペースを出力する。
+
+```
+$ seq 5 1 | awk '{for (i=1; i<=$1; i++){printf " "}; print "x"}'
+     x
+    x
+   x
+  x
+ x
+ ```
+
+tacを使えば出力を逆順にできる。
+
+```
+$ seq 5 | awk '{for (i=1; i<$1; i++){printf " "}; print "x"}' | tac
+    x
+   x
+  x
+ x
+x
+```
