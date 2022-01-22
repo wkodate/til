@@ -1,4 +1,4 @@
-# 練習問題
+# 第1章 Linux環境
 
 ## 1.2.c 1+1の計算
 
@@ -118,8 +118,45 @@ $ seq 5 | awk 'BEGIN{a=0}$1%2==0{print $1, "Even"}$1%2{print $1,"Odd"}{a+=$1}END
 Sum 15
 ```
 
+## 1.3.e sortとuniqによる集計
 
-# 問題
+奇数と偶数の数を出力する例。
+
+```
+$ seq 5 | awk '$1%2==0{print "Even"}$1%2{print "Odd"}' | sort | uniq -c | sort -nr | awk '{print $2, $1}'
+Odd 3
+Even 2
+```
+
+## 1.3.f xargsによる一括処理
+
+`dir_1`, `dir_2`, `dir_3`, `dir_4`という名前のディレクトリを作成する。
+
+`-I`オプションの後ろに指定した文字列(以下では`@`)に受け取った文字列が入る。
+
+
+```
+$ seq 4 | xargs -I@ mkdir dir_@
+```
+
+## 1.3.g bashによるメタプログラミング
+
+パイプから受け取ったコマンドを`bash`で実行できる。
+
+以下の例は、`odd_1`, `odd_3`, `even_2`, `even_4`のディレクトリを作るコマンド
+
+```
+$ seq 4 | awk '$1%2==0{print "mkdir even_"$1}$1%2{print "mkdir odd_"$1}'
+mkdir odd_1
+mkdir even_2
+mkdir odd_3
+mkdir even_4
+
+$ seq 4 | awk '$1%2==0{print "mkdir even_"$1}$1%2{print "mkdir odd_"$1}' | bash
+
+$ ls
+even_2		even_4		odd_1		odd_3
+```
 
 ## 1. ファイル名の検索
 
@@ -144,7 +181,7 @@ $ ls *.png | sed 's/\.png$//' | xargs -I FILE convert FILE.png FILE.jpg
 
 ```
 
-xargsの-I(iのupper case)オプションで指定した文字列に受け取った値が入る。上記の場合は`FILE`。
+xargsの`-I`(iのupper case)オプションで指定した文字列に受け取った値が入る。上記の場合は`FILE`。
 
 ## 3. ファイル名の一括変換
 
@@ -324,4 +361,3 @@ $ seq 5 | awk '{for (i=1; i<$1; i++){printf " "}; print "x"}' | tac
  x
 x
 ```
-
