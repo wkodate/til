@@ -374,3 +374,26 @@ x
 $ cat kakeibo.txt | awk '{tax=($1<"20191001"||$2~/^\*/)?1.08:1.1;print $0,tax}' | awk 'BEGIN{sum=0}{sum+=int($3*$4)}END{print sum}'
 53612
 ```
+
+## 8. ログの集計
+
+`access.log`から午前と午後のそれぞれの行数を求める。
+
+### 実行
+
+タイムスタンプが含まれている4列目を抽出し、`:`でsplitして時間ごとにグルーピングしてカウント。
+
+
+```
+$ cat access.log | awk '{print $4}' | awk -F: '$2<12{print "Morning"}$2>=12{print "Evening"}' | sort | uniq -c
+   3 Evening
+   2 Morning
+```
+
+`NF`(Number of Fields)で列数を取得できるので、後ろから時間を抽出するのも良い
+
+```
+$ cat access.log | awk -F: '{print $(NF-2)}' | awk '$1<12{print "Morning"}$1>=12{print "Evening"}' | sort | uniq -c
+   3 Evening
+   2 Morning
+```

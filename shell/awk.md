@@ -43,3 +43,11 @@ $ seq 5 | awk 'BEGIN{a=0}$1%2==0{print $1, "Even"}$1%2{print $1,"Odd"}{a+=$1}END
 5 Odd
 Sum 15
 ```
+
+`NF`(Number of Fields)で列数を取得できる
+
+```
+$ cat access.log | awk -F: '{print $(NF-2)}' | awk '$1<12{print "Morning"}$1>=12{print "Evening"}' | sort | uniq -c
+   3 Evening
+   2 Morning
+```
