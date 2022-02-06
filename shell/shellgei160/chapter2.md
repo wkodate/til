@@ -159,3 +159,43 @@ $ [ -e /etc/passwd ]
 $ echo $?
 0
 ```
+
+## 12. 変数の読み込み
+
+標準入力あるいは引数で受け取った数字を倍にして返す。
+
+`read`で標準入力を受け取る。
+
+`$#`で引数の個数を取得できる。
+
+
+### 実行
+
+double.bash
+
+```
+#!/bin/bash
+
+v=0
+if [ $# = 0 ]; then
+  read val
+  v=$val
+else
+  v=$1
+fi
+
+echo $((v * 2))
+```
+
+出力の確認
+
+```
+$ bash double.bash 5
+10
+
+$ echo 3 | bash double.bash
+6
+
+$ echo 3 | bash double.bash 5
+10
+```
