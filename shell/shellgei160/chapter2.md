@@ -199,3 +199,27 @@ $ echo 3 | bash double.bash
 $ echo 3 | bash double.bash 5
 10
 ```
+
+## 13. 存在しないファイルの初期化
+
+ファイルがなければファイルを作成する。exit statusが0を返すようにする。
+
+### 実行
+
+OR演算子を使用し、ファイルが存在しなければtouch unfileが実行される。
+
+```
+$ [ -e unfile ] || touch unfile
+
+$ echo $?
+0
+```
+
+別解。`<>`は読み書きモードでファイルを開くの意味。unfileが存在すれば読み込み、存在しなければ作る。
+
+```
+$ cat <> unfile
+
+$ echo $?
+0
+```
