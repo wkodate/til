@@ -223,3 +223,20 @@ $ cat <> unfile
 $ echo $?
 0
 ```
+
+## 14. さまざまなループ
+
+1からNまで1秒ごとに表示する。
+
+### 実行
+
+ワンライナーでfor loopを実行し、sleepを挟む。
+
+```
+$ for i in `seq 1 5`; do echo $i; sleep 1; done
+1
+2
+3
+4
+5
+```
