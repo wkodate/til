@@ -6,13 +6,14 @@ til
 [GitHub Pages](https://wkodate.github.io/til/)
 
 ## Page of Contents
+
 - [Airflow](#airflow)
 - [Ansible](#ansible)
 - [AWS](#aws)
+- [C++](#cpp)
 - [DataEngineering](#dataengineering)
 - [DataEngWeekly](#dataengweekly)
 - [Elasticsearch](#elasticsearch)
-- [Flink](#flink)
 - [GCP](#gcp)
 - [Git](#git)
 - [Go](#go)
@@ -24,7 +25,6 @@ til
 - [Prometheus](#prometheus)
 - [Shell](#shell)
 - [SQL](#sql)
-- [Storm](#storm)
 
 ## Airflow
 
@@ -58,8 +58,14 @@ til
   - [day13](aws/udemy-aws-14days/day13.md)
   - [day14](aws/udemy-aws-14days/day14.md)
 
+## C++
+
+- [C++ Grammar](cpp/README.md)
+
 ## DataEngineering
 
+- [Storm](data-engineering/storm/README.md)
+- [Flink Elasticsearch Connector](data-engineering/flink/elasticsearch-connector.md)
 - [1001 Data Engineering Interview Questions](data-engineering/interview.md)
 - [Designing Data-Intensive Applications - Part 1. Foundations of Data System](data-engineering/designing-data-intensive-applications-part1.md)
 - [Designing Data-Intensive Applications - Part 2. Distributed Data](data-engineering/designing-data-intensive-applications-part2.md)
@@ -81,10 +87,6 @@ til
 
 - [Elasticsearch実践ガイド](elasticsearch/guide-to-distributed-search-analytics-and-visualization.md)
 - [Elasticsearch performance](elasticsearch/elasticsearch-performance.md)
-
-## Flink
-
-- [Flink Elasticsearch Connector](flink/elasticsearch-connector.md)
 
 ## GCP
 
@@ -152,6 +154,7 @@ til
 
 - Shell one liner 160
   - [Chapter 1](shell/shellgei160/chapter1.md)
+  - [Chapter 2](shell/shellgei160/chapter2.md)
 - [awk](shell/awk.md)
 - [sed](shell/sed.md)
 
@@ -160,6 +163,3 @@ til
 - [SQLZOO](sql/sqlzoo/README.md)
 - [スッキリわかるSQL入門](sql/sukkiri/README.md)
 
-## Storm
-
-- [Overview](storm/README.md)
