@@ -20,6 +20,26 @@ s = "abc";
 s.sbstr(0, 2);  // "ab"
 ```
 
+string -> integerの変換
+
+```
+int i = atoi(str.c_str());
+```
+
+integer -> stringの変換
+
+```
+string str = to_string(integer);
+```
+
+contains。下の例はsにtが含まれているかどうか。
+
+```
+if (s.find(t) != string::npos) {
+    cout << "s contains t" << endl;
+}
+```
+
 ## 配列
 
 - vectorによる配列の使用を推奨
