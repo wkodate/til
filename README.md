@@ -10,7 +10,7 @@ til
 - [Airflow](#airflow)
 - [Ansible](#ansible)
 - [AWS](#aws)
-- [C++](#cpp)
+- [C++](#c)
 - [DataEngineering](#dataengineering)
 - [DataEngWeekly](#dataengweekly)
 - [Elasticsearch](#elasticsearch)
