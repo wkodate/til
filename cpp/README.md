@@ -11,6 +11,14 @@ g++ a.cpp
 
 - formatterはAlt + Shift + f
 
+## 数値型
+
+double型の値を出力する際に小数点以下の桁数を指定。以下は小数点以下15桁を表示する。
+
+```
+cout << fixed << setprecision(15);
+```
+
 ## 文字列
 
 文字列の長さ。
@@ -71,6 +79,15 @@ sort(a.begin(), a.end());
 // desc
 sort(a.begin(), a.end(), greater<int>());
 ```
+
+### 2次元あ卑劣
+
+宣言
+
+```
+vector<vector<int>> data(3, vector<int>(4));
+```
+
 
 ## Set
 
