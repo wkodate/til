@@ -80,7 +80,7 @@ sort(a.begin(), a.end());
 sort(a.begin(), a.end(), greater<int>());
 ```
 
-### 2次元あ卑劣
+### 2次元配列
 
 宣言
 
@@ -88,17 +88,57 @@ sort(a.begin(), a.end(), greater<int>());
 vector<vector<int>> data(3, vector<int>(4));
 ```
 
+## Map
+
+宣言
+
+```
+map<Keyの型, Valueの型> 変数名;
+```
+
+追加
+
+```
+map[key] = value;
+```
+
+アクセス
+
+```
+map.at(key)
+```
+
+
+```
+map[key]
+```
+
+contains
+
+```
+map.count(key)
+
+```
+
 
 ## Set
 
-使い方
+宣言
 
 ```
 set<int> s;
+```
 
+追加
+
+```
 s.insert(3);
 s.insert(4);
+```
 
+contains
+
+```
 if (s.count(3)) {
     cout << "found 3" << endl;
 }
