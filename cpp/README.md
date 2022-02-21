@@ -96,18 +96,17 @@ vector<vector<int>> data(3, vector<int>(4));
 map<Keyの型, Valueの型> 変数名;
 ```
 
-追加
+add
 
 ```
 map[key] = value;
 ```
 
-アクセス
+get
 
 ```
 map.at(key)
 ```
-
 
 ```
 map[key]
@@ -117,9 +116,16 @@ contains
 
 ```
 map.count(key)
-
 ```
 
+for loop
+
+```
+for (auto p : map) {
+    key = p.first;
+    value = p.second;
+}
+```
 
 ## Set
 
@@ -129,7 +135,7 @@ map.count(key)
 set<int> s;
 ```
 
-追加
+add
 
 ```
 s.insert(3);
