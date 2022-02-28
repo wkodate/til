@@ -60,13 +60,26 @@ if (s.find(t) != string::npos) {
 - 宣言はint data[3] よりもverctor<int> data(3) を推奨
 - 配列へのアクセスはvec[0] よりもvec.at(0)を推奨
   
-使い方
+宣言
 
 ```
 verctor<int> data(3);
+// 大きさを指定せずに宣言
+verctor<int> data;
+```
 
+set
+```
+data.at[2] = 1;
+// 要素を指定せずに追加
+data.push_back(1);
+```
+
+get
+```
 int d = data.at(0):
 ```
+
 
 STL
 - min, max, swap, sort, reverse
@@ -96,7 +109,7 @@ vector<vector<int>> data(3, vector<int>(4));
 map<Keyの型, Valueの型> 変数名;
 ```
 
-add
+set
 
 ```
 map[key] = value;
@@ -148,4 +161,25 @@ contains
 if (s.count(3)) {
     cout << "found 3" << endl;
 }
+```
+
+## pair
+
+2つの値の組を表す。
+
+宣言
+```
+pair<string int> p;
+pair<string int> p("abc", 3);
+```
+
+pariの生成
+```
+p = make_pair("hello", 2)
+```
+
+get
+```
+p.first()
+p.second()
 ```

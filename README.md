@@ -131,7 +131,7 @@ https://wkodate.github.io/til/
 
 ## Linux
 
-- [Linuxのしくみ](linux/linux-no-shikumi.md)
+- [Linuxのしくみ](linux/linux-no-shikumi/linux-no-shikumi.md)
 - LPIC201
   - [200 Capacity Planning](linux/lpic201/200-capacity-planning.md)
   - [201 Linux Kernel](linux/lpic201/201-linux-kernel.md)
