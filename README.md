@@ -13,7 +13,8 @@ https://wkodate.github.io/til/
 - [Ansible](#ansible)
 - [AWS](#aws)
 - [C++](#c)
-- [DataEngineering](#dataengineering)
+- [Computer Architecture](#computer-architecture)
+- [Data Engineering](#data-engineering)
 - [DataEngWeekly](#dataengweekly)
 - [Elasticsearch](#elasticsearch)
 - [GCP](#gcp)
@@ -64,7 +65,12 @@ https://wkodate.github.io/til/
 
 - [C++ Grammar](cpp/README.md)
 
-## DataEngineering
+## Computer Architecture
+
+- [Computer Organization and Design](computer-architecture/computer-organization-and-design/README.md)
+- [Nand2Tetris](computer-architecture/nand2tetris)
+
+## Data Engineering
 
 - [Storm](data-engineering/storm/README.md)
 - [Flink Elasticsearch Connector](data-engineering/flink/elasticsearch-connector.md)
@@ -74,16 +80,16 @@ https://wkodate.github.io/til/
 
 ## DataEngWeekly
 
-- [Issue286](DataEngWeekly/issue286.md)
-- [Issue288](DataEngWeekly/issue288.md)
-- [Issue289](DataEngWeekly/issue289.md)
-- [Issue305](DataEngWeekly/issue305.md)
-- [Issue312](DataEngWeekly/issue312.md)
-- [Issue313](DataEngWeekly/issue313.md)
-- [Issue314](DataEngWeekly/issue314.md)
-- [Issue330](DataEngWeekly/issue330.md)
-- [Issue331](DataEngWeekly/issue331.md)
-- [Issue332](DataEngWeekly/issue332.md)
+- [Issue286](dataengweekly/issue286.md)
+- [Issue288](dataengweekly/issue288.md)
+- [Issue289](dataengweekly/issue289.md)
+- [Issue305](dataengweekly/issue305.md)
+- [Issue312](dataengweekly/issue312.md)
+- [Issue313](dataengweekly/issue313.md)
+- [Issue314](dataengweekly/issue314.md)
+- [Issue330](dataengweekly/issue330.md)
+- [Issue331](dataengweekly/issue331.md)
+- [Issue332](dataengweekly/issue332.md)
 
 ## Elasticsearch
 
