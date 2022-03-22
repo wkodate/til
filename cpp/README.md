@@ -27,11 +27,23 @@ cout << fixed << setprecision(15);
 str.size()
 ```
 
+文字列の結合は`+`を使う.
+
+```
+string str = "Hello"
+str += ", World."
+```
+
 文字列の切り出し。0文字目から2文字分切り出す。
 
 ```
 s = "abc";
 s.sbstr(0, 2);  // "ab"
+```
+
+文字列の反転
+```
+reverse(str.begin(), str.end());
 ```
 
 string -> integerの変換
@@ -99,6 +111,9 @@ sort(a.begin(), a.end(), greater<int>());
 
 ```
 vector<vector<int>> data(3, vector<int>(4));
+```
+```
+vector<vector<int>> mat1 = {{1, 0, 0}, {0, 0, 1}, {1, 0, 0}};
 ```
 
 ## Map
