@@ -25,6 +25,7 @@ https://wkodate.github.io/til/
 - [Kotlin](#kotlin)
 - [Kubernetes](#kubernetes)
 - [Linux](#linux)
+- [Math](#math)
 - [Prometheus](#prometheus)
 - [Shell](#shell)
 - [SQL](#sql)
@@ -45,7 +46,7 @@ https://wkodate.github.io/til/
 - [JAWS-UG Beginner #17](aws/jawsug_beginner/jawsug_beginner_17.md)
 - [JAWS-UG Beginner #20](aws/jawsug_beginner/jawsug_beginner_20.md)
 - [JAWS-UG Beginner #24](aws/jawsug_beginner/jawsug_beginner_24.md)
-- 手を動かしながら2週間で学ぶAWS 基本から応用まで - Udemy
+- [手を動かしながら2週間で学ぶAWS 基本から応用まで - Udemy](aws/udemy-aws-14days)
   - [day1](aws/udemy-aws-14days/day1.md)
   - [day2](aws/udemy-aws-14days/day2.md)
   - [day3](aws/udemy-aws-14days/day3.md)
@@ -99,7 +100,6 @@ https://wkodate.github.io/til/
 ## GCP
 
 - [GCP Hands-on](gcp/gcp-handson.md)
-- [merpayインフラTalk #5 ~ GCP関連の技術編 ~](gcp/workshop/191113_merpay_infra.md)
 - [Google Cloud Platform Big Data and Machine Learning Fundamentals](gcp/gcp-big-data-and-ml-fundamentals.md)
 - [Serverless Machine Learning with Tensorflow on Google Cloud Platform](gcp/serverless-ml-with-tensorflow-on-gcp.md)
 
@@ -138,7 +138,7 @@ https://wkodate.github.io/til/
 ## Linux
 
 - [Linuxのしくみ](linux/linux-no-shikumi/linux-no-shikumi.md)
-- LPIC201
+- [LPIC201](linux/lpic201)
   - [200 Capacity Planning](linux/lpic201/200-capacity-planning.md)
   - [201 Linux Kernel](linux/lpic201/201-linux-kernel.md)
   - [202 System Startup](linux/lpic201/202-system-startup.md)
@@ -146,7 +146,7 @@ https://wkodate.github.io/til/
   - [204 Capacity Planning](linux/lpic201/204-advanced-storage-device-adinistration.md) 
   - [205 Networking Configuration](linux/lpic201/205-networking-configuration.md)
   - [206 System Maintenance](linux/lpic201/206-system-maintenance.md)
-- LPIC202
+- [LPIC202](linux/lpic201)
   - [207 Domain Name Server](linux/lpic202/207-domain-name-server.md)
   - [208 Web Services](linux/lpic202/208-web-services.md)
   - [209 File Sharing](linux/lpic202/209-file-sharing.md)
@@ -154,13 +154,17 @@ https://wkodate.github.io/til/
   - [211 Email Services](linux/lpic202/211-email-services.md)
   - [212 System Security](linux/lpic202/212-system-security.md)
 
+## Math
+
+- [Statistics](math/statistics)
+
 ## Prometheus
 
 - [Overview](prometheus/README.md)
 
 ## Shell
 
-- Shell one liner 160
+- [Shell one liner 160](shell/shellgei160)
   - [Chapter 1](shell/shellgei160/chapter1.md)
   - [Chapter 2](shell/shellgei160/chapter2.md)
 - [awk](shell/awk.md)
