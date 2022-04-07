@@ -80,7 +80,7 @@ verctor<int> data(3);
 verctor<int> data;
 ```
 
-set
+add
 ```
 data.at[2] = 1;
 // 要素を指定せずに追加
@@ -124,7 +124,7 @@ vector<vector<int>> mat1 = {{1, 0, 0}, {0, 0, 1}, {1, 0, 0}};
 map<Keyの型, Valueの型> 変数名;
 ```
 
-set
+add
 
 ```
 map[key] = value;
