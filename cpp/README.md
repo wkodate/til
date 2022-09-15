@@ -118,7 +118,7 @@ sort(a.begin(), a.end(), greater<int>());
 vector<vector<int>> data(3, vector<int>(4));
 ```
 ```
-vector<vector<int>> mat1 = {{1, 0, 0}, {0, 0, 1}, {1, 0, 0}};
+vector<vector<int>> mat1 = { {1, 0, 0}, {0, 0, 1}, {1, 0, 0} };
 ```
 
 ## Map
