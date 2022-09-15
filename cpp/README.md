@@ -3,10 +3,12 @@ C++ Grammar
 
 ## コーディング
 
-- ビルド
+- ビルド、実行
 
 ```
 g++ a.cpp
+
+./a.out
 ```
 
 - formatterはAlt + Shift + f
@@ -76,8 +78,11 @@ if (s.find(t) != string::npos) {
 
 ```
 verctor<int> data(3);
+
 // 大きさを指定せずに宣言
 verctor<int> data;
+
+vector<int> data = {1, 2, 3};
 ```
 
 add
