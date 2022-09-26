@@ -11,7 +11,7 @@ g++ a.cpp
 ./a.out
 ```
 
-- formatterはAlt + Shift + f
+- VSCodeのformatterはAlt + Shift + f
 
 ## 数値型
 
@@ -74,86 +74,68 @@ if (s.find(t) != string::npos) {
 - 宣言はint data[3] よりもverctor<int> data(3) を推奨
 - 配列へのアクセスはvec[0] よりもvec.at(0)を推奨
   
-宣言
-
 ```
+# 宣言
 verctor<int> data(3);
-
-// 大きさを指定せずに宣言
+# 大きさを指定せずに宣言
 verctor<int> data;
-
+# 初期値を指定して宣言
 vector<int> data = {1, 2, 3};
-```
 
-add
-```
+# 追加
 data.at[2] = 1;
-// 要素を指定せずに追加
+# 要素を指定せずに追加
 data.push_back(1);
-```
 
-get
-```
+# 取得
 int d = data.at(0):
 ```
 
-
 STL
-- min, max, swap, sort, reverse
+- `min`, `max`, `swap`, `sort`, `reverse`
 
 ソート
 
 ```
-// asc
-sort(a.begin(), a.end());
-// desc
-sort(a.begin(), a.end(), greater<int>());
+# asc
+sort(data.begin(), data.end());
+# desc
+sort(data.begin(), data.end(), greater<int>());
+```
+
+並びを逆順にする
+```
+reverse(data.begin(), data.end());
 ```
 
 ### 2次元配列
 
-宣言
 
 ```
+# 宣言
 vector<vector<int>> data(3, vector<int>(4));
-```
-```
+
+# 初期値を指定して宣言
 vector<vector<int>> mat1 = { {1, 0, 0}, {0, 0, 1}, {1, 0, 0} };
 ```
 
 ## Map
 
-宣言
-
 ```
+# 宣言
 map<Keyの型, Valueの型> 変数名;
-```
 
-add
-
-```
+# 追加
 map[key] = value;
-```
 
-get
+# 取得
+k = map.at(key);
+k = map[key];
 
-```
-map.at(key)
-```
-
-```
-map[key]
-```
-
-contains
-
-```
+# contains
 map.count(key)
-```
 
-for loop
-
-```
+# for loop
 for (auto p : map) {
     key = p.first;
     value = p.second;
@@ -162,24 +144,23 @@ for (auto p : map) {
 
 ## Set
 
-宣言
 
 ```
+# 宣言
 set<int> s;
-```
 
-add
-
-```
+# 追加
 s.insert(3);
 s.insert(4);
-```
 
-contains
-
-```
+# contains
 if (s.count(3)) {
     cout << "found 3" << endl;
+}
+
+# loopで取得
+for (auto num : s) {
+  cout << num << endl;
 }
 ```
 
@@ -187,19 +168,46 @@ if (s.count(3)) {
 
 2つの値の組を表す。
 
-宣言
 ```
+# 宣言
 pair<string int> p;
 pair<string int> p("abc", 3);
-```
 
-pariの生成
-```
+# pairの生成
 p = make_pair("hello", 2)
-```
 
-get
-```
+# 取得
 p.first()
 p.second()
+```
+
+## Priority queue
+
+優先度付きキュー。追加した要素のうち最も大きいものを取り出す。
+
+```
+# 宣言
+priority_queue<int> queue;
+
+# 小さい順に取り出されるpriority queueの宣言
+priority_queue<int, vector<int>, greater<int>> queue;
+
+# 追加
+queue.push(1);
+
+# 要素数の取得. size_t型を返す
+queue.size(); 
+
+# 最大の要素を取得
+queue.top();
+
+# 最大の要素を削除
+queue.pop()
+
+# queueが空かどうか
+while(!queue.empty()) {
+  # 最大値を取り出して削除
+  cout << queue.top() << endl;
+  queue.pop();
+}
 ```
