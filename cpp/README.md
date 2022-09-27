@@ -89,6 +89,12 @@ data.push_back(1);
 
 # 取得
 int d = data.at(0):
+
+# 任意の場所にデータを挿入。3番目にvalを挿入。
+data.insert(list.begin() + 3, val);
+
+# 2番目の要素を削除
+data.erase(data.bnegin() + 2)
 ```
 
 STL
