@@ -43,6 +43,13 @@ s = "abc";
 s.sbstr(0, 2);  // "ab"
 ```
 
+characterを取り出す
+
+```
+s = "abc";
+char c = s.at(1) // 'b'
+```
+
 文字列の反転
 ```
 reverse(str.begin(), str.end());
