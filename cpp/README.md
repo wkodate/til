@@ -224,3 +224,27 @@ while(!queue.empty()) {
   queue.pop();
 }
 ```
+
+
+## Stack
+
+```
+stack<int> stack;
+
+# 追加
+stack.push(1);
+
+# 次の値へのアクセス
+stack.top();
+
+# 値の削除
+stack.pop();
+
+# 要素数の取得
+stack.size();
+
+# 空であるかを調べる
+if (stack.empty()) {
+
+}
+```
