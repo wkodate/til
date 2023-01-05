@@ -25,7 +25,6 @@ https://wkodate.github.io/til/
 - [Kotlin](#kotlin)
 - [Kubernetes](#kubernetes)
 - [Linux](#linux)
-- [Math](#math)
 - [Prometheus](#prometheus)
 - [Shell](#shell)
 - [SQL](#sql)
@@ -68,7 +67,6 @@ https://wkodate.github.io/til/
 
 ## Computer Architecture
 
-- [Computer Organization and Design](computer-architecture/computer-organization-and-design/README.md)
 - [Nand2Tetris](computer-architecture/nand2tetris)
 
 ## Data Engineering
@@ -125,6 +123,7 @@ https://wkodate.github.io/til/
 - [Mirrormaker2](kafka/mirrormaker2.md)
 - [Add Headers in Kafka Record](kafka/add-headers-in-kafka-record.md)
 - [Setting quotas](kafka/setting-quotas.md)
+- [Metrics](kafka/metrics.md)
 
 ## Kotlin
 
@@ -153,10 +152,6 @@ https://wkodate.github.io/til/
   - [210 Network Client Management](linux/lpic202/210-network-client-management.md)
   - [211 Email Services](linux/lpic202/211-email-services.md)
   - [212 System Security](linux/lpic202/212-system-security.md)
-
-## Math
-
-- [Statistics](math/statistics)
 
 ## Prometheus
 

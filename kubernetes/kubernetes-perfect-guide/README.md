@@ -286,4 +286,8 @@ $ kubectl get secret sample-db-auth -o json | jq .data
 * kubectlで直接値を渡して作成する(--from-literal)
 * マニフェストから作成する(-f)
 
-### ConfigMapの利用
+# 第14章 マニフェストの汎用化を行うOSS
+
+## Helm
+
+Kubernetesのパッケージマネージャ。Linuxでいうyum。様々なパッケージ(Chart)が用意されている。
