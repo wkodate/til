@@ -162,6 +162,7 @@ https://wkodate.github.io/til/
 
 - [Software Engineering at Google](programming/software-engineering-at-google)
     - [1. Thesis](programming/software-engineering-at-google/1_thesis.md)
+    - [2. Culture](programming/software-engineering-at-google/2_culture.md)
 
 ## Shell
 
