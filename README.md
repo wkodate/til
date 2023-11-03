@@ -164,6 +164,7 @@ https://wkodate.github.io/til/
     - [1. Thesis](programming/software-engineering-at-google/1_thesis.md)
     - [2. Culture](programming/software-engineering-at-google/2_culture.md)
     - [3. Processes](programming/software-engineering-at-google/3_processes.md)
+    - [4. Tools](programming/software-engineering-at-google/4_tools.md)
 
 ## Shell
 
