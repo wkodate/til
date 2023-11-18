@@ -77,6 +77,7 @@ https://wkodate.github.io/til/
 - [1001 Data Engineering Interview Questions](data-engineering/interview.md)
 - [Designing Data-Intensive Applications - Part 1. Foundations of Data System](data-engineering/designing-data-intensive-applications-part1.md)
 - [Designing Data-Intensive Applications - Part 2. Distributed Data](data-engineering/designing-data-intensive-applications-part2.md)
+- [データ分析基盤入門](data-engineering/bigdataplatform_and_engineering_book/README.md)
 
 ## DataEngWeekly
 
