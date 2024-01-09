@@ -27,6 +27,7 @@ https://wkodate.github.io/til/
 - [Linux](#linux)
 - [Prometheus](#prometheus)
 - [Programming](#programming)
+- [Python](#python)
 - [Shell](#shell)
 - [Spark](#spark)
 - [SQL](#sql)
@@ -167,6 +168,11 @@ https://wkodate.github.io/til/
     - [2. Culture](programming/software-engineering-at-google/2_culture.md)
     - [3. Processes](programming/software-engineering-at-google/3_processes.md)
     - [4. Tools](programming/software-engineering-at-google/4_tools.md)
+
+## Python
+
+- [Effective Python](python/effective-python)
+    - [1. Pythonic Thinking](python/effective-python/1_pythonic_thinking.md)
 
 ## Spark
 - [Learning Spark](spark/learning-spark/README.md)
