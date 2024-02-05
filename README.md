@@ -174,6 +174,11 @@ https://wkodate.github.io/til/
 - [Effective Python](python/effective-python)
     - [1. Pythonic Thinking](python/effective-python/1_pythonic_thinking.md)
 
+## Software Architecture
+
+- [Software Architecture Metrics](software-architecture/software-architecture-metrics)
+  - [1. Four Key Metrics Unleashed](software-architecture/software-architecture-metrics/1_four_key_metrics_unleashed.md)
+
 ## Spark
 - [Learning Spark](spark/learning-spark/README.md)
 
