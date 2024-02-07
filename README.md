@@ -178,6 +178,8 @@ https://wkodate.github.io/til/
 
 - [Software Architecture Metrics](software-architecture/software-architecture-metrics)
   - [1. Four Key Metrics Unleashed](software-architecture/software-architecture-metrics/1_four_key_metrics_unleashed.md)
+  - [2. The Fitness Function Testing Pyramid: An Analogy for Architectural Tests and Metrics](software-architecture/software-architecture-metrics/2_the_fitness_function_testing_pyramid.md)
+  - [3. Evolutionary Architecture: Guiding Architecture with Testability and Deployability](software-architecture/software-architecture-metrics/3_evolutionary_architecture.md)
 
 ## Spark
 - [Learning Spark](spark/learning-spark/README.md)
@@ -194,4 +196,3 @@ https://wkodate.github.io/til/
 
 - [SQLZOO](sql/sqlzoo/README.md)
 - [スッキリわかるSQL入門](sql/sukkiri/README.md)
-
