@@ -29,6 +29,7 @@ https://wkodate.github.io/til/
 - [Programming](#programming)
 - [Python](#python)
 - [Shell](#shell)
+- [Software Architecture](#software-architecture)
 - [Spark](#spark)
 - [SQL](#sql)
 
@@ -181,6 +182,7 @@ https://wkodate.github.io/til/
   - [2. The Fitness Function Testing Pyramid: An Analogy for Architectural Tests and Metrics](software-architecture/software-architecture-metrics/2_the_fitness_function_testing_pyramid.md)
   - [3. Evolutionary Architecture: Guiding Architecture with Testability and Deployability](software-architecture/software-architecture-metrics/3_evolutionary_architecture.md)
   - [4. Improve Your Architecture with the Modularity Maturity Index](software-architecture/software-architecture-metrics/4_improve_your_architecture_with_the_modularity_maturity_index.md)
+  - [5. Private Builds and Metrics: Tools for Surviving DevOps Transitions](software-architecture/software-architecture-metrics/5_private_builds_and_metrics.md)
 
 ## Spark
 - [Learning Spark](spark/learning-spark/README.md)
