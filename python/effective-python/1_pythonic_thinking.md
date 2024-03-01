@@ -45,11 +45,11 @@ sys.version_info(major=3, minor=11, micro=4, releaselevel='final', serial=0)
 
 ## 3. Know the Differences Between `bytes` and `str`
 
-bytesとstrの違いを知っておく。
+`bytes`と `str` の違いを知っておく。
 
-bytesは、符号なし8ビット値のASCIIエンコーディング。テキストエンコーディングを持たない。
+`bytes`は、符号なし8ビット値のASCIIエンコーディング。テキストエンコーディングを持たない。
 
-strは、Unicodeコードポイントの文字列。バイナリエンコーディングを持たない。
+`str`は、Unicodeコードポイントの文字列。バイナリエンコーディングを持たない。
 
 ```python
 # bytes
@@ -166,7 +166,7 @@ my_var = 1.234
 0
 ```
 
-Helper関数を使う。
+上記をHelper関数にする。
 
 ```python
 def get_first_int(values, key, default=0):
@@ -186,6 +186,8 @@ def get_first_int(values, key, default=0):
 インデックスではなくアンパックを使う。
 
 Pythonでは1つの代入文で複数の値を代入できるアンパック構文がある。コレクションの要素を一括で変数に代入できる。
+
+アンパックを使えば、インデックスを使わずに済むので見た目がスッキリする。
 
 ```python
 # アンパック構文
@@ -209,8 +211,96 @@ for rank, (name, calories) in enumerate(snacks, 1):
 
 ## 7. Prefer `enumerate` Over range
 
+`range`ではなく `enumerate` を使う。
+
+`enumerate` を使えば、イテレータでループをしながら、要素のインデックスを取り出すことができる。
+
+```python
+flavor_list = ['vanilla', 'chocolate', 'pecan', 'strawberry']
+```
+
+`range`:
+
+```python
+for i in range(len(flavor_list)):
+    flavor = flavor_list[i]
+    print(f'{i + 1}: {flavor}')
+```
+
+`enumerate`:
+
+```python
+for i, flavor in enumerate(flavor_list):
+    print(f'{i + 1}: {flavor}')
+```
+
 ## 8. Use `zip` to Process Iterators in Parallel
+
+イテレータを並列に処理するにはzipを使う。
+
+```python
+longest_name = None
+max_count = 0
+for name, count in zip(names, counts):
+    if count > max_count:
+        longest_name = name
+        max_count = count
+
+print(longest_name)
+# Cecilia
+```
 
 ## 9. Avoid `else` Blocks After `for` and `while` Loops
 
+loop後の `else`ブロックは使わない。
+
+`else`ブロックはループが終了された直後に実行されるが、ループ内で `break`が実行されるとelseブロックを通らない。
+
+直感的ではなく誤解を生みやすいので使用しない。代わりにヘルパー関数を書く。
+
+```python
+for i in range(3):
+    print('Loop', i)
+else:
+    print('Else block!')
+
+Loop 0
+Loop 1
+Loop 2
+Else block!
+
+for i in range(3):
+    print('Loop', i)
+    if i == 1:
+        break
+else:
+    print('Else block!')
+
+Loop 0
+Loop 1
+```
+
 ## 10. Prevent Repetition with Assignment Expressions
+
+代入式で繰り返しを防ぐ。
+
+walrus演算子( `:=` )は変数への値の代入と評価を行う。これで繰り返しをなくす。
+
+代入と評価が分かれているコード:
+
+```python
+count = fresh_fruit.get('lemon', 0)
+if count:
+    make_lemonade(count)
+else:
+    out_of_stock()
+```
+
+walrus演算子を使ったコード:
+
+```python
+if count := fresh_fruit.get('lemon', 0):
+    make_lemonade(count)
+else:
+    out_of_stock()
+```
