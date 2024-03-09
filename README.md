@@ -187,6 +187,7 @@ https://wkodate.github.io/til/
   - [6. Scaling an Organization: The Central Role of Software Architecture](software-architecture/software-architecture-metrics/6_scaling_an_organization.md)
   - [7. The Role of Measurement in Software Architecture](software-architecture/software-architecture-metrics/7_the_role_of_measurement_in_software_architecture.md)
   - [8. Progressing from Metrics to Engineering](software-architecture/software-architecture-metrics/8_progressing_from_metrics_to_engineering.md)
+  - [9. Using Software Metrics to Ensure Maintainability](software-architecture/software-architecture-metrics/9_using_software_metrics_to_ensure_maintainability.md)
 
 ## Spark
 - [Learning Spark](spark/learning-spark/README.md)
