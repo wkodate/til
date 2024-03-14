@@ -4,16 +4,16 @@
 
 In Python, the most common way to organize information is in a sequence of values stored in a `list`. A `list`‘s natural complement is the `dict` that stores lookup keys mapped to corresponding values. This chapter covers how to build programs with these versatile building blocks.
 
-1. Know How to Slice Sequences
-2. Avoid Striding and Slicing in a Single Expression
-3. Prefer Catch-All Unpacking Over Slicing
-4. Sort by Complex Criteria Using the `key` Parameter
-5. Be Cautious When Relying on `dict` Insertion Ordering
-6. Prefer `get` Over `in` and `KeyError` to Handle Missing Dictionary Keys
-7. Prefer `defaultdict` Over `setdefault` to Handle Missing Items in Internal State
-8. Know How to Construct Key-Dependent Default Values with `__missing__`
+- 11. Know How to Slice Sequences
+- 12. Avoid Striding and Slicing in a Single Expression
+- 13. Prefer Catch-All Unpacking Over Slicing
+- 14. Sort by Complex Criteria Using the `key` Parameter
+- 15. Be Cautious When Relying on `dict` Insertion Ordering
+- 16. Prefer `get` Over `in` and `KeyError` to Handle Missing Dictionary Keys
+- 17. Prefer `defaultdict` Over `setdefault` to Handle Missing Items in Internal State
+- 18. Know How to Construct Key-Dependent Default Values with `__missing__`
 
-## 1. Know How to Slice Sequences
+## 11. Know How to Slice Sequences
 
 `list` などのシーケンスをどのようにスライスするかを知っておく。
 
@@ -27,7 +27,7 @@ print(list[3:5])
 ['d', 'e']
 ```
 
-## 2. Avoid Striding and Slicing in a Single Expression
+## 12. Avoid Striding and Slicing in a Single Expression
 
 ストライドとスライスを1角式で同時に使わない。
 
@@ -63,7 +63,7 @@ print(z)
 ['c', 'e']
 ```
 
-## 3. Prefer Catch-All Unpacking Over Slicing
+## 13. Prefer Catch-All Unpacking Over Slicing
 
 アンパックするときは、インデックスとスライドを使うのではなく、 `catch-all` アンパックを使う。
 
@@ -90,7 +90,7 @@ print(oldest, second_oldest, others)
 20 19 [15, 9, 8, 7, 6, 4, 1, 0]
 ```
 
-## 4. Sort by Complex Criteria Using the `key` Parameter
+## 14. Sort by Complex Criteria Using the `key` Parameter
 
 `key` パラメータを使って複雑なソートをする。
 
@@ -132,7 +132,7 @@ print(power_tools)
 [Tool('jackhammer', 40), Tool('circular saw', 5), Tool('drill', 4), Tool('sander', 4)]  # 上記ソートによるdrill, sanderの順が保持されている。
 ```
 
-## 5. Be Cautious When Relying on `dict` Insertion Ordering
+## 15. Be Cautious When Relying on `dict` Insertion Ordering
 
 `dict` の順番に注意する。
 
@@ -140,7 +140,7 @@ Python3.7以降は、 `dict` の内容は挿入順に保持される。
 
 挿入順に依存しないコードを書く、実行時に `dict` 型かを明示的にチェックする、型ヒントと静的解析で `dict` をチェックする。
 
-## 6. Prefer `get` Over `in` and `KeyError` to Handle Missing Dictionary Keys
+## 16. Prefer `get` Over `in` and `KeyError` to Handle Missing Dictionary Keys
 
 辞書の欠損キーの処理には `in` や `KeyError` ではなく `get` を使う。
 
@@ -160,7 +160,7 @@ print(counters)
 
 ```
 
-## 7. Prefer `defaultdict` Over `setdefault` to Handle Missing Items in Internal State
+## 17. Prefer `defaultdict` Over `setdefault` to Handle Missing Items in Internal State
 
 辞書への値の代入もする場合は、 `get` よりも `setdefault` が好ましい場合もある。
 
@@ -184,7 +184,7 @@ print(visits.data)
 defaultdict(<class 'set'>, {'England': {'Bath', 'London'}})
 ```
 
-## 8. Know How to Construct Key-Dependent Default Values with `__missing__`
+## 18. Know How to Construct Key-Dependent Default Values with `__missing__`
 
 `__missing__` でキー依存デフォルト値を作成する方法を知る。
 
