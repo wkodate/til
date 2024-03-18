@@ -176,6 +176,7 @@ https://wkodate.github.io/til/
     - [1. Pythonic Thinking](python/effective-python/1_pythonic_thinking.md)
     - [2. Lists and Dictionaries](python/effective-python/2_lists_and_dictionaries.md)
     - [3. Functions](python/effective-python/3_functions.md)
+    - [4. Comprehensions and Generators](python/effective-python/4_comprehensions_and_generators.md)
 
 ## Software Architecture
 
