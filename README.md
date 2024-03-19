@@ -190,6 +190,7 @@ https://wkodate.github.io/til/
   - [7. The Role of Measurement in Software Architecture](software-architecture/software-architecture-metrics/7_the_role_of_measurement_in_software_architecture.md)
   - [8. Progressing from Metrics to Engineering](software-architecture/software-architecture-metrics/8_progressing_from_metrics_to_engineering.md)
   - [9. Using Software Metrics to Ensure Maintainability](software-architecture/software-architecture-metrics/9_using_software_metrics_to_ensure_maintainability.md)
+  - [10. Measure the Unknown with the Goal-Question-Metric Approach](software-architecture/software-architecture-metrics/10_measure_the_unknown_with_the_goal_question_metric_approach.md)
 
 ## Spark
 - [Learning Spark](spark/learning-spark/README.md)
