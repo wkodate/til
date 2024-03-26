@@ -178,6 +178,7 @@ https://wkodate.github.io/til/
     - [3. Functions](python/effective-python/3_functions.md)
     - [4. Comprehensions and Generators](python/effective-python/4_comprehensions_and_generators.md)
     - [5. Classes and Interfaces](python/effective-python/5_classes_and_interfaces.md)
+    - [6. Metaclasses and Attributes](python/effective-python/6_metaclasses_and_attributes.md)
 
 ## Software Architecture
 
