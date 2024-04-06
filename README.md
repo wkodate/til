@@ -181,6 +181,7 @@ https://wkodate.github.io/til/
     - [6. Metaclasses and Attributes](python/effective-python/6_metaclasses_and_attributes.md)
     - [7. Concurrency and Parallelism](python/effective-python/7_concurrency_and_parallelism.md)
     - [8. Robustness and Performance](python/effective-python/8_robustness_and_performance.md)
+    - [9. Testing and Debugging](python/effective-python/9_testing_and_debugging.md)
 
 ## Software Architecture
 
