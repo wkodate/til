@@ -182,6 +182,7 @@ https://wkodate.github.io/til/
     - [7. Concurrency and Parallelism](python/effective-python/7_concurrency_and_parallelism.md)
     - [8. Robustness and Performance](python/effective-python/8_robustness_and_performance.md)
     - [9. Testing and Debugging](python/effective-python/9_testing_and_debugging.md)
+    - [10. Collaboration](python/effective-python/10_collaboration.md)
 
 ## Software Architecture
 
