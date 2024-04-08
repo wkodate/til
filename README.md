@@ -81,7 +81,8 @@ https://wkodate.github.io/til/
 - [Designing Data-Intensive Applications - Part 1. Foundations of Data System](data-engineering/designing-data-intensive-applications-part1.md)
 - [Designing Data-Intensive Applications - Part 2. Distributed Data](data-engineering/designing-data-intensive-applications-part2.md)
 - [データ分析基盤入門](data-engineering/bigdataplatform_and_engineering_book/README.md)
-
+- [Fundamentals of Data Engineering](data-engineering/01_data_engineering_described.md)
+    - [1. Data Engineering Described](data-engineering/fundamentals_of_data_engineering/01_data_engineering_described.md)
 ## DataEngWeekly
 
 - [Issue286](dataengweekly/issue286.md)
