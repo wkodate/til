@@ -84,6 +84,7 @@ https://wkodate.github.io/til/
 - [Fundamentals of Data Engineering](data-engineering/01_data_engineering_described.md)
     - [1. Data Engineering Described](data-engineering/fundamentals_of_data_engineering/01_data_engineering_described.md)
     - [2. The Data Engineering Lifecycle](data-engineering/fundamentals_of_data_engineering/02_the_data_engineering_lifecycle.md)
+    - [3. Designing Good Data Architecture](data-engineering/fundamentals_of_data_engineering/03_designing_good_data_architecture.md)
 ## DataEngWeekly
 
 - [Issue286](dataengweekly/issue286.md)
