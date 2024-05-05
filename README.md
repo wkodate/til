@@ -86,6 +86,7 @@ https://wkodate.github.io/til/
     - [2. The Data Engineering Lifecycle](data-engineering/fundamentals_of_data_engineering/02_the_data_engineering_lifecycle.md)
     - [3. Designing Good Data Architecture](data-engineering/fundamentals_of_data_engineering/03_designing_good_data_architecture.md)
     - [4. Choosing Technologies Across The Data Engineering Lifecycle](data-engineering/fundamentals_of_data_engineering/04_choosing_technologies_across_the_data_engineering_lifecycle.md)
+    - [5. Data Generation In Source Systems](data-engineering/fundamentals_of_data_engineering/05_data_generation_In_source_systems.md)
 
 ## DataEngWeekly
 
