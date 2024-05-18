@@ -88,6 +88,7 @@ https://wkodate.github.io/til/
     - [4. Choosing Technologies Across The Data Engineering Lifecycle](data-engineering/fundamentals_of_data_engineering/04_choosing_technologies_across_the_data_engineering_lifecycle.md)
     - [5. Data Generation In Source Systems](data-engineering/fundamentals_of_data_engineering/05_data_generation_In_source_systems.md)
     - [6. Storage](data-engineering/fundamentals_of_data_engineering/06_storage.md)
+    - [7. Ingestion](data-engineering/fundamentals_of_data_engineering/07_ingestion.md)
 
 ## DataEngWeekly
 
