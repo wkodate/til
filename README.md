@@ -89,6 +89,7 @@ https://wkodate.github.io/til/
     - [5. Data Generation In Source Systems](data-engineering/fundamentals_of_data_engineering/05_data_generation_In_source_systems.md)
     - [6. Storage](data-engineering/fundamentals_of_data_engineering/06_storage.md)
     - [7. Ingestion](data-engineering/fundamentals_of_data_engineering/07_ingestion.md)
+    - [8. Queries, Modeling, And Transformation](data-engineering/fundamentals_of_data_engineering/08_queries_modeling_and_transformation.md)
 
 ## DataEngWeekly
 
