@@ -90,6 +90,7 @@ https://wkodate.github.io/til/
     - [6. Storage](data-engineering/fundamentals_of_data_engineering/06_storage.md)
     - [7. Ingestion](data-engineering/fundamentals_of_data_engineering/07_ingestion.md)
     - [8. Queries, Modeling, And Transformation](data-engineering/fundamentals_of_data_engineering/08_queries_modeling_and_transformation.md)
+    - [9. Serving Data For Analytics, Machine Learning, And Reverse ETL](data-engineering/fundamentals_of_data_engineering/09_serving_data_for_analytics_machine_learning_and_reverse_etl.md)
 
 ## DataEngWeekly
 
