@@ -94,6 +94,7 @@ https://wkodate.github.io/til/
     - [10. Security And Privacy](data-engineering/fundamentals_of_data_engineering/10_security_and_privacy.md)
     - [11. The Future Of Data Engineering](data-engineering/fundamentals_of_data_engineering/11_the_future_of_data_engineering.md)
     - [Appendix A. Serialization And Compression Technical Details](data-engineering/fundamentals_of_data_engineering/a_serialization_and_compression_technical_details.md)
+    - [Appendix B. Cloud Networking](data-engineering/fundamentals_of_data_engineering/b_cloud_networking.md)
 
 ## DataEngWeekly
 
