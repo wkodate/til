@@ -95,6 +95,8 @@ https://wkodate.github.io/til/
     - [11. The Future Of Data Engineering](data-engineering/fundamentals_of_data_engineering/11_the_future_of_data_engineering.md)
     - [Appendix A. Serialization And Compression Technical Details](data-engineering/fundamentals_of_data_engineering/a_serialization_and_compression_technical_details.md)
     - [Appendix B. Cloud Networking](data-engineering/fundamentals_of_data_engineering/b_cloud_networking.md)
+- [The Cloud Data Lake](data-engineering/the_cloud_data_lake)
+    - [1. Big Data: Beyond the Buzz](data-engineering/the_cloud_data_lake/01_big_data_beyond_the_buzz.md)
 
 ## DataEngWeekly
 
