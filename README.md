@@ -97,6 +97,7 @@ https://wkodate.github.io/til/
     - [Appendix B. Cloud Networking](data-engineering/fundamentals_of_data_engineering/b_cloud_networking.md)
 - [The Cloud Data Lake](data-engineering/the_cloud_data_lake)
     - [1. Big Data: Beyond the Buzz](data-engineering/the_cloud_data_lake/01_big_data_beyond_the_buzz.md)
+    - [2. Big Data Architectures on the Cloud](data-engineering/the_cloud_data_lake/02_big_data_architectures_on_the_cloud.md)
 
 ## DataEngWeekly
 
