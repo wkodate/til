@@ -98,6 +98,7 @@ https://wkodate.github.io/til/
 - [The Cloud Data Lake](data-engineering/the_cloud_data_lake)
     - [1. Big Data: Beyond the Buzz](data-engineering/the_cloud_data_lake/01_big_data_beyond_the_buzz.md)
     - [2. Big Data Architectures on the Cloud](data-engineering/the_cloud_data_lake/02_big_data_architectures_on_the_cloud.md)
+    - [3. Design Considerations for Your Data Lake](data-engineering/the_cloud_data_lake/03_design_considerations_for_your_data_lake.md)
 
 ## DataEngWeekly
 
