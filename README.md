@@ -101,6 +101,7 @@ https://wkodate.github.io/til/
     - [3. Design Considerations for Your Data Lake](data-engineering/the_cloud_data_lake/03_design_considerations_for_your_data_lake.md)
     - [4. Scalable Data Lakes](data-engineering/the_cloud_data_lake/04_scalable_data_lakes.md)
     - [5. Optimizing Cloud Data Lake Architectures for Performance](data-engineering/the_cloud_data_lake/05_optimizing_cloud_data_lake_architectures_for_performance.md)
+    - [6. Deep Dive on Data Formats](data-engineering/the_cloud_data_lake/06_deep_dive_on_data_formats.md)
 
 ## DataEngWeekly
 
