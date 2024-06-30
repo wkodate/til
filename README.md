@@ -103,6 +103,7 @@ https://wkodate.github.io/til/
     - [5. Optimizing Cloud Data Lake Architectures for Performance](data-engineering/the_cloud_data_lake/05_optimizing_cloud_data_lake_architectures_for_performance.md)
     - [6. Deep Dive on Data Formats](data-engineering/the_cloud_data_lake/06_deep_dive_on_data_formats.md)
     - [7. Decision Framework for Your Architecture](data-engineering/the_cloud_data_lake/07_decision_framework_for_your_architecture.md)
+    - [8. Six Lessons for a Data Informed Future](data-engineering/the_cloud_data_lake/08_six_lessons_for_a_data_informed_future.md)
 
 ## DataEngWeekly
 
