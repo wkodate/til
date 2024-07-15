@@ -28,6 +28,7 @@ https://wkodate.github.io/til/
 - [Prometheus](#prometheus)
 - [Programming](#programming)
 - [Python](#python)
+- [Self-Development](#self-development)
 - [Shell](#shell)
 - [Software Architecture](#software-architecture)
 - [Spark](#spark)
@@ -207,6 +208,18 @@ https://wkodate.github.io/til/
     - [9. Testing and Debugging](python/effective-python/9_testing_and_debugging.md)
     - [10. Collaboration](python/effective-python/10_collaboration.md)
 
+## Self-Development
+
+- [エンジニアの知的生産術](self-development/engineers_way_of_creating_knowledge/README.md)
+
+## Shell
+
+- [Shell one liner 160](shell/shellgei160)
+  - [Chapter 1](shell/shellgei160/chapter1.md)
+  - [Chapter 2](shell/shellgei160/chapter2.md)
+- [awk](shell/awk.md)
+- [sed](shell/sed.md)
+
 ## Software Architecture
 
 - [Software Architecture Metrics](software-architecture/software-architecture-metrics)
@@ -223,14 +236,6 @@ https://wkodate.github.io/til/
 
 ## Spark
 - [Learning Spark](spark/learning-spark/README.md)
-
-## Shell
-
-- [Shell one liner 160](shell/shellgei160)
-  - [Chapter 1](shell/shellgei160/chapter1.md)
-  - [Chapter 2](shell/shellgei160/chapter2.md)
-- [awk](shell/awk.md)
-- [sed](shell/sed.md)
 
 ## SQL
 
